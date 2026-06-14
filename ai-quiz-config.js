@@ -3,7 +3,7 @@
  * 예: https://test-quiz.onrender.com
  */
 (function (global) {
-  var BUILTIN_API_BASE = "";
+  var BUILTIN_API_BASE = "https://test-quiz-8eb3.onrender.com";
 
   var PRESETS = {
     programming: {
