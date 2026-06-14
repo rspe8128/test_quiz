@@ -1,0 +1,852 @@
+{
+  "pdf": "C:\\Users\\marin\\Downloads\\모의고사-해설-기말고사-대비순서.pdf",
+  "total_pages": 64,
+  "embedded": [
+    {
+      "file": "fsci-assets/embed-p06-001.jpeg",
+      "page": 6,
+      "width": 661,
+      "height": 316
+    },
+    {
+      "file": "fsci-assets/embed-p06-002.jpeg",
+      "page": 6,
+      "width": 405,
+      "height": 219
+    },
+    {
+      "file": "fsci-assets/embed-p07-003.jpeg",
+      "page": 7,
+      "width": 730,
+      "height": 404
+    },
+    {
+      "file": "fsci-assets/embed-p07-004.jpeg",
+      "page": 7,
+      "width": 831,
+      "height": 379
+    },
+    {
+      "file": "fsci-assets/embed-p07-005.jpeg",
+      "page": 7,
+      "width": 589,
+      "height": 83
+    },
+    {
+      "file": "fsci-assets/embed-p07-006.jpeg",
+      "page": 7,
+      "width": 597,
+      "height": 156
+    },
+    {
+      "file": "fsci-assets/embed-p07-007.jpeg",
+      "page": 7,
+      "width": 501,
+      "height": 146
+    },
+    {
+      "file": "fsci-assets/embed-p07-008.jpeg",
+      "page": 7,
+      "width": 597,
+      "height": 228
+    },
+    {
+      "file": "fsci-assets/embed-p09-009.jpeg",
+      "page": 9,
+      "width": 824,
+      "height": 366
+    },
+    {
+      "file": "fsci-assets/embed-p09-010.jpeg",
+      "page": 9,
+      "width": 825,
+      "height": 409
+    },
+    {
+      "file": "fsci-assets/embed-p10-011.jpeg",
+      "page": 10,
+      "width": 800,
+      "height": 504
+    },
+    {
+      "file": "fsci-assets/embed-p10-012.png",
+      "page": 10,
+      "width": 807,
+      "height": 646
+    },
+    {
+      "file": "fsci-assets/embed-p11-013.jpeg",
+      "page": 11,
+      "width": 953,
+      "height": 370
+    },
+    {
+      "file": "fsci-assets/embed-p11-014.png",
+      "page": 11,
+      "width": 282,
+      "height": 182
+    },
+    {
+      "file": "fsci-assets/embed-p11-015.jpeg",
+      "page": 11,
+      "width": 535,
+      "height": 287
+    },
+    {
+      "file": "fsci-assets/embed-p12-016.jpeg",
+      "page": 12,
+      "width": 386,
+      "height": 522
+    },
+    {
+      "file": "fsci-assets/embed-p13-017.jpeg",
+      "page": 13,
+      "width": 448,
+      "height": 434
+    },
+    {
+      "file": "fsci-assets/embed-p13-018.jpeg",
+      "page": 13,
+      "width": 316,
+      "height": 331
+    },
+    {
+      "file": "fsci-assets/embed-p13-019.png",
+      "page": 13,
+      "width": 110,
+      "height": 123
+    },
+    {
+      "file": "fsci-assets/embed-p13-020.png",
+      "page": 13,
+      "width": 136,
+      "height": 121
+    },
+    {
+      "file": "fsci-assets/embed-p14-021.jpeg",
+      "page": 14,
+      "width": 86,
+      "height": 248
+    },
+    {
+      "file": "fsci-assets/embed-p14-022.png",
+      "page": 14,
+      "width": 78,
+      "height": 246
+    },
+    {
+      "file": "fsci-assets/embed-p15-023.jpeg",
+      "page": 15,
+      "width": 971,
+      "height": 699
+    },
+    {
+      "file": "fsci-assets/embed-p15-024.png",
+      "page": 15,
+      "width": 250,
+      "height": 185
+    },
+    {
+      "file": "fsci-assets/embed-p15-025.png",
+      "page": 15,
+      "width": 250,
+      "height": 163
+    },
+    {
+      "file": "fsci-assets/embed-p16-026.png",
+      "page": 16,
+      "width": 319,
+      "height": 152
+    },
+    {
+      "file": "fsci-assets/embed-p16-027.jpeg",
+      "page": 16,
+      "width": 369,
+      "height": 303
+    },
+    {
+      "file": "fsci-assets/embed-p16-028.png",
+      "page": 16,
+      "width": 473,
+      "height": 395
+    },
+    {
+      "file": "fsci-assets/embed-p16-029.png",
+      "page": 16,
+      "width": 477,
+      "height": 576
+    },
+    {
+      "file": "fsci-assets/embed-p17-030.png",
+      "page": 17,
+      "width": 446,
+      "height": 442
+    },
+    {
+      "file": "fsci-assets/embed-p18-031.png",
+      "page": 18,
+      "width": 440,
+      "height": 345
+    },
+    {
+      "file": "fsci-assets/embed-p19-032.png",
+      "page": 19,
+      "width": 389,
+      "height": 388
+    },
+    {
+      "file": "fsci-assets/embed-p20-033.png",
+      "page": 20,
+      "width": 439,
+      "height": 409
+    },
+    {
+      "file": "fsci-assets/embed-p21-034.png",
+      "page": 21,
+      "width": 387,
+      "height": 395
+    },
+    {
+      "file": "fsci-assets/embed-p24-035.jpeg",
+      "page": 24,
+      "width": 892,
+      "height": 467
+    },
+    {
+      "file": "fsci-assets/embed-p24-036.jpeg",
+      "page": 24,
+      "width": 872,
+      "height": 545
+    },
+    {
+      "file": "fsci-assets/embed-p25-037.jpeg",
+      "page": 25,
+      "width": 452,
+      "height": 304
+    },
+    {
+      "file": "fsci-assets/embed-p26-038.jpeg",
+      "page": 26,
+      "width": 942,
+      "height": 656
+    },
+    {
+      "file": "fsci-assets/embed-p26-039.png",
+      "page": 26,
+      "width": 1070,
+      "height": 122
+    },
+    {
+      "file": "fsci-assets/embed-p26-040.png",
+      "page": 26,
+      "width": 1070,
+      "height": 122
+    },
+    {
+      "file": "fsci-assets/embed-p27-041.jpeg",
+      "page": 27,
+      "width": 209,
+      "height": 225
+    },
+    {
+      "file": "fsci-assets/embed-p27-042.jpeg",
+      "page": 27,
+      "width": 308,
+      "height": 240
+    },
+    {
+      "file": "fsci-assets/embed-p28-043.jpeg",
+      "page": 28,
+      "width": 317,
+      "height": 240
+    },
+    {
+      "file": "fsci-assets/embed-p28-044.jpeg",
+      "page": 28,
+      "width": 178,
+      "height": 177
+    },
+    {
+      "file": "fsci-assets/embed-p29-045.jpeg",
+      "page": 29,
+      "width": 590,
+      "height": 297
+    },
+    {
+      "file": "fsci-assets/embed-p30-046.jpeg",
+      "page": 30,
+      "width": 595,
+      "height": 429
+    },
+    {
+      "file": "fsci-assets/embed-p30-047.jpeg",
+      "page": 30,
+      "width": 236,
+      "height": 206
+    },
+    {
+      "file": "fsci-assets/embed-p30-048.jpeg",
+      "page": 30,
+      "width": 249,
+      "height": 206
+    },
+    {
+      "file": "fsci-assets/embed-p30-049.jpeg",
+      "page": 30,
+      "width": 238,
+      "height": 206
+    },
+    {
+      "file": "fsci-assets/embed-p30-050.png",
+      "page": 30,
+      "width": 685,
+      "height": 75
+    },
+    {
+      "file": "fsci-assets/embed-p30-051.png",
+      "page": 30,
+      "width": 399,
+      "height": 129
+    },
+    {
+      "file": "fsci-assets/embed-p30-052.png",
+      "page": 30,
+      "width": 399,
+      "height": 128
+    },
+    {
+      "file": "fsci-assets/embed-p31-053.jpeg",
+      "page": 31,
+      "width": 635,
+      "height": 647
+    },
+    {
+      "file": "fsci-assets/embed-p31-054.jpeg",
+      "page": 31,
+      "width": 427,
+      "height": 277
+    },
+    {
+      "file": "fsci-assets/embed-p32-055.jpeg",
+      "page": 32,
+      "width": 423,
+      "height": 559
+    },
+    {
+      "file": "fsci-assets/embed-p32-056.png",
+      "page": 32,
+      "width": 430,
+      "height": 189
+    },
+    {
+      "file": "fsci-assets/embed-p32-057.jpeg",
+      "page": 32,
+      "width": 423,
+      "height": 332
+    },
+    {
+      "file": "fsci-assets/embed-p32-058.jpeg",
+      "page": 32,
+      "width": 427,
+      "height": 277
+    },
+    {
+      "file": "fsci-assets/embed-p33-059.png",
+      "page": 33,
+      "width": 449,
+      "height": 372
+    },
+    {
+      "file": "fsci-assets/embed-p34-060.png",
+      "page": 34,
+      "width": 444,
+      "height": 380
+    },
+    {
+      "file": "fsci-assets/embed-p35-061.jpeg",
+      "page": 35,
+      "width": 436,
+      "height": 380
+    },
+    {
+      "file": "fsci-assets/embed-p37-062.jpeg",
+      "page": 37,
+      "width": 656,
+      "height": 345
+    },
+    {
+      "file": "fsci-assets/embed-p37-063.jpeg",
+      "page": 37,
+      "width": 180,
+      "height": 196
+    },
+    {
+      "file": "fsci-assets/embed-p37-064.jpeg",
+      "page": 37,
+      "width": 180,
+      "height": 195
+    },
+    {
+      "file": "fsci-assets/embed-p38-065.jpeg",
+      "page": 38,
+      "width": 180,
+      "height": 196
+    },
+    {
+      "file": "fsci-assets/embed-p38-066.jpeg",
+      "page": 38,
+      "width": 180,
+      "height": 195
+    },
+    {
+      "file": "fsci-assets/embed-p39-067.jpeg",
+      "page": 39,
+      "width": 238,
+      "height": 184
+    },
+    {
+      "file": "fsci-assets/embed-p39-068.jpeg",
+      "page": 39,
+      "width": 233,
+      "height": 184
+    },
+    {
+      "file": "fsci-assets/embed-p40-069.jpeg",
+      "page": 40,
+      "width": 629,
+      "height": 257
+    },
+    {
+      "file": "fsci-assets/embed-p41-070.jpeg",
+      "page": 41,
+      "width": 576,
+      "height": 196
+    },
+    {
+      "file": "fsci-assets/embed-p42-071.jpeg",
+      "page": 42,
+      "width": 172,
+      "height": 142
+    },
+    {
+      "file": "fsci-assets/embed-p42-072.jpeg",
+      "page": 42,
+      "width": 260,
+      "height": 165
+    },
+    {
+      "file": "fsci-assets/embed-p42-073.jpeg",
+      "page": 42,
+      "width": 688,
+      "height": 329
+    },
+    {
+      "file": "fsci-assets/embed-p43-074.jpeg",
+      "page": 43,
+      "width": 503,
+      "height": 235
+    },
+    {
+      "file": "fsci-assets/embed-p43-075.jpeg",
+      "page": 43,
+      "width": 251,
+      "height": 178
+    },
+    {
+      "file": "fsci-assets/embed-p44-076.png",
+      "page": 44,
+      "width": 282,
+      "height": 206
+    },
+    {
+      "file": "fsci-assets/embed-p44-077.png",
+      "page": 44,
+      "width": 359,
+      "height": 201
+    },
+    {
+      "file": "fsci-assets/embed-p45-078.jpeg",
+      "page": 45,
+      "width": 750,
+      "height": 661
+    },
+    {
+      "file": "fsci-assets/embed-p46-079.jpeg",
+      "page": 46,
+      "width": 259,
+      "height": 161
+    },
+    {
+      "file": "fsci-assets/embed-p47-080.png",
+      "page": 47,
+      "width": 440,
+      "height": 684
+    },
+    {
+      "file": "fsci-assets/embed-p48-081.png",
+      "page": 48,
+      "width": 446,
+      "height": 445
+    },
+    {
+      "file": "fsci-assets/embed-p50-082.jpeg",
+      "page": 50,
+      "width": 972,
+      "height": 525
+    },
+    {
+      "file": "fsci-assets/embed-p50-083.jpeg",
+      "page": 50,
+      "width": 995,
+      "height": 538
+    },
+    {
+      "file": "fsci-assets/embed-p51-084.jpeg",
+      "page": 51,
+      "width": 687,
+      "height": 609
+    },
+    {
+      "file": "fsci-assets/embed-p52-085.png",
+      "page": 52,
+      "width": 201,
+      "height": 327
+    },
+    {
+      "file": "fsci-assets/embed-p52-086.jpeg",
+      "page": 52,
+      "width": 632,
+      "height": 629
+    },
+    {
+      "file": "fsci-assets/embed-p52-087.jpeg",
+      "page": 52,
+      "width": 409,
+      "height": 672
+    },
+    {
+      "file": "fsci-assets/embed-p53-088.jpeg",
+      "page": 53,
+      "width": 339,
+      "height": 330
+    },
+    {
+      "file": "fsci-assets/embed-p53-089.jpeg",
+      "page": 53,
+      "width": 600,
+      "height": 216
+    },
+    {
+      "file": "fsci-assets/embed-p54-090.jpeg",
+      "page": 54,
+      "width": 409,
+      "height": 467
+    },
+    {
+      "file": "fsci-assets/embed-p55-091.png",
+      "page": 55,
+      "width": 743,
+      "height": 211
+    },
+    {
+      "file": "fsci-assets/embed-p55-092.jpeg",
+      "page": 55,
+      "width": 594,
+      "height": 305
+    },
+    {
+      "file": "fsci-assets/embed-p56-093.jpeg",
+      "page": 56,
+      "width": 819,
+      "height": 295
+    },
+    {
+      "file": "fsci-assets/embed-p56-094.png",
+      "page": 56,
+      "width": 277,
+      "height": 184
+    },
+    {
+      "file": "fsci-assets/embed-p57-095.jpeg",
+      "page": 57,
+      "width": 260,
+      "height": 303
+    },
+    {
+      "file": "fsci-assets/embed-p58-096.jpeg",
+      "page": 58,
+      "width": 614,
+      "height": 500
+    },
+    {
+      "file": "fsci-assets/embed-p58-097.jpeg",
+      "page": 58,
+      "width": 271,
+      "height": 325
+    },
+    {
+      "file": "fsci-assets/embed-p59-098.jpeg",
+      "page": 59,
+      "width": 430,
+      "height": 399
+    },
+    {
+      "file": "fsci-assets/embed-p59-099.jpeg",
+      "page": 59,
+      "width": 684,
+      "height": 441
+    },
+    {
+      "file": "fsci-assets/embed-p60-100.png",
+      "page": 60,
+      "width": 416,
+      "height": 274
+    },
+    {
+      "file": "fsci-assets/embed-p60-101.jpeg",
+      "page": 60,
+      "width": 421,
+      "height": 281
+    },
+    {
+      "file": "fsci-assets/embed-p60-102.jpeg",
+      "page": 60,
+      "width": 440,
+      "height": 539
+    },
+    {
+      "file": "fsci-assets/embed-p60-103.jpeg",
+      "page": 60,
+      "width": 434,
+      "height": 561
+    },
+    {
+      "file": "fsci-assets/embed-p60-104.jpeg",
+      "page": 60,
+      "width": 433,
+      "height": 315
+    },
+    {
+      "file": "fsci-assets/embed-p60-105.jpeg",
+      "page": 60,
+      "width": 438,
+      "height": 481
+    },
+    {
+      "file": "fsci-assets/embed-p60-106.jpeg",
+      "page": 60,
+      "width": 330,
+      "height": 169
+    },
+    {
+      "file": "fsci-assets/embed-p61-107.png",
+      "page": 61,
+      "width": 444,
+      "height": 570
+    },
+    {
+      "file": "fsci-assets/embed-p62-108.png",
+      "page": 62,
+      "width": 389,
+      "height": 695
+    },
+    {
+      "file": "fsci-assets/embed-p63-109.png",
+      "page": 63,
+      "width": 438,
+      "height": 732
+    },
+    {
+      "file": "fsci-assets/embed-p64-110.png",
+      "page": 64,
+      "width": 443,
+      "height": 497
+    }
+  ],
+  "pages": {
+    "bio-material": [
+      {
+        "file": "fsci-assets/bio-material/page-04.png",
+        "page": 4
+      },
+      {
+        "file": "fsci-assets/bio-material/page-05.png",
+        "page": 5
+      },
+      {
+        "file": "fsci-assets/bio-material/page-06.png",
+        "page": 6
+      },
+      {
+        "file": "fsci-assets/bio-material/page-07.png",
+        "page": 7
+      },
+      {
+        "file": "fsci-assets/bio-material/page-08.png",
+        "page": 8
+      },
+      {
+        "file": "fsci-assets/bio-material/page-09.png",
+        "page": 9
+      },
+      {
+        "file": "fsci-assets/bio-material/page-10.png",
+        "page": 10
+      },
+      {
+        "file": "fsci-assets/bio-material/page-11.png",
+        "page": 11
+      },
+      {
+        "file": "fsci-assets/bio-material/page-12.png",
+        "page": 12
+      },
+      {
+        "file": "fsci-assets/bio-material/page-13.png",
+        "page": 13
+      },
+      {
+        "file": "fsci-assets/bio-material/page-14.png",
+        "page": 14
+      },
+      {
+        "file": "fsci-assets/bio-material/page-15.png",
+        "page": 15
+      }
+    ],
+    "bio-cell": [
+      {
+        "file": "fsci-assets/bio-cell/page-22.png",
+        "page": 22
+      },
+      {
+        "file": "fsci-assets/bio-cell/page-23.png",
+        "page": 23
+      },
+      {
+        "file": "fsci-assets/bio-cell/page-24.png",
+        "page": 24
+      },
+      {
+        "file": "fsci-assets/bio-cell/page-25.png",
+        "page": 25
+      },
+      {
+        "file": "fsci-assets/bio-cell/page-26.png",
+        "page": 26
+      },
+      {
+        "file": "fsci-assets/bio-cell/page-27.png",
+        "page": 27
+      },
+      {
+        "file": "fsci-assets/bio-cell/page-28.png",
+        "page": 28
+      },
+      {
+        "file": "fsci-assets/bio-cell/page-29.png",
+        "page": 29
+      },
+      {
+        "file": "fsci-assets/bio-cell/page-30.png",
+        "page": 30
+      },
+      {
+        "file": "fsci-assets/bio-cell/page-31.png",
+        "page": 31
+      }
+    ],
+    "bio-metabolism": [
+      {
+        "file": "fsci-assets/bio-metabolism/page-36.png",
+        "page": 36
+      },
+      {
+        "file": "fsci-assets/bio-metabolism/page-37.png",
+        "page": 37
+      },
+      {
+        "file": "fsci-assets/bio-metabolism/page-38.png",
+        "page": 38
+      },
+      {
+        "file": "fsci-assets/bio-metabolism/page-39.png",
+        "page": 39
+      },
+      {
+        "file": "fsci-assets/bio-metabolism/page-40.png",
+        "page": 40
+      },
+      {
+        "file": "fsci-assets/bio-metabolism/page-41.png",
+        "page": 41
+      },
+      {
+        "file": "fsci-assets/bio-metabolism/page-42.png",
+        "page": 42
+      },
+      {
+        "file": "fsci-assets/bio-metabolism/page-43.png",
+        "page": 43
+      },
+      {
+        "file": "fsci-assets/bio-metabolism/page-44.png",
+        "page": 44
+      },
+      {
+        "file": "fsci-assets/bio-metabolism/page-45.png",
+        "page": 45
+      },
+      {
+        "file": "fsci-assets/bio-metabolism/page-46.png",
+        "page": 46
+      }
+    ],
+    "bio-genetics": [
+      {
+        "file": "fsci-assets/bio-genetics/page-49.png",
+        "page": 49
+      },
+      {
+        "file": "fsci-assets/bio-genetics/page-50.png",
+        "page": 50
+      },
+      {
+        "file": "fsci-assets/bio-genetics/page-51.png",
+        "page": 51
+      },
+      {
+        "file": "fsci-assets/bio-genetics/page-52.png",
+        "page": 52
+      },
+      {
+        "file": "fsci-assets/bio-genetics/page-53.png",
+        "page": 53
+      },
+      {
+        "file": "fsci-assets/bio-genetics/page-54.png",
+        "page": 54
+      },
+      {
+        "file": "fsci-assets/bio-genetics/page-55.png",
+        "page": 55
+      },
+      {
+        "file": "fsci-assets/bio-genetics/page-56.png",
+        "page": 56
+      },
+      {
+        "file": "fsci-assets/bio-genetics/page-57.png",
+        "page": 57
+      },
+      {
+        "file": "fsci-assets/bio-genetics/page-58.png",
+        "page": 58
+      },
+      {
+        "file": "fsci-assets/bio-genetics/page-59.png",
+        "page": 59
+      }
+    ]
+  }
+}

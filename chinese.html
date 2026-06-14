@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>중국어 단어 암기</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="site-theme.css" />
+  <style>
+    :root {
+      --card-radius: 24px;
+      --shadow-card: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 20px 40px -12px rgba(14, 165, 233, 0.2);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      min-height: 100vh;
+      padding: clamp(16px, 3vw, 28px) 16px 100px;
+      
+      }
+    
+    .site-nav__btn {
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .page-title {
+      text-align: center;
+      font-size: clamp(1.35rem, 4vw, 2rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.25;
+      margin-bottom: clamp(8px, 2vw, 16px);
+    }
+    #cn-home {
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: var(--card-radius);
+      padding: clamp(48px, 10vw, 72px) clamp(22px, 5vw, 40px);
+      max-width: 520px;
+      margin: clamp(20px, 5vw, 40px) auto;
+      box-shadow: var(--shadow-card);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      text-align: center;
+    }
+    #cn-home .cn-home-lead {
+      font-size: 0.9375rem;
+      color: #64748b;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      line-height: 1.55;
+    }
+    #cn-home .cn-home-lead strong { color: #0284c7; font-weight: 800; }
+    #cn-home .cn-home-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      align-items: stretch;
+      max-width: 320px;
+      margin: 0 auto;
+    }
+    #cn-home .cn-home-actions button {
+      padding: 1rem 1.5rem;
+      font-size: 1.08rem;
+      font-weight: 700;
+      border-radius: 14px;
+      margin: 0;
+      width: 100%;
+      border: 1px solid var(--sky-100);
+      cursor: pointer;
+      font-family: inherit;
+      color: var(--sky-600);
+      background: var(--sky-50);
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    #cn-home .cn-home-actions button:hover {
+      background: var(--sky-100);
+      border-color: var(--sky-200);
+    }
+    #cn-home .cn-home-actions button span {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 500;
+      opacity: 0.92;
+      margin-top: 0.2rem;
+    }
+    .cn-home-btn--list {
+      background: var(--sky-50);
+      color: var(--sky-600);
+      border: 1px solid var(--sky-100);
+      box-shadow: none;
+    }
+    .cn-home-btn--flash {
+      background: var(--sky-50);
+      color: var(--sky-600);
+      border: 1px solid var(--sky-100);
+      box-shadow: none;
+    }
+    .cn-home-btn--quiz {
+      background: var(--sky-100);
+      color: var(--sky-600);
+      border: 1px solid var(--sky-200);
+      box-shadow: none;
+    }
+    #cn-app[hidden] { display: none !important; }
+    #cn-app {
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    #header { text-align: center; padding: 20px 16px 12px; border-bottom: 1px solid #e0f2fe; max-width: 520px; margin: 0 auto; }
+    #header .sub { font-size: 12px; color: #0284c7; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; font-weight: 700; }
+    #header h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+    #header h1 span { color: var(--sky-500); }
+    #tabs { display: flex; justify-content: center; gap: 8px; padding: 16px 16px 20px; max-width: 520px; margin: 0 auto; }
+    .tab-btn {
+      padding: 9px 22px;
+      border-radius: 99px;
+      border: 1px solid var(--sky-200);
+      background: transparent;
+      color: #0284c7;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+    .tab-btn.active {
+      border: 1px solid var(--sky-200);
+      background: var(--sky-100);
+      color: var(--sky-600);
+      box-shadow: none;
+    }
+    #content { max-width: 520px; margin: 0 auto; padding: 0 16px; }
+
+    .list-row {
+      display: grid;
+      grid-template-columns: 2rem 3rem 1fr 1fr;
+      align-items: center;
+      gap: 12px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 16px;
+      margin-bottom: 8px;
+    }
+    .list-num { font-size: 11px; color: #0284c7; font-weight: 700; }
+    .list-char { font-size: 24px; color: #1e293b; font-weight: 700; }
+    .list-pinyin { font-size: 13px; color: var(--sky-600); font-style: italic; }
+    .list-korean { font-size: 13px; color: #94a3b8; line-height: 1.35; }
+
+    .prog-wrap { width: 100%; margin-bottom: 20px; }
+    .prog-info { display: flex; justify-content: space-between; font-size: 13px; color: #94a3b8; margin-bottom: 6px; font-weight: 600; }
+    .prog-track { height: 6px; background: #f0f9ff; border-radius: 99px; overflow: hidden; }
+    .prog-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0ea5e9, #06b6d4);
+      border-radius: 99px;
+      transition: width 0.3s ease;
+    }
+
+    #card {
+      width: 100%;
+      min-height: 220px;
+      background: linear-gradient(180deg, #f0f9ff 0%, #fff 100%);
+      border: 1px solid var(--sky-200);
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 32px;
+      box-shadow: var(--shadow-card);
+      transition: all 0.25s ease;
+      user-select: none;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    #card.flipped {
+      background: linear-gradient(180deg, #fff 0%, #f0f9ff 100%);
+      box-shadow: var(--shadow-card);
+    }
+    #card .card-char { font-size: 72px; font-weight: 700; color: #1e293b; line-height: 1; }
+    #card .card-hint { font-size: 13px; color: #0284c7; margin-top: 4px; font-weight: 600; }
+    #card .card-pinyin { font-size: 22px; color: #bae6fd; font-style: italic; }
+    #card .card-korean { font-size: 20px; color: #1e293b; margin-top: 4px; line-height: 1.45; }
+    #flash-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-know {
+      padding: 12px 32px;
+      border-radius: 12px;
+      border: none;
+      background: #16a34a;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .btn-dunno {
+      padding: 12px 32px;
+      border-radius: 12px;
+      border: none;
+      background: #dc2626;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .btn-flip {
+      padding: 12px 32px;
+      border-radius: 12px;
+      border: 1px solid var(--sky-200);
+      background: transparent;
+      color: #0284c7;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    #quiz-prompt {
+      width: 100%;
+      min-height: 140px;
+      background: linear-gradient(180deg, #f0f9ff 0%, #fff 100%);
+      border: 1px solid var(--sky-200);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 24px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    #quiz-prompt .q-main { font-weight: 700; color: #1e293b; line-height: 1.2; }
+    #quiz-prompt .q-pinyin { font-size: 18px; color: #0284c7; font-style: italic; }
+    #quiz-prompt .q-label { font-size: 13px; color: #38bdf8; margin-top: 4px; font-weight: 600; }
+    #options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .opt-btn {
+      position: relative;
+      padding: 14px 12px 14px 40px;
+      border-radius: 14px;
+      border: 1px solid var(--sky-100);
+      background: #f0f9ff;
+      color: #64748b;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s ease;
+      text-align: center;
+      line-height: 1.35;
+    }
+    .opt-key-num {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 24px;
+      height: 24px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      background: rgba(99, 102, 241, 0.25);
+      color: #0284c7;
+    }
+    .opt-btn.correct .opt-key-num { background: rgba(22, 163, 74, 0.35); color: #bbf7d0; }
+    .opt-btn.wrong .opt-key-num { background: rgba(220, 38, 38, 0.35); color: #fecaca; }
+    .opt-btn.correct { background: #14532d; border-color: #16a34a; color: #bbf7d0; }
+    .opt-btn.wrong { background: #7f1d1d; border-color: #dc2626; color: #fecaca; }
+
+    #done-screen { text-align: center; padding: 32px; }
+    #done-screen .done-emoji { font-size: 64px; }
+    #done-screen .done-score { font-size: 32px; color: #1e293b; font-weight: 700; margin-top: 12px; }
+    #done-screen .done-pct { font-size: 18px; color: #0284c7; margin-top: 8px; font-weight: 600; }
+    #done-screen .done-msg { font-size: 14px; color: #38bdf8; margin-top: 16px; }
+    .btn-restart {
+      margin-top: 24px;
+      padding: 12px 32px;
+      border-radius: 12px;
+      border: 1px solid var(--sky-200);
+      background: var(--sky-100);
+      color: var(--sky-600);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+    }
+  </style>
+</head>
+<body>
+  <nav class="site-nav">
+    <a class="site-nav__link" href="index.html#midterm">&larr; 중간 대비 메인</a>
+    <button type="button" class="site-nav__link site-nav__btn" id="btn-mode-home" hidden>&larr; 학습 방식 선택</button>
+    <button type="button" class="site-nav__link site-nav__btn" id="btn-cn-clear-nav" hidden style="border-color:rgba(248,113,113,0.55);color:#fecaca">저장 진행 삭제</button>
+  </nav>
+  <h1 class="page-title">중국어 단어 암기</h1>
+
+  <div id="cn-home">
+    <p class="cn-home-lead">총 <strong id="cn-home-count">0</strong>개 단어입니다.<br />학습할 방식을 선택하세요.</p>
+    <div class="cn-home-actions">
+      <button type="button" class="cn-home-btn--list" id="cn-pick-list">목록 보기<span>한자 · 병음 · 뜻 한눈에</span></button>
+      <button type="button" class="cn-home-btn--flash" id="cn-pick-flash">플래시카드<span>탭해서 뒤집고 암기</span></button>
+      <button type="button" class="cn-home-btn--quiz" id="cn-pick-quiz">퀴즈<span>객관식 · 정답 확인</span></button>
+    </div>
+    <p style="margin-top:1.35rem;font-size:0.8125rem;color:#64748b;line-height:1.5">플래시카드·퀴즈 진행 위치는 이 기기에 자동 저장됩니다.<br />삭제는 아래 버튼으로만 됩니다.</p>
+    <button type="button" id="cn-clear-home" style="margin-top:10px;padding:0.55rem 1rem;font-size:0.8125rem;font-weight:600;border-radius:10px;border:1px solid #cbd5e1;background:#f1f5f9;color:#475569;cursor:pointer;font-family:inherit">저장된 학습 진행 삭제</button>
+  </div>
+
+  <div id="cn-app" hidden>
+    <div id="header">
+      <div class="sub">학습 중</div>
+      <h1>시험 단어 <span id="total-count"></span></h1>
+    </div>
+    <div id="tabs">
+      <button type="button" class="tab-btn" data-mode="list">목록</button>
+      <button type="button" class="tab-btn" data-mode="flash">플래시카드</button>
+      <button type="button" class="tab-btn" data-mode="quiz">퀴즈</button>
+    </div>
+    <div id="content"></div>
+  </div>
+
+  <div class="page-footer">제작자: 정해우</div>
+  <link rel="stylesheet" href="ai-quiz-ui.css" />
+  <script src="ai-quiz-config.js"></script>
+  <script src="ai-quiz-bridge.js"></script>
+  <script src="ai-quiz-runner.js"></script>
+  <script src="ai-quiz-subjects.js"></script>
+  <link rel="stylesheet" href="bgm-player.css" />
+  <script src="bgm-player.js" defer></script>
+
+  <script>
+const vocab = [
+  { char:"你", pinyin:"nǐ", korean:"너" },
+  { char:"好", pinyin:"hǎo", korean:"안녕하다, 좋다" },
+  { char:"们", pinyin:"men", korean:"~들 (복수)" },
+  { char:"再见", pinyin:"zàijiàn", korean:"잘 가, 안녕" },
+  { char:"明天", pinyin:"míngtiān", korean:"내일" },
+  { char:"见", pinyin:"jiàn", korean:"만나다, 보다" },
+  { char:"您", pinyin:"nín", korean:"당신 (你의 존칭)" },
+  { char:"大家", pinyin:"dàjiā", korean:"모두, 여러분" },
+  { char:"早上", pinyin:"zǎoshang", korean:"아침" },
+  { char:"下午", pinyin:"xiàwǔ", korean:"오후" },
+  { char:"晚上", pinyin:"wǎnshang", korean:"저녁, 밤" },
+  { char:"周末", pinyin:"zhōumò", korean:"주말" },
+  { char:"谢谢", pinyin:"xièxie", korean:"고맙습니다" },
+  { char:"不", pinyin:"bù", korean:"(~이) 아니다" },
+  { char:"客气", pinyin:"kèqi", korean:"예의를 차리다" },
+  { char:"不好意思", pinyin:"bù hǎoyìsi", korean:"미안하다, 쑥스럽다" },
+  { char:"没", pinyin:"méi", korean:"없다" },
+  { char:"关系", pinyin:"guānxi", korean:"관계" },
+  { char:"老师", pinyin:"lǎoshī", korean:"선생님" },
+  { char:"妈妈", pinyin:"māma", korean:"어머니, 엄마" },
+  { char:"对不起", pinyin:"duìbuqǐ", korean:"미안합니다" },
+  { char:"叫", pinyin:"jiào", korean:"~라고 하다" },
+  { char:"什么", pinyin:"shénme", korean:"무엇, 무슨" },
+  { char:"名字", pinyin:"míngzi", korean:"이름" },
+  { char:"呢", pinyin:"ne", korean:"~는요?" },
+  { char:"欢迎", pinyin:"huānyíng", korean:"환영하다" },
+  { char:"是", pinyin:"shì", korean:"~이다, 네" },
+  { char:"哪", pinyin:"nǎ", korean:"어느" },
+  { char:"国", pinyin:"guó", korean:"나라" },
+  { char:"人", pinyin:"rén", korean:"사람" },
+  { char:"也", pinyin:"yě", korean:"~도, 또한" },
+  { char:"吗", pinyin:"ma", korean:"~입니까?" },
+  { char:"韩国", pinyin:"Hánguó", korean:"한국" },
+  { char:"中国", pinyin:"Zhōngguó", korean:"중국" },
+  { char:"美国", pinyin:"Měiguó", korean:"미국" },
+  { char:"印度", pinyin:"Yìndù", korean:"인도" },
+  { char:"日本", pinyin:"Rìběn", korean:"일본" },
+  { char:"学生", pinyin:"xuésheng", korean:"학생" },
+  { char:"这", pinyin:"zhè", korean:"이(것), 이 사람" },
+  { char:"谁", pinyin:"shéi", korean:"누구" },
+  { char:"哥哥", pinyin:"gēge", korean:"오빠, 형" },
+  { char:"今年", pinyin:"jīnnián", korean:"올해" },
+  { char:"多", pinyin:"duō", korean:"얼마나" },
+  { char:"大", pinyin:"dà", korean:"(나이가) 많다, 크다" },
+  { char:"岁", pinyin:"suì", korean:"살, 세" },
+  { char:"爸爸", pinyin:"bàba", korean:"아버지, 아빠" },
+  { char:"弟弟", pinyin:"dìdi", korean:"남동생" },
+  { char:"朋友", pinyin:"péngyou", korean:"친구" },
+  { char:"几", pinyin:"jǐ", korean:"몇" },
+  { char:"年纪", pinyin:"niánjì", korean:"나이, 연령" },
+  { char:"有", pinyin:"yǒu", korean:"(가지고) 있다" },
+  { char:"妹妹", pinyin:"mèimei", korean:"여동생" },
+  { char:"没有", pinyin:"méiyǒu", korean:"없다" },
+  { char:"只", pinyin:"zhǐ", korean:"오직, 단지" },
+  { char:"个", pinyin:"gè", korean:"개, 명 (단위)" },
+  { char:"姐姐", pinyin:"jiějie", korean:"언니, 누나" },
+  { char:"上", pinyin:"shàng", korean:"(~에) 다니다" },
+  { char:"年级", pinyin:"niánjí", korean:"학년" },
+  { char:"高中", pinyin:"gāozhōng", korean:"고등학교" },
+  { char:"空", pinyin:"kòng", korean:"틈, 짬, 시간" },
+  { char:"手机", pinyin:"shǒujī", korean:"휴대 전화" },
+  { char:"自行车", pinyin:"zìxíngchē", korean:"자전거" },
+  { char:"小学", pinyin:"xiǎoxué", korean:"초등학교" },
+  { char:"初中", pinyin:"chūzhōng", korean:"중학교" },
+  { char:"大学", pinyin:"dàxué", korean:"대학교" },
+];
+
+function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+
+const CN_LS_KEY = "chinese-study-v1";
+function readCn() {
+  try {
+    const t = localStorage.getItem(CN_LS_KEY);
+    return t ? JSON.parse(t) : null;
+  } catch (e) {
+    return null;
+  }
+}
+function deckToIdx(deck) {
+  return deck.map((w) => vocab.indexOf(w)).filter((i) => i >= 0);
+}
+function idxToDeck(idxs) {
+  return idxs.map((i) => vocab[i]).filter((w) => !!w);
+}
+function persistChinese() {
+  try {
+    const app = document.getElementById("cn-app");
+    if (app.hidden) return;
+    const obj = {
+      v: 1,
+      inApp: true,
+      mode,
+      flash: { idxs: deckToIdx(flashDeck), flashIdx, flashFlipped, flashKnown, flashUnknown },
+      quiz: { idxs: deckToIdx(quizDeck), quizIdx, quizScore, quizType, quizOptions: quizOptions.slice(), quizSelected },
+    };
+    localStorage.setItem(CN_LS_KEY, JSON.stringify(obj));
+  } catch (e) {}
+}
+function applyFlashFromSaved(s) {
+  if (!s || !s.flash || !s.flash.idxs || !s.flash.idxs.length) return false;
+  const deck = idxToDeck(s.flash.idxs);
+  if (deck.length !== s.flash.idxs.length) return false;
+  flashDeck = deck;
+  flashIdx = Math.max(0, Math.min(s.flash.flashIdx | 0, deck.length - 1));
+  flashFlipped = !!s.flash.flashFlipped;
+  flashKnown = +s.flash.flashKnown || 0;
+  flashUnknown = +s.flash.flashUnknown || 0;
+  return true;
+}
+function applyQuizFromSaved(s) {
+  if (!s || !s.quiz || !s.quiz.idxs || !s.quiz.idxs.length) return false;
+  const deck = idxToDeck(s.quiz.idxs);
+  if (deck.length !== s.quiz.idxs.length) return false;
+  quizDeck = deck;
+  quizIdx = Math.max(0, Math.min(s.quiz.quizIdx | 0, quizDeck.length));
+  quizScore = +s.quiz.quizScore || 0;
+  quizType = s.quiz.quizType === "korean→char" ? "korean→char" : "char→korean";
+  if (quizIdx >= quizDeck.length) return true;
+  if (s.quiz.quizOptions && s.quiz.quizOptions.length) {
+    quizOptions = s.quiz.quizOptions;
+    quizSelected = s.quiz.quizSelected !== undefined && s.quiz.quizSelected !== null ? s.quiz.quizSelected : null;
+  } else {
+    quizSelected = null;
+    buildOptions();
+  }
+  return true;
+}
+function initFlashFresh() {
+  flashDeck = shuffle(vocab);
+  flashIdx = 0;
+  flashFlipped = false;
+  flashKnown = 0;
+  flashUnknown = 0;
+}
+function initQuizFresh() {
+  if (quizAdvanceTimer !== null) {
+    clearTimeout(quizAdvanceTimer);
+    quizAdvanceTimer = null;
+  }
+  quizDeck = shuffle(vocab);
+  quizIdx = 0;
+  quizScore = 0;
+  quizSelected = null;
+  quizType = Math.random() < 0.5 ? "char→korean" : "korean→char";
+  buildOptions();
+}
+function clearChineseProgress() {
+  if (!confirm("플래시카드·퀴즈에 저장된 진행 위치를 모두 삭제할까요?")) return;
+  try {
+    localStorage.removeItem(CN_LS_KEY);
+  } catch (e) {}
+  initFlashFresh();
+  initQuizFresh();
+  if (!document.getElementById("cn-app").hidden) renderOnly();
+}
+
+let mode = "flash";
+
+function enterStudy(m) {
+  document.getElementById("cn-home").hidden = true;
+  document.getElementById("cn-app").hidden = false;
+  document.getElementById("btn-mode-home").hidden = false;
+  document.getElementById("btn-cn-clear-nav").hidden = false;
+  switchMode(m);
+}
+
+function showModeHome() {
+  persistChinese();
+  document.getElementById("cn-app").hidden = true;
+  document.getElementById("cn-home").hidden = false;
+  document.getElementById("btn-mode-home").hidden = true;
+  document.getElementById("btn-cn-clear-nav").hidden = true;
+}
+
+function switchMode(m) {
+  if (quizAdvanceTimer !== null) {
+    clearTimeout(quizAdvanceTimer);
+    quizAdvanceTimer = null;
+  }
+  mode = m;
+  document.querySelectorAll("#tabs .tab-btn").forEach((b) => {
+    b.classList.toggle("active", b.getAttribute("data-mode") === m);
+  });
+  if (m === "list") {
+    persistChinese();
+    renderList();
+    persistChinese();
+    return;
+  }
+  if (m === "flash") {
+    persistChinese();
+    initFlash();
+    renderFlash();
+    persistChinese();
+    return;
+  }
+  persistChinese();
+  initQuiz();
+  renderQuiz();
+  persistChinese();
+}
+
+function renderOnly() {
+  if (mode === 'list') { renderList(); return; }
+  if (mode === 'flash') { renderFlash(); return; }
+  if (mode === 'quiz') { renderQuiz(); return; }
+}
+
+function renderList() {
+  const c = document.getElementById('content');
+  c.innerHTML = vocab.map((w, i) => `
+    <div class="list-row">
+      <span class="list-num">#${i + 1}</span>
+      <span class="list-char">${w.char}</span>
+      <span class="list-pinyin">${w.pinyin}</span>
+      <span class="list-korean">${w.korean}</span>
+    </div>`).join('');
+}
+
+let flashDeck = [], flashIdx = 0, flashFlipped = false, flashKnown = 0, flashUnknown = 0;
+
+function initFlash() {
+  initFlashFresh();
+}
+
+function renderFlash() {
+  if (!flashDeck.length) initFlashFresh();
+  const card = flashDeck[flashIdx];
+  const total = flashDeck.length;
+  const prog = (((flashKnown + flashUnknown) / Math.max(1, total)) * 100).toFixed(1);
+  const c = document.getElementById('content');
+  c.innerHTML = `
+    <div class="prog-wrap">
+      <div class="prog-info"><span>${flashIdx + 1} / ${total}</span><span>✓ ${flashKnown} &nbsp; ✗ ${flashUnknown}</span></div>
+      <div class="prog-track"><div class="prog-fill" style="width:${prog}%"></div></div>
+    </div>
+    <div id="card" class="${flashFlipped ? 'flipped' : ''}" onclick="flipCard()">
+      ${!flashFlipped
+        ? `<div class="card-char">${card.char}</div><div class="card-hint">탭하여 뒤집기</div>`
+        : `<div class="card-char" style="font-size:52px">${card.char}</div>
+           <div class="card-pinyin">${card.pinyin}</div>
+           <div class="card-korean">${card.korean}</div>`}
+    </div>
+    <div id="flash-btns">
+      ${flashFlipped
+        ? `<button type="button" class="btn-know" onclick="flashNext(true)">✓ 알았어</button>
+           <button type="button" class="btn-dunno" onclick="flashNext(false)">✗ 모르겠어</button>`
+        : `<button type="button" class="btn-flip" onclick="flipCard()">뒤집기</button>`}
+    </div>`;
+}
+
+function flipCard() {
+  flashFlipped = !flashFlipped;
+  renderFlash();
+  persistChinese();
+}
+
+function flashNext(knew) {
+  if (knew) flashKnown++;
+  else flashUnknown++;
+  flashFlipped = false;
+  flashIdx = (flashIdx + 1) % flashDeck.length;
+  renderFlash();
+  persistChinese();
+}
+
+let quizDeck = [], quizIdx = 0, quizScore = 0, quizType = 'char→korean', quizSelected = null, quizOptions = [];
+let quizAdvanceTimer = null;
+
+function initQuiz() {
+  initQuizFresh();
+}
+
+function buildOptions() {
+  const card = quizDeck[quizIdx];
+  const field = quizType === 'char→korean' ? 'korean' : 'char';
+  const wrongs = shuffle(vocab.filter(w => w[field] !== card[field])).slice(0, 3).map(w => w[field]);
+  quizOptions = shuffle([card[field], ...wrongs]);
+  quizSelected = null;
+}
+
+function renderQuiz() {
+  if (!quizDeck.length) initQuizFresh();
+  if (quizIdx >= quizDeck.length) {
+    renderDone();
+    return;
+  }
+  const card = quizDeck[quizIdx];
+  const promptField = quizType === 'char→korean' ? 'char' : 'korean';
+  const correctField = quizType === 'char→korean' ? 'korean' : 'char';
+  const isCharPrompt = quizType === 'char→korean';
+  const prog = ((quizIdx / quizDeck.length) * 100).toFixed(1);
+
+  const optBtns = quizOptions.map((opt, qi) => {
+    const isCorrect = opt === card[correctField];
+    const isSelected = opt === quizSelected;
+    let cls = 'opt-btn';
+    if (quizSelected !== null) {
+      if (isCorrect) cls += ' correct';
+      else if (isSelected) cls += ' wrong';
+    }
+    const fs = !isCharPrompt ? 'font-size:24px;' : '';
+    const label = String(opt)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+    return `<button type="button" class="${cls}" style="${fs}" data-quiz-i="${qi}"><span class="opt-key-num" aria-hidden="true">${qi + 1}</span>${label}</button>`;
+  }).join('');
+
+  document.getElementById('content').innerHTML = `
+    <div class="prog-wrap">
+      <div class="prog-info"><span>${quizIdx + 1} / ${quizDeck.length}</span><span>점수: ${quizScore}</span></div>
+      <div class="prog-track"><div class="prog-fill" style="width:${prog}%"></div></div>
+    </div>
+    <div id="quiz-prompt">
+      <div class="q-main" style="font-size:${isCharPrompt ? '60px' : '22px'}">${card[promptField]}</div>
+      ${isCharPrompt ? `<div class="q-pinyin">${card.pinyin}</div>` : ''}
+      <div class="q-label">${isCharPrompt ? '뜻은?' : '한자는?'}</div>
+    </div>
+    <div id="options">${optBtns}</div>`;
+
+  document.querySelectorAll('#options [data-quiz-i]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const i = Number(btn.getAttribute('data-quiz-i'));
+      chooseOpt(quizOptions[i]);
+    });
+  });
+}
+
+function finishCurrentQuizQuestion() {
+  if (quizAdvanceTimer !== null) {
+    clearTimeout(quizAdvanceTimer);
+    quizAdvanceTimer = null;
+  }
+  if (quizSelected === null) return;
+  quizIdx++;
+  persistChinese();
+  if (quizIdx >= quizDeck.length) renderDone();
+  else {
+    buildOptions();
+    renderQuiz();
+  }
+}
+
+function chooseOpt(opt) {
+  if (quizSelected !== null) return;
+  quizSelected = opt;
+  const card = quizDeck[quizIdx];
+  const correctField = quizType === "char→korean" ? "korean" : "char";
+  if (opt === card[correctField]) quizScore++;
+  renderQuiz();
+  persistChinese();
+  quizAdvanceTimer = setTimeout(() => {
+    quizAdvanceTimer = null;
+    finishCurrentQuizQuestion();
+  }, 900);
+}
+
+function renderDone() {
+  const pct = Math.round(quizScore / quizDeck.length * 100);
+  const emoji = pct >= 80 ? '🎉' : pct >= 60 ? '📚' : '💪';
+  const msg = pct >= 80 ? '내일 시험 준비 완료!' : pct >= 60 ? '한 번 더 돌려봐!' : '플래시카드로 복습하고 다시!';
+  document.getElementById('content').innerHTML = `
+    <div id="done-screen">
+      <div class="done-emoji">${emoji}</div>
+      <div class="done-score">${quizScore} / ${quizDeck.length}</div>
+      <div class="done-pct">${pct}% 정답</div>
+      <div class="done-msg">${msg}</div>
+      <button type="button" class="btn-restart" onclick="switchMode('quiz')">다시 도전</button>
+    </div>`;
+  persistChinese();
+}
+
+document.getElementById('cn-home-count').textContent = String(vocab.length);
+document.getElementById('total-count').textContent = vocab.length + '개';
+
+document.getElementById('cn-pick-list').addEventListener('click', () => enterStudy('list'));
+document.getElementById('cn-pick-flash').addEventListener('click', () => enterStudy('flash'));
+document.getElementById('cn-pick-quiz').addEventListener('click', () => enterStudy('quiz'));
+document.getElementById('btn-mode-home').addEventListener('click', showModeHome);
+
+document.querySelectorAll('#tabs .tab-btn').forEach((b) => {
+  b.addEventListener('click', () => switchMode(b.getAttribute('data-mode')));
+});
+
+document.getElementById('cn-clear-home').addEventListener('click', clearChineseProgress);
+document.getElementById('btn-cn-clear-nav').addEventListener('click', clearChineseProgress);
+
+document.addEventListener('keydown', (ev) => {
+  if (ev.target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(ev.target.tagName)) return;
+  if (ev.target && ev.target.isContentEditable) return;
+  if (mode === 'quiz' && quizSelected !== null && document.getElementById('options') && ev.key === 'Enter') {
+    ev.preventDefault();
+    finishCurrentQuizQuestion();
+    return;
+  }
+  if (mode !== 'quiz' || quizSelected !== null || !document.getElementById('options')) return;
+  const m = /^(?:Digit|Numpad)([1-9])$/.exec(ev.code);
+  if (!m) return;
+  const idx = Number(m[1]) - 1;
+  if (idx >= quizOptions.length) return;
+  ev.preventDefault();
+  chooseOpt(quizOptions[idx]);
+});
+
+(function restoreChineseSession() {
+  const s = readCn();
+  if (!s || s.v !== 1 || !s.inApp) return;
+  document.getElementById('cn-home').hidden = true;
+  document.getElementById('cn-app').hidden = false;
+  document.getElementById('btn-mode-home').hidden = false;
+  document.getElementById('btn-cn-clear-nav').hidden = false;
+  mode = s.mode || 'flash';
+  applyFlashFromSaved(s);
+  applyQuizFromSaved(s);
+  if (!flashDeck.length) initFlashFresh();
+  if (!quizDeck.length) initQuizFresh();
+  document.querySelectorAll('#tabs .tab-btn').forEach((b) => {
+    b.classList.toggle('active', b.getAttribute('data-mode') === mode);
+  });
+  renderOnly();
+  persistChinese();
+})();
+  </script>
+</body>
+</html>

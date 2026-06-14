@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>역사 퀴즈 · 고려 완전 정복</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="site-theme.css" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      padding: clamp(16px, 4vw, 28px) 16px 100px;
+      min-height: 100vh;
+      }
+    
+    .app-title {
+      text-align: center;
+      
+      margin-bottom: clamp(18px, 4vw, 26px);
+      font-size: clamp(1.5rem, 4.5vw, 2.1rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      
+    }
+    .page-card {
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: 24px;
+      padding: clamp(32px, 5vw, 48px) clamp(22px, 4vw, 40px);
+      max-width: 720px;
+      margin: 0 auto 72px;
+      box-shadow:
+        0 4px 6px -1px rgba(15, 23, 42, 0.06),
+        0 24px 48px -12px rgba(14, 165, 233, 0.22);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+    }
+    .wrap { max-width: 100%; margin: 0 auto; padding: 0; }
+
+    :root {
+      --color-text-primary: #333;
+      --color-text-secondary: #666;
+      --color-text-tertiary: #999;
+      --color-text-success: #4caf50;
+      --color-text-info: #0ea5e9;
+      --color-text-warning: #e65100;
+      --color-text-danger: #f44336;
+      --color-background-primary: #fff;
+      --color-background-secondary: #f5f7fa;
+      --color-border-tertiary: #e0e0e0;
+      --color-border-secondary: #d0d0d0;
+      --color-background-success: #e8f5e9;
+      --color-border-success: #81c784;
+      --color-background-danger: #ffebee;
+      --color-border-danger: #ef9a9a;
+      --color-background-warning: #fff8e1;
+      --color-border-warning: #ffe082;
+    }
+
+    .bar { height: 8px; background: var(--sky-100);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 8px;
+      transition: width 0.3s ease;
+      background: linear-gradient(90deg, #0ea5e9, #0284c7);
+    }
+    .bar-sm { height: 5px; margin-bottom: 18px; }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 10px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 0.95em;
+      color: #333;
+      text-align: left;
+      line-height: 1.5;
+      transition: all 0.3s ease;
+      position: relative;
+      font-family: inherit;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    .btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    }
+    .btn:active:not(:disabled) { transform: translateY(0); }
+    .btn:disabled {
+      cursor: default;
+      opacity: 0.65;
+      transform: none;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-main {
+      padding: 16px 18px;
+      font-size: 1.1em;
+      font-weight: 700;
+      margin-bottom: 16px;
+      text-align: center;
+      color: var(--sky-600);
+      background: var(--sky-100);
+      border: 1px solid var(--sky-200);
+      box-shadow: none;
+    }
+    .btn-main:hover:not(:disabled) {
+      background: var(--sky-200);
+      border-color: var(--sky-300);
+    }
+
+    .btn-next {
+      display: inline-block;
+      width: auto;
+      padding: 12px 32px;
+      font-size: 1.05em;
+      font-weight: 700;
+      text-align: center;
+      color: var(--sky-600);
+      background: var(--sky-100);
+      border: 1px solid var(--sky-200);
+      box-shadow: none;
+    }
+    .btn-next:hover:not(:disabled) {
+      background: var(--sky-200);
+      border-color: var(--sky-300);
+    }
+
+    .cat-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      font-size: 0.92em;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      color: #333;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .cat-bar {
+      width: 40px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.75);
+      border-radius: 4px;
+      display: inline-block;
+      position: relative;
+      vertical-align: middle;
+    }
+    .cat-bar-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, #0ea5e9, #0284c7);
+    }
+
+    .opt-num {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8em;
+      font-weight: 800;
+      background: rgba(14, 165, 233, 0.14);
+      color: #0284c7;
+      flex-shrink: 0;
+    }
+    .btn.bg-ok .opt-num { background: rgba(76, 175, 80, 0.2); color: var(--color-text-success); }
+    .btn.bg-err .opt-num { background: rgba(244, 67, 54, 0.15); color: var(--color-text-danger); }
+
+    .opt-label {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.75em;
+      font-weight: 700;
+    }
+
+    .weak-box {
+      background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+      border: 1px solid #ffe082;
+      border-radius: 15px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(230, 81, 0, 0.1);
+    }
+
+    .review-btn {
+      margin-bottom: 8px;
+      text-align: center;
+      color: #c2410c;
+      font-weight: 700;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      box-shadow: none;
+    }
+
+    .card {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf4 100%);
+      border-radius: 15px;
+      padding: 24px;
+      cursor: pointer;
+      min-height: 140px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border: none;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .ex-box {
+      background: #fff;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
+      border: 1px solid #e0e0e0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .wrong-ref-wrap { margin-top: 10px; }
+    .wrong-ref-intro {
+      font-size: 11px;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+    .wrong-ref-tab {
+      margin-bottom: 8px;
+      border: 1px solid var(--color-border-tertiary);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .wrong-ref-tab > summary {
+      cursor: pointer;
+      list-style: none;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 10px 12px;
+      background: linear-gradient(135deg, #f0f9ff 0%, #f1f5f9 100%);
+      color: #0369a1;
+      user-select: none;
+    }
+    .wrong-ref-tab > summary::-webkit-details-marker { display: none; }
+    .wrong-ref-tab > summary::marker { content: ""; }
+    .wrong-ref-tab[open] > summary { border-bottom: 1px solid var(--color-border-tertiary); }
+    .wrong-ref-tab-body { padding: 10px 12px 12px; font-size: 0.86rem; line-height: 1.55; color: var(--color-text-primary); }
+
+    .link-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.95em;
+      color: #0ea5e9;
+      font-weight: 600;
+      padding: 4px 0;
+      font-family: inherit;
+      transition: color 0.2s ease;
+    }
+    .link-btn:hover { text-decoration: underline; color: #0284c7; }
+
+    .progress-box {
+      background: #f5f7fa;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82em;
+      color: #999;
+      margin-bottom: 6px;
+    }
+
+    .c-ok { color: #4caf50; }
+    .c-info { color: #0ea5e9; }
+    .c-warn { color: #e65100; }
+    .c-err { color: #f44336; }
+
+    .bg-ok {
+      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%) !important;
+      border: 2px solid #4caf50 !important;
+      color: #1b5e20 !important;
+      box-shadow: 0 2px 12px rgba(76, 175, 80, 0.25) !important;
+    }
+    .bg-err {
+      background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%) !important;
+      border: 2px solid #f44336 !important;
+      color: #b71c1c !important;
+      box-shadow: 0 2px 12px rgba(244, 67, 54, 0.2) !important;
+    }
+
+    .hist-topnav {
+      display: flex;
+      gap: 8px;
+      margin: -8px 0 20px;
+      padding: 6px;
+      background: linear-gradient(135deg, #f1f5f9 0%, #e8e0f7 100%);
+      border-radius: 14px;
+      border: 1px solid rgba(2, 132, 199, 0.12);
+    }
+    .hist-topnav__btn {
+      flex: 1;
+      padding: 12px 14px;
+      border: none;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: #0284c7;
+      background: transparent;
+      transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .hist-topnav__btn:hover { background: rgba(255, 255, 255, 0.65); }
+    .hist-topnav__btn.is-on {
+      color: #fff;
+      background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+      box-shadow: 0 4px 14px rgba(102, 126, 234, 0.4);
+    }
+
+    .concept-wrap {
+      color: var(--color-text-primary);
+      font-size: 0.9rem;
+      line-height: 1.65;
+    }
+    .concept-wrap h3 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #0284c7;
+      margin: 1rem 0 0.35rem;
+    }
+    .concept-wrap h3:first-child { margin-top: 0; }
+    .concept-wrap ul { margin: 0.25rem 0 0.75rem 1.1rem; padding: 0; }
+    .concept-wrap li { margin-bottom: 0.35rem; }
+    .concept-wrap .concept-note {
+      font-size: 0.82rem;
+      color: var(--color-text-secondary);
+      background: #f8fafc;
+      border-left: 3px solid #bae6fd;
+      padding: 10px 12px;
+      border-radius: 0 8px 8px 0;
+      margin: 0.5rem 0;
+    }
+    .concept-wrap details {
+      margin-bottom: 10px;
+      border: 1px solid var(--color-border-tertiary);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .concept-wrap summary {
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 12px 14px;
+      background: linear-gradient(135deg, #f0f9ff 0%, #f1f5f9 100%);
+      color: #0369a1;
+      list-style: none;
+    }
+    .concept-wrap summary::-webkit-details-marker { display: none; }
+    .concept-wrap details[open] summary { border-bottom: 1px solid var(--color-border-tertiary); }
+    .concept-wrap .concept-details-body { padding: 12px 14px 14px; }
+    .concept-wrap table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      margin: 0.5rem 0;
+    }
+    .concept-wrap th,
+    .concept-wrap td {
+      border: 1px solid var(--color-border-tertiary);
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .concept-wrap th { background: #f1f5f9; font-weight: 700; color: #334155; }
+    .concept-wrap details.concept-chapter {
+      margin-bottom: 12px;
+      border-width: 2px;
+      border-color: rgba(2, 132, 199, 0.2);
+    }
+    .concept-wrap details.concept-chapter > summary { font-size: 0.95rem; padding: 14px 16px; }
+    .concept-wrap details.concept-nested {
+      margin: 0 0 8px 4px;
+      border: 1px solid #e9d5ff;
+      border-radius: 10px;
+      background: #fdfcff;
+    }
+    .concept-wrap details.concept-nested > summary {
+      font-size: 0.84rem;
+      font-weight: 700;
+      padding: 10px 12px;
+      background: linear-gradient(135deg, #f0f9ff 0%, #f8fafc 100%);
+      color: #0284c7;
+    }
+    .concept-wrap details.concept-nested[open] > summary { border-bottom: 1px solid #e0f2fe; }
+    .concept-wrap details.concept-nested .concept-details-body { padding: 10px 12px 12px; font-size: 0.86rem; }
+    .concept-wrap .concept-chapter-hint {
+      font-size: 0.8rem;
+      color: var(--color-text-secondary);
+      margin: 0 0 10px;
+      padding: 0 2px;
+    }
+  </style>
+</head>
+<body>
+  <nav class="site-nav">
+    <a class="site-nav__link" href="index.html#midterm">&larr; 중간 대비 메인</a>
+  </nav>
+  <h1 class="app-title">고려 완전 정복</h1>
+  <div class="page-card">
+    <div class="hist-topnav" id="histTopnav" role="tablist" aria-label="역사 페이지 구분">
+      <button type="button" class="hist-topnav__btn is-on" data-hist-view="quiz" role="tab" aria-selected="true">퀴즈</button>
+      <button type="button" class="hist-topnav__btn" data-hist-view="concepts" role="tab" aria-selected="false">역사 개념</button>
+    </div>
+    <div class="wrap" id="app"></div>
+  </div>
+  <div class="footer">제작자: 정해우</div>
+
+<template id="histConceptTpl">
+<div class="concept-wrap">
+<p class="concept-note">이 자료는 본 페이지 <strong>고려 통사·제도·문화</strong> 퀴즈 범위에 맞춰 정리했습니다. 먼저 <strong>큰 제목(제○부)</strong>을 펼친 뒤, 안의 소단원을 펼쳐 보세요.</p>
+
+<details class="concept-chapter" open><summary>제1부 · 후삼국 분열과 고려 건국·태조</summary><div class="concept-details-body">
+<p class="concept-chapter-hint">통일 전 압축 성장과 왕건의 통합 전략.</p>
+<details class="concept-nested" open><summary>후삼국의 성립과 배경</summary><div class="concept-details-body">
+<ul>
+<li><strong>배경</strong>: 신라 하대 중앙 통제력 약화, 지방 <strong>호족</strong>의 군사·경제력 성장, 곡창·사병의 사유화.</li>
+<li><strong>후백제</strong>(900): <strong>견훤</strong>(신라 군인 출신), 도읍 <strong>완산주</strong>(전주 일대).</li>
+<li><strong>후고구려→태봉</strong>(901): <strong>궁예</strong>(신라 왕족), 송악 건국 → 905 <strong>철원 천도</strong> → 국호 <strong>마진</strong>→<strong>태봉</strong>.</li>
+<li><strong>고려</strong>: 918 왕건이 궁예를 몰아내고 즉위, 919 <strong>개경 천도</strong>.</li>
+<li><strong>고려의 대외 태도</strong>: <strong>발해 유민 적극 포용</strong>, 신라와 <strong>친선·우호</strong>, 후백제와 <strong>대립·경쟁</strong>.</li>
+<li><strong>통일 순서</strong>: 견훤 아들에게 쫓겨 <strong>귀순</strong> → 신라 <strong>경순왕 자발적 귀부</strong>(935) → <strong>후백제 정벌</strong>(936)로 통일 완성.</li>
+</ul>
+</div></details>
+<details class="concept-nested"><summary>태조 왕건의 호족 정책</summary><div class="concept-details-body">
+<ul>
+<li><strong>당근</strong>: <strong>혼인 정책</strong>(호족과 정략결혼·29부인·자녀 다수→이후 왕위 계쟁), <strong>사성</strong>(왕씨 성 하사).</li>
+<li><strong>채찍</strong>: <strong>기인</strong>(호족 자제를 개경에 인질 격 체류), <strong>사심관</strong>(출신 고을에 중앙 관리 파견·감시).</li>
+<li><strong>민생</strong>: <strong>조세 감면</strong>, <strong>흑창</strong>(빈민 구제 기관).</li>
+<li><strong>북진</strong>: 발해 유민·<strong>여진</strong> 수용과 북방 경영.</li>
+</ul>
+</div></details>
+<details class="concept-nested"><summary>훈요 10조(태조 유훈)</summary><div class="concept-details-body">
+<ul>
+<li>후대 왕이 지켜야 할 <strong>통치 교훈 10조</strong>. 핵심 키워드: <strong>불교 숭상</strong>(국교적 성격), <strong>도선 풍수</strong>·사찰, <strong>거란 경계·의관 따르지 말 것</strong>(주체성), <strong>서경 백일 체류</strong>(지맥), <strong>연등·팔관 유지</strong>(후에 성종 때 폐지), <strong>차령 이남 인물 관직 제한</strong>(하대 신라 지역 반감), <strong>민생·탐관 엄단</strong> 등.</li>
+<li>고려 <strong>불교 국가·풍수 정치</strong> 이념의 헌법적 성격.</li>
+</ul>
+</div></details>
+</div></details>
+
+<details class="concept-chapter"><summary>제2부 · 광종·성종 — 호족 격파와 유교적 중앙 집권</summary><div class="concept-details-body">
+<p class="concept-chapter-hint">“힘으로 꺾고(광종), 제도로 굳힌다(성종).”</p>
+<details class="concept-nested"><summary>광종의 개혁</summary><div class="concept-details-body">
+<ul>
+<li><strong>노비안검법</strong>(958): 불법 노비를 양인화 → ①국가 재정(세·역 부과 대상) 확대 ②호족 사노비·노동력·군사력 약화.</li>
+<li><strong>독자 연호</strong> <code>광덕</code>·<code>준풍</code>, <strong>황제 칭호·공복</strong> → 중원과 대등한 외교 위상.</li>
+<li>후반: <strong>쌍기</strong> 등용 후 문사 숙청·소인 득세 → <strong>시무 28조</strong>(최승로→성종)에서 비판.</li>
+<li>후속: 경종 <strong>복수 허용·천민 환원</strong>, 성종 <strong>노비 환천</strong> 등 반동.</li>
+</ul>
+</div></details>
+<details class="concept-nested"><summary>성종·최승로와 유교 국가 골격</summary><div class="concept-details-body">
+<ul>
+<li><strong>시무 28조</strong>: 유교 정치 이념에 따른 국정 개혁안.</li>
+<li><strong>2성 6부</strong> 정비, <strong>12목</strong> 설치(지방관 파견), <strong>국자감·경학박사</strong>(박사·직강), <strong>연등회·팔관회 폐지</strong>, <strong>교방</strong>(왕실·귀족 자녀 교육).</li>
+<li>광종이 호족을 <strong>힘</strong>으로 눌렀다면, 성종은 <strong>제도</strong>로 안정·전수.</li>
+</ul>
+</div></details>
+<details class="concept-nested"><summary>현종과 지방 군사 행정</summary><div class="concept-details-body">
+<ul>
+<li><strong>5도 양계</strong> 완성: <strong>5도+안찰사</strong>=일반 민정, <strong>양계+병마사</strong>=군사(이름·성격 구분 암기).</li>
+</ul>
+</div></details>
+</div></details>
+
+<details class="concept-chapter"><summary>제3부 · 중앙 관제 — 2성 6부와 고려만의 기구</summary><div class="concept-details-body">
+<details class="concept-nested"><summary>2성 6부·낭사</summary><div class="concept-details-body">
+<ul>
+<li><strong>2성</strong>: <strong>중서문하성</strong>(당의 중서+문하 합침)+<strong>상서성</strong>.</li>
+<li><strong>6부</strong>: <strong>이·병·호·형·예·공</strong>(이병호형예공).</li>
+<li><strong>재신</strong>: 정책 논의·결정, <strong>낭사</strong>: 봉박(왕명 부당 시 봉함) 등 <strong>서경권</strong>·언론.</li>
+</ul>
+</div></details>
+<details class="concept-nested"><summary>군사·왕명·재정·감찰</summary><div class="concept-details-body">
+<ul>
+<li><strong>중추원</strong>: 추밀(군사 기밀)+승선(왕명 출납).</li>
+<li><strong>어사대</strong>: 풍속 교정·관리 감찰 → <strong>대간</strong>(낭사+어사대) 견제 기능.</li>
+<li><strong>삼사</strong>: 재정·회계·곡실·물가.</li>
+<li><strong>도병마사</strong>·<strong>식목도감</strong>: 당에 없는 고려 <strong>독자 회의 기구</strong>(국방 vs 신제도 논의).</li>
+</ul>
+</div></details>
+<details class="concept-nested"><summary>원 간섭기 관제 변화(참고)</summary><div class="concept-details-body">
+<ul>
+<li><strong>2성→첨의부</strong>, <strong>6부→4사</strong>, 칭호 <strong>조종→왕</strong> 등 몽골식 외압 반영.</li>
+</ul>
+</div></details>
+</div></details>
+
+<details class="concept-chapter"><summary>제4부 · 지방 제도 — 12목·주현·향리·3경</summary><div class="concept-details-body">
+<details class="concept-nested"><summary>12목·5도·양계</summary><div class="concept-details-body">
+<ul>
+<li><strong>12목</strong>: 성종 때 지방에 파견된 수령급 관리 → 주현 통제·민정.</li>
+<li><strong>주현 vs 속현</strong>: 주현=수령 파견(555), 속현=미파견(378)→<strong>향리</strong> 실질 통치.</li>
+<li><strong>향리</strong>: 조세·지방군, 최고직 <strong>호장</strong>; 문종 때 일부 <strong>과거 진출</strong> 허용.</li>
+</ul>
+</div></details>
+<details class="concept-nested"><summary>향·부곡·소·3경</summary><div class="concept-details-body">
+<ul>
+<li><strong>향·부곡</strong>: 국가 통제 농업, 이주·과거·결혼 제한.</li>
+<li><strong>소</strong>: 국가 수공업 제품 생산.</li>
+<li><strong>3경</strong>: 개경·서경·동경(후에 <strong>남경</strong>으로 변경).</li>
+</ul>
+</div></details>
+</div></details>
+
+<details class="concept-chapter"><summary>제5부 · 관리 임용 — 과거·음서·문벌 귀족</summary><div class="concept-details-body">
+<details class="concept-nested"><summary>과거와 잡과·승과</summary><div class="concept-details-body">
+<ul>
+<li><strong>문과</strong>: <strong>제술과</strong>(시문·정책), <strong>명경과</strong>(유교 경전).</li>
+<li><strong>잡과</strong>→<strong>기술관</strong>(법률·회계·지리), <strong>승과</strong>→<strong>승관</strong>(교종선·선종선).</li>
+</ul>
+</div></details>
+<details class="concept-nested"><summary>음서·공음전·문벌</summary><div class="concept-details-body">
+<ul>
+<li><strong>음서</strong>: 왕실·공신·고위 관료 자손의 관직 진입.</li>
+<li><strong>문벌 귀족 공식</strong>: 과거+음서+<strong>공음전</strong>(5품 이상 세습 허용)+혼인망→관직·토지 독점.</li>
+</ul>
+</div></details>
+</div></details>
+
+<details class="concept-chapter"><summary>제6부 · 문벌 동요 — 이자겸·묘청</summary><div class="concept-details-body">
+<details class="concept-nested"><summary>이자겸의 난(1126)</summary><div class="concept-details-body">
+<ul>
+<li><strong>경원 이씨</strong> 외척 세력, 진압 후에도 <strong>왕권 실축</strong>·지배층 분열.</li>
+</ul>
+</div></details>
+<details class="concept-nested"><summary>묘청의 난(1135)</summary><div class="concept-details-body">
+<ul>
+<li>주장: <strong>서경 천도</strong>·<strong>황제 칭호</strong>·<strong>독자 연호</strong>·<strong>금 정벌</strong> — 근거 <strong>풍수지리설</strong>.</li>
+<li><strong>김부식</strong> 관군이 진압 → 서경 천도론 좌절.</li>
+</ul>
+</div></details>
+</div></details>
+
+<details class="concept-chapter"><summary>제7부 · 무신 정권</summary><div class="concept-details-body">
+<details class="concept-nested"><summary>정변의 원인과 경과</summary><div class="concept-details-body">
+<ul>
+<li><strong>원인</strong>: 무신 차별, <strong>의종</strong>의 향락(<strong>보현원</strong>), 문신 중심 정치.</li>
+<li><strong>연포루</strong>에서 이의방 등이 정변(1170).</li>
+</ul>
+</div></details>
+<details class="concept-nested"><summary>기구·사병·집권자</summary><div class="concept-details-body">
+<ul>
+<li>기구: <strong>중방</strong>→<strong>교정도감</strong>(최충헌)→<strong>교정도감+정방</strong>(최우), 최우 때 <strong>서방</strong>(문인 통제).</li>
+<li>사병: <strong>도방</strong>(경대승)→도방(최충헌)+<strong>삼별초</strong>(최우).</li>
+<li>집권 순(초반): 이의방→정중부→경대승→이의민→<strong>최씨 4대</strong>(충헌·우·항·의)→김준·임연·임유무.</li>
+</ul>
+</div></details>
+<details class="concept-nested"><summary>민중 저항</summary><div class="concept-details-body">
+<ul>
+<li><strong>망이·망소이</strong>(명학소), <strong>만적</strong>(최충헌 사노비, 개경 북산) 등.</li>
+<li>원과의 전쟁기 <strong>삼별초</strong>(최이, 강화도 항전 등) 병행 암기.</li>
+</ul>
+</div></details>
+</div></details>
+
+<details class="concept-chapter"><summary>제8부 · 대외 관계 — 천하관·거란·송·여진</summary><div class="concept-details-body">
+<details class="concept-nested"><summary>독자 천하관</summary><div class="concept-details-body">
+<ul>
+<li><strong>해동천자</strong>, 황제·폐하·성상, 수도를 <strong>황도</strong>로, <strong>독자 연호</strong>(태조 천수, 광종 광덕·준풍).</li>
+</ul>
+</div></details>
+<details class="concept-nested"><summary>거란 3차·서희·강감찬·윤관</summary><div class="concept-details-body">
+<ul>
+<li><strong>1차</strong>: <strong>서희</strong> 담판(<strong>소손녕</strong>)→<strong>강동 6주</strong>.</li>
+<li><strong>2차</strong>: 개경 함락 후 퇴각 등 복합 대응.</li>
+<li><strong>3차</strong>: <strong>강감찬</strong> <strong>귀주대첩</strong>·<strong>천리장성</strong>.</li>
+<li><strong>윤관</strong> <strong>동북 9성</strong>→방어 부담·여진 정세로 <strong>반환</strong>.</li>
+</ul>
+</div></details>
+<details class="concept-nested"><summary>송·여진·해양</summary><div class="concept-details-body">
+<ul>
+<li><strong>벽란도</strong>: 송·거란·여진·일본 등과 연결된 무역항.</li>
+<li><strong>예종</strong> 여진 정벌, <strong>숙종</strong> 요동 정벌 중단 논쟁, <strong>금</strong>과의 긴장 등 외정 흐름.</li>
+</ul>
+</div></details>
+</div></details>
+
+<details class="concept-chapter"><summary>제9부 · 전시과·조세·화폐</summary><div class="concept-details-body">
+<details class="concept-nested"><summary>전시과의 구조</summary><div class="concept-details-body">
+<ul>
+<li><strong>전지</strong>=곡물 수취권, <strong>시지</strong>=땔감 채취권. 원칙적 세습 불가.</li>
+<li><strong>공음전</strong>: 5품 이상만 세습 가능 → 문벌 경제 기반.</li>
+</ul>
+</div></details>
+<details class="concept-nested"><summary>시정·개정·경정</summary><div class="concept-details-body">
+<ul>
+<li><strong>시정</strong>(경종): 인품+관품, <strong>개정</strong>(목종): 전·현직, <strong>경정</strong>(문종): 현직만 → 수급 대상 축소·토지 부족 반영.</li>
+<li>말기 <strong>과전법</strong>(경기도 한정)로 연결.</li>
+</ul>
+</div></details>
+<details class="concept-nested"><summary>조세·공납·역</summary><div class="concept-details-body">
+<ul>
+<li><strong>양안+호적</strong>, 조세 대략 <strong>십분의일</strong>, <strong>상공</strong>(매년)+<strong>별공</strong>(수시).</li>
+<li><strong>역</strong>: 16~59세 양인 정남, 요역·군역.</li>
+<li><strong>활구</strong>(은병)=베 100필, 금속 화폐 유통 한계로 실물 경제.</li>
+<li><strong>원 간섭기</strong>: <strong>보초</strong>(원 지폐), <strong>건원중보</strong> 등.</li>
+</ul>
+</div></details>
+</div></details>
+
+<details class="concept-chapter"><summary>제10부 · 신분제·노비·여성</summary><div class="concept-details-body">
+<details class="concept-nested"><summary>양천제·정호·백정</summary><div class="concept-details-body">
+<ul>
+<li><strong>양천제</strong>, <strong>일천즉천</strong>(한쪽 천이면 자녀도 천인).</li>
+<li><strong>정호</strong>: 직역(요역) 부담→토지 수급, <strong>백정</strong>: 직역 없는 농민층.</li>
+<li><strong>공노비</strong> 입역/외거, <strong>사노비</strong> 솔거/외거.</li>
+</ul>
+</div></details>
+<details class="concept-nested"><summary>여성·가족</summary><div class="concept-details-body">
+<ul>
+<li><strong>호주</strong> 가능, 별도 재산·상속, 재혼 비교적 자유, 처가 거주·외가 음서·상피제와 맞물린 혼망 전략.</li>
+</ul>
+</div></details>
+</div></details>
+
+<details class="concept-chapter"><summary>제11부 · 불교·유교·학술 문화</summary><div class="concept-details-body">
+<details class="concept-nested"><summary>불교</summary><div class="concept-details-body">
+<ul>
+<li><strong>의천</strong>: 해동천태종, <strong>교관겸수</strong>(교종 중심 선종 통합), 『교장』.</li>
+<li><strong>지눌</strong>: 수선사·송광사, <strong>정혜쌍수·돈오점수</strong>, 선종 중심.</li>
+<li><strong>요세</strong>: 백련사, 참회 실천(천태).</li>
+<li><strong>결사운동</strong>: 교·선 갈등 이후 재편.</li>
+<li><strong>팔만대장경</strong>: 고종대 국난 극복·경전 보존, 해인사 보존.</li>
+</ul>
+</div></details>
+<details class="concept-nested"><summary>유교·성리학·사학·사서</summary><div class="concept-details-body">
+<ul>
+<li><strong>도선</strong>: 풍수지리설 체계화.</li>
+<li><strong>안향</strong>→<strong>이제현</strong>(만권당)→<strong>이색</strong> 등 성리학 수용.</li>
+<li><strong>최충</strong>: 9재 학당·<strong>문헌공도</strong> → 성종대 <strong>7재·양현고</strong> 등 관학 진흥.</li>
+<li>저술: 김부식『삼국사기』(기전체), 이규보『동명왕편』, 일연『삼국유사』, 이승휴『제왕운기』.</li>
+<li><strong>정도전</strong>『불씨잡변』: 성리학적 불교 비판.</li>
+</ul>
+</div></details>
+</div></details>
+
+<details class="concept-chapter"><summary>제12부 · 원 간섭기·권문세족</summary><div class="concept-details-body">
+<details class="concept-nested"><summary>부마국·간섭 기구</summary><div class="concept-details-body">
+<ul>
+<li>고려 왕·<strong>원 공주</strong> 혼인, <strong>조공·역진</strong>, <strong>정동행성·다루가치</strong> 내정 간섭.</li>
+<li><strong>권문세족</strong>: 친원·대토지·노비, 실권 기구 <strong>도평의사사</strong>.</li>
+</ul>
+</div></details>
+<details class="concept-nested"><summary>몽골 재침과 고종</summary><div class="concept-details-body">
+<ul>
+<li>1232년 재침에 <strong>강화도 천도</strong>(고종).</li>
+</ul>
+</div></details>
+</div></details>
+
+<details class="concept-chapter"><summary>제13부 · 고려 말 개혁과 조선 건국</summary><div class="concept-details-body">
+<details class="concept-nested"><summary>공민왕·신돈</summary><div class="concept-details-body">
+<ul>
+<li><strong>반원·자주화</strong>: 몽골식 폐지, 친원 제거, 정동행성 이문소 폐지, 쌍성총관부·철령 이북.</li>
+<li><strong>왕권 강화</strong>: 정방 폐지, <strong>신돈</strong>+전민변정도감, 성균관·과거, 신진사대부.</li>
+<li><strong>전민변정도감</strong>: 빼앗긴 토지·노비 환원.</li>
+<li>실패 요인: 권문 반발, <strong>홍건적·왜구</strong>, 신돈 제거.</li>
+</ul>
+</div></details>
+<details class="concept-nested"><summary>위화도 회군·과전법·1392</summary><div class="concept-details-body">
+<ul>
+<li><strong>최영</strong> 요동 정벌 vs <strong>이성계</strong> 회군 명분.</li>
+<li><strong>급진파 정도전</strong> vs <strong>온건파 정몽주</strong>(과전법 반대).</li>
+<li><strong>과전법</strong> 경기도 한정 → 정몽주 제거 → <strong>1392 조선 건국</strong>.</li>
+<li>지배층 흐름: 호족→문벌→무신→권문→<strong>신진사대부</strong>.</li>
+</ul>
+</div></details>
+</div></details>
+
+<p class="concept-note" style="margin-top:1rem">암기 팁: 왕대·인물·제도를 한 줄로 연결해 스토리를 만든 뒤(예: “광종 노비안검→성종 12목→문종 향리 과거”), 퀴즈 카테고리 이름과 맞춰 복습하면 빈칸이 줄어듭니다.</p>
+</div>
+</template>
+
+<script>
+const Q=[
+{id:1,cat:"후삼국",q:"후백제를 건국한 인물과 그의 출신은?",a:"견훤, 신라의 군인 출신",opts:["견훤, 신라의 군인 출신","궁예, 신라의 왕족 출신","왕건, 호족 출신","경순왕, 신라 왕족 출신"],ex:"견훤은 신라의 군인 출신으로, 완산주에 도읍을 정하고 후백제를 건국(900)했다."},
+{id:2,cat:"후삼국",q:"후백제의 도읍은?",a:"완산주",opts:["완산주","송악","철원","경주"],ex:"견훤이 완산주(지금의 전주)에 도읍을 정했다."},
+{id:3,cat:"후삼국",q:"후고구려를 건국한 인물과 그의 출신은?",a:"궁예, 신라 왕족 출신",opts:["궁예, 신라 왕족 출신","견훤, 신라 군인 출신","왕건, 호족 출신","김헌창, 신라 귀족 출신"],ex:"궁예는 신라 왕족 출신으로 송악에 도읍을 정하고 후고구려를 건국(901)했다."},
+{id:4,cat:"후삼국",q:"궁예의 국호 변천 순서는?",a:"마진 → 철원 천도 → 태봉 → 고려(왕건)",opts:["마진 → 철원 천도 → 태봉 → 고려(왕건)","태봉 → 마진 → 고려","후고구려 → 태봉 → 마진","마진 → 태봉 → 후고구려"],ex:"마진(국호) → 철원 천도(905) → 태봉(국호) → 왕건이 918년에 고려로 교체."},
+{id:5,cat:"후삼국",q:"후삼국 분열의 근본적 배경은?",a:"신라 하대 혼란 심화 → 지방 호족 성장",opts:["신라 하대 혼란 심화 → 지방 호족 성장","당의 침입으로 신라 약화","발해 멸망의 영향","불교 교단의 분열"],ex:"신라 하대에 중앙 통제력이 약화되면서 지방 호족들이 독자적으로 성장했다."},
+{id:6,cat:"후삼국",q:"고려가 발해·신라·후백제에 각각 취한 태도는?",a:"발해=적극적 포용, 신라=친선과 우호, 후백제=대립과 경쟁",opts:["발해=적극적 포용, 신라=친선과 우호, 후백제=대립과 경쟁","모두 대립","모두 우호","발해=적대, 신라=대립, 후백제=포용"],ex:"세 나라에 대한 전략이 전부 달랐다."},
+{id:7,cat:"후삼국",q:"고려의 후삼국 통일 순서는?",a:"견훤의 귀순 → 경순왕의 귀부 → 후백제 정벌(936)",opts:["견훤의 귀순 → 경순왕의 귀부 → 후백제 정벌(936)","경순왕 → 견훤 → 정벌","정벌 → 견훤 → 경순왕","견훤 → 정벌 → 경순왕"],ex:"견훤이 아들에게 쫓겨나 귀순 → 경순왕이 자발적 귀부 → 후백제 정벌로 통일."},
+{id:8,cat:"태조",q:"태조의 호족 우대 정책(당근) 2가지는?",a:"혼인 정책, 사성 정책",opts:["혼인 정책, 사성 정책","기인 제도, 사심관 제도","과거제, 음서","훈요 10조, 북진 정책"],ex:"혼인(29명 부인)=정략결혼, 사성=왕씨 성 하사."},
+{id:9,cat:"태조",q:"태조의 호족 통제 정책(채찍) 2가지는?",a:"기인 제도, 사심관 제도",opts:["기인 제도, 사심관 제도","혼인 정책, 사성 정책","노비안검법, 과거제","조세 감면, 흑창"],ex:"기인=호족 자제를 인질로 개경 체류, 사심관=중앙 관리를 출신 지역 감시자로 파견."},
+{id:10,cat:"태조",q:"흑창이란?",a:"태조가 설치한 빈민 구제 기관",opts:["태조가 설치한 빈민 구제 기관","곡식 저장 창고","군량미 비축 시설","세금 징수 기관"],ex:"태조의 민생 안정 정책. 조세 감면과 함께 실시."},
+{id:11,cat:"태조",q:"왕건의 부인 수와 자녀 수는?",a:"29명 부인, 25남 9녀",opts:["29명 부인, 25남 9녀","25명 부인, 29남 9녀","29명 부인, 20남 10녀","30명 부인, 25남 9녀"],ex:"거의 전부 호족과의 정략결혼. 사후 왕위 계승 분쟁 발생."},
+{id:12,cat:"훈요10조",q:"훈요 10조란?",a:"태조가 후대 왕에게 남긴 통치 교훈",opts:["태조가 후대 왕에게 남긴 통치 교훈","광종의 관료 규범","성종의 교육 지침","최승로의 정책 건의"],ex:"핵심: 불교 숭상, 풍수 존중, 서경 중시, 거란 적대, 민생 우선."},
+{id:13,cat:"훈요10조",q:"훈요 10조 제1조: 불교에 대해?",a:"불교의 힘으로 나라를 세웠으므로 사찰을 세우라",opts:["불교의 힘으로 나라를 세웠으므로 사찰을 세우라","유교 교육 강화","서경에 머물라","거란 적대시"],ex:"사찰을 세우고 주지를 파견하여 불도를 닦도록 하라."},
+{id:14,cat:"훈요10조",q:"훈요 10조 제2조에 언급된 인물과 사상은?",a:"도선의 풍수 사상",opts:["도선의 풍수 사상","최승로의 유교","의천의 교관겸수","안향의 성리학"],ex:"도선의 풍수 사상에 따라 사찰을 세우고 함부로 짓지 말라."},
+{id:15,cat:"훈요10조",q:"훈요 10조 제4조: 거란에 대해?",a:"짐승같은 나라이므로 의관 제도를 따르지 마라",opts:["짐승같은 나라이므로 의관 제도를 따르지 마라","우호 관계 유지","군사 동맹","문화 수용"],ex:"중국 문화를 반드시 따를 필요 없다고도 언급. 주체성 강조."},
+{id:16,cat:"훈요10조",q:"훈요 10조 제5조: 서경에 대해?",a:"지맥의 근본이니 백 일 이상 머물러라",opts:["지맥의 근본이니 백 일 이상 머물러라","천도하라","군사 기지 설치","사찰 보호"],ex:"서경 중시 — 풍수지리적 중요성."},
+{id:17,cat:"훈요10조",q:"훈요 10조 제6조: 연등과 팔관?",a:"연등=부처, 팔관=하늘·산·강 섬기는 것. 줄이지 마라",opts:["연등=부처, 팔관=하늘·산·강 섬기는 것. 줄이지 마라","둘 다 불교 행사","유교·도교 행사","왕실·백성 행사"],ex:"성종 때 폐지되었다가 다시 부활."},
+{id:18,cat:"훈요10조",q:"훈요 10조 제8조: 벼슬을 주지 말라고 한 대상은?",a:"차령 산맥 이남 사람",opts:["차령 산맥 이남 사람","서경 출신","여진족","거란 출신"],ex:"통합당한 원한을 품고 난을 일으킬 염려."},
+{id:19,cat:"광종",q:"노비안검법의 이중 목적은?",a:"국가 재정 확충 + 호족의 경제·군사적 기반 약화",opts:["국가 재정 확충 + 호족의 경제·군사적 기반 약화","노비 해방 + 신분제 폐지","사원 통제 + 승려 관리","호족 우대 + 왕실 강화"],ex:"불법 노비를 양인으로 → ①세금 낼 양인 증가 ②호족의 노동력·군사력 감소."},
+{id:20,cat:"광종",q:"광종이 사용한 독자적 연호 2가지는?",a:"'광덕', '준풍'",opts:["'광덕', '준풍'","'천수', '건원'","'태평', '광명'","'건덕', '천풍'"],ex:"황제 칭호, 공복 제정과 함께 독자적 위상 과시. 태조='천수'."},
+{id:21,cat:"광종",q:"광종과 대목왕후 황보씨의 관계는?",a:"이복 남매 (2촌)",opts:["이복 남매 (2촌)","사촌","남남 부부","고모와 조카"],ex:"태조의 자녀끼리 결혼. 고려 왕실 근친혼 사례."},
+{id:22,cat:"광종",q:"시무 28조에서 비판된 광종 후반기 문제는?",a:"쌍기 등용 후 문사 과도 중용 → 16년간 숙청, 소인 득세",opts:["쌍기 등용 후 문사 과도 중용 → 16년간 숙청, 소인 득세","노비안검법 실패","과거제 부작용","거란 전쟁 패배"],ex:"초기 8년은 청렴·공평 → 쌍기 등용 이후 과도한 숙청. 최승로가 성종에게 보고."},
+{id:23,cat:"광종",q:"경종·성종 때 노비안검법의 후속 문제는?",a:"경종: 복수 허용(천민 환원) / 성종: 노비 환천",opts:["경종: 복수 허용(천민 환원) / 성종: 노비 환천","추가 해방","강화","매매 금지"],ex:"광종대 개혁의 반작용."},
+{id:24,cat:"성종",q:"시무 28조를 올린 인물 → 어떤 왕?",a:"최승로 → 성종",opts:["최승로 → 성종","서희 → 현종","김부식 → 인종","묘청 → 인종"],ex:"유교 정치 이념에 기반한 국정 개혁안."},
+{id:25,cat:"성종",q:"성종의 핵심 업적 4가지는?",a:"2성6부 정비, 12목 설치, 국자감·경학박사, 연등회·팔관회 폐지",opts:["2성6부 정비, 12목 설치, 국자감·경학박사, 연등회·팔관회 폐지","노비안검법, 과거제","교정도감, 정방","전시과, 과전법"],ex:"광종이 힘으로 호족을 꺾었다면, 성종은 제도로 안정시켰다."},
+{id:26,cat:"중앙제도",q:"2성 6부의 '2성'은?",a:"중서문하성, 상서성",opts:["중서문하성, 상서성","중서문하성, 중추원","상서성, 어사대","중서성, 문하성"],ex:"당의 3성 중 중서성+문하성을 합침. 상서성 아래 6부(이병호형예공)."},
+{id:27,cat:"중앙제도",q:"중서문하성 '재신' vs '낭사'?",a:"재신=정책 논의, 낭사=언론 기능(서경권)",opts:["재신=정책 논의, 낭사=언론 기능(서경권)","재신=군사, 낭사=재정","재신=감찰, 낭사=교육","동일 역할"],ex:"같은 기관에 결정권자(재신)와 견제자(낭사)가 공존."},
+{id:28,cat:"중앙제도",q:"6부를 나열하면?",a:"이부·병부·호부·형부·예부·공부",opts:["이부·병부·호부·형부·예부·공부","이부·병부·호부·형부·예부·상부","이부·병부·재부·형부·예부·공부","이부·병부·호부·법부·예부·공부"],ex:"'이병호형예공'으로 암기."},
+{id:29,cat:"중앙제도",q:"중추원의 두 기능은?",a:"추밀=군사 기밀, 승선=왕명 출납",opts:["추밀=군사 기밀, 승선=왕명 출납","추밀=재정, 승선=감찰","추밀=교육, 승선=외교","둘 다 군사"],ex:"군사 기밀과 왕명 출납."},
+{id:30,cat:"중앙제도",q:"어사대 vs 삼사?",a:"어사대=풍속 교정·관리 감찰, 삼사=재정·회계",opts:["어사대=풍속 교정·관리 감찰, 삼사=재정·회계","어사대=재정, 삼사=감찰","둘 다 군사","둘 다 교육"],ex:"어사대는 관리 비리 감시, 삼사는 곡실 출납·회계·물가 조절."},
+{id:31,cat:"중앙제도",q:"도병마사 vs 식목도감?",a:"도병마사=국방·군사, 식목도감=새 제도·규칙. 둘 다 고려 독자적",opts:["도병마사=국방·군사, 식목도감=새 제도·규칙. 둘 다 고려 독자적","당에서 수입","원간섭기 설치","무신 정권 기구"],ex:"당 제도에 없는 고려만의 독자적 회의 기구."},
+{id:32,cat:"중앙제도",q:"대간의 핵심 역할은?",a:"정치 잘못 지적 + 관리 임명 동의(서경권) → 권력 견제",opts:["정치 잘못 지적 + 관리 임명 동의(서경권) → 권력 견제","군사 지휘","세금 징수","외교"],ex:"대간 = 중서문하성 낭사 + 어사대."},
+{id:33,cat:"지방제도",q:"12목 설치 왕 → 5도 양계 완성 왕?",a:"성종 → 현종",opts:["성종 → 현종","태조 → 광종","광종 → 성종","현종 → 성종"],ex:"성종: 12목(지방관 파견). 현종: 경기+5도 양계 완성."},
+{id:34,cat:"지방제도",q:"5도 vs 양계?",a:"5도=일반 행정(안찰사), 양계=군사 행정(병마사)",opts:["5도=일반 행정(안찰사), 양계=군사 행정(병마사)","5도=군사, 양계=행정","둘 다 군사","둘 다 행정"],ex:"성격과 장관 명칭이 다르다."},
+{id:35,cat:"지방제도",q:"주현 vs 속현?",a:"주현=수령 파견, 속현=미파견 → 향리가 독자 운영",opts:["주현=수령 파견, 속현=미파견 → 향리가 독자 운영","주현=미파견, 속현=파견","둘 다 파견","둘 다 미파견"],ex:"주현 555개, 속현 378개."},
+{id:36,cat:"지방제도",q:"3경은?",a:"개경, 서경, 동경(→남경)",opts:["개경, 서경, 동경(→남경)","개경, 서경, 금주","개경, 서경, 경주","개경, 평양, 한양"],ex:"동경이 나중에 남경으로 바뀜."},
+{id:37,cat:"지방제도",q:"향리의 역할과 최고직은?",a:"조세 징수·지방군 지휘, 최고직=호장",opts:["조세 징수·지방군 지휘, 최고직=호장","정책 결정, 수령","외교, 안찰사","교육, 경학박사"],ex:"일부는 과거로 중앙 진출(문종 때 허용). 김부식 가문=경주 호장 출신."},
+{id:38,cat:"지방제도",q:"'소'의 주민이 생산한 것은?",a:"국가의 수공업 수요품",opts:["국가의 수공업 수요품","곡물","군수물자","비단"],ex:"향·부곡=농업, 소=수공업. 모두 과거·거주이전·결혼 제한."},
+{id:39,cat:"관리임용",q:"문과: 제술과 vs 명경과?",a:"제술과=문학·정책, 명경과=유교 경전 이해",opts:["제술과=문학·정책, 명경과=유교 경전 이해","제술과=유교, 명경과=문학","둘 다 문학","둘 다 경전"],ex:"잡과(법률·회계·지리)→기술관, 승과(교종선·선종선)→승관."},
+{id:40,cat:"관리임용",q:"음서의 대상은?",a:"왕실, 공신, 고위 관리 자손",opts:["왕실, 공신, 고위 관리 자손","모든 양인","과거 합격자","군인 자제"],ex:"과거 없이 관직. 문벌 귀족 형성의 핵심."},
+{id:41,cat:"관리임용",q:"문벌 귀족 형성 공식은?",a:"과거+음서+공음전+혼인 → 관직 독점",opts:["과거+음서+공음전+혼인 → 관직 독점","과거제만","왕의 임명","군사력"],ex:"네 가지가 결합 → 세습적 지배층."},
+{id:42,cat:"문벌동요",q:"이자겸의 가문과 난의 결과는?",a:"경원 이씨 / 진압 → 왕권 실추, 지배층 분열",opts:["경원 이씨 / 진압 → 왕권 실추, 지배층 분열","경주 김씨 / 왕위 찬탈","해주 최씨 / 고려 멸망","안동 권씨 / 무신 정권"],ex:"외척 권력 독점 → 반란 → 진압되었으나 왕권 크게 추락."},
+{id:43,cat:"문벌동요",q:"묘청의 주장 4가지와 근거는?",a:"서경 천도·황제 칭호·연호·금 정벌 / 풍수지리설",opts:["서경 천도·황제 칭호·연호·금 정벌 / 풍수지리설","개경 천도 / 유교","남경 천도 / 성리학","서경 천도 / 불교"],ex:"김부식의 관군이 진압."},
+{id:44,cat:"무신정권",q:"무신 정변의 원인 3가지는?",a:"무신 차별 + 의종의 향락 + 문신 중심 정치",opts:["무신 차별 + 의종의 향락 + 문신 중심 정치","거란 침입 + 노비 반란","이자겸 + 묘청 + 불교","원 간섭 + 공녀 + 관제 격하"],ex:"구조적 + 개인적 + 정치적 세 요인 중첩."},
+{id:45,cat:"무신정권",q:"정치 기구 변천은?",a:"중방(초기) → 교정도감(최충헌) → 교정도감+정방(최우)",opts:["중방(초기) → 교정도감(최충헌) → 교정도감+정방(최우)","교정도감 → 중방 → 정방","정방 → 교정도감 → 중방","도병마사 → 식목도감"],ex:"기구와 설치자 매칭 필수."},
+{id:46,cat:"무신정권",q:"사병 집단 변천은?",a:"도방(경대승) → 도방(최충헌) + 삼별초(최우)",opts:["도방(경대승) → 도방(최충헌) + 삼별초(최우)","삼별초 → 도방","별무반 → 도방","야별초만"],ex:"최우는 서방(문인 기구)도 설치."},
+{id:47,cat:"무신정권",q:"집권자 순서 (처음 4명)?",a:"이의방→정중부→경대승→이의민",opts:["이의방→정중부→경대승→이의민","정중부→이의방→이의민→경대승","이의민→경대승→정중부→이의방","정중부→경대승→이의방→이의민"],ex:"이후 최씨 4대(충헌→우→항→의) → 김준 → 임연 → 임유무."},
+{id:48,cat:"무신정권",q:"망이·망소이 장소 / 만적 신분·장소?",a:"명학소 / 최충헌의 사노비, 개경 북산",opts:["명학소 / 최충헌의 사노비, 개경 북산","개경 / 문벌 귀족","서경 / 호위무사","강화도 / 양인"],ex:"'장상의 씨가 따로 있으랴!'"},
+{id:49,cat:"원간섭기",q:"원 간섭기 용어·관제 변화는?",a:"조종→왕, 폐하→전하, 2성→첨의부, 6부→4사",opts:["조종→왕, 폐하→전하, 2성→첨의부, 6부→4사","왕→황제, 전하→폐하","변화 없음","관제 확대"],ex:"부마국 전락. 다루가치·정동행성으로 내정 간섭."},
+{id:50,cat:"원간섭기",q:"권문세족 특징과 장악 기구?",a:"친원적·대토지·노비 확대 / 도평의사사",opts:["친원적·대토지·노비 확대 / 도평의사사","반원적 / 교정도감","무신 / 중방","성리학 / 성균관"],ex:"원에 붙어 권력 장악. 국가 재정 궁핍, 백성 고통."},
+{id:51,cat:"고려말",q:"공민왕 반원자주화 정책 3가지?",a:"몽골식 제도 폐지+친원 제거, 정동행성 이문소 폐지, 쌍성총관부 공격(철령 이북)",opts:["몽골식 제도 폐지+친원 제거, 정동행성 이문소 폐지, 쌍성총관부 공격(철령 이북)","과거제 폐지","원과 동맹 강화","토지 국유화"],ex:"원 쇠퇴를 계기로 추진."},
+{id:52,cat:"고려말",q:"공민왕 왕권 강화 정책은?",a:"정방 폐지, 신돈+전민변정도감, 성균관·과거제 정비, 신진사대부 등용",opts:["정방 폐지, 신돈+전민변정도감, 성균관·과거제 정비, 신진사대부 등용","교정도감 설치","중방 강화","원에 인질 파견"],ex:"전민변정도감=빼앗긴 토지·노비를 돌려줌."},
+{id:53,cat:"고려말",q:"공민왕 개혁 실패 원인 3가지?",a:"권문세족 반대, 홍건적·왜구, 신돈 제거",opts:["권문세족 반대, 홍건적·왜구, 신돈 제거","왕의 무능","원 재침입","모두 성공"],ex:"내부의 적 + 외부의 적 + 개혁 동력 상실."},
+{id:54,cat:"고려말",q:"위화도 회군 / 요동 정벌 추진?",a:"이성계 / 최영",opts:["이성계 / 최영","최영 / 이성계","정도전 / 정몽주","정몽주 / 정도전"],ex:"최영의 요동 정벌에 이성계가 반대 → 회군 → 과전법·조선 건국."},
+{id:55,cat:"고려말",q:"급진파 vs 온건파?",a:"급진파=정도전, 온건파=정몽주",opts:["급진파=정도전, 온건파=정몽주","반대","둘 다 급진","둘 다 온건"],ex:"과전법(경기도 한정) → 정몽주 제거 → 조선 건국(1392)."},
+{id:56,cat:"고려말",q:"지배 세력 변천 5단계?",a:"호족→문벌→무신→권문세족→신진사대부",opts:["호족→문벌→무신→권문세족→신진사대부","문벌→호족→무신→신진사대부→권문세족","호족→무신→문벌→권문세족→신진사대부","호족→문벌→권문세족→무신→신진사대부"],ex:"매번 이전 세력이 '너무 많이 가져서' 뒤집힘."},
+{id:57,cat:"대외관계",q:"독자적 천하관 용어들은?",a:"해동천자, 황제, 폐하, 성상, 황도(개경), 독자적 연호",opts:["해동천자, 황제, 폐하, 성상, 황도(개경), 독자적 연호","동방천자, 대왕","해동 제후","중국의 제후국"],ex:"태조='천수', 광종='광덕'·'준풍'."},
+{id:58,cat:"대외관계",q:"거란 1차·2차·3차 핵심 결과?",a:"1차=서희→강동6주, 2차=개경함락→퇴각, 3차=강감찬→천리장성",opts:["1차=서희→강동6주, 2차=개경함락→퇴각, 3차=강감찬→천리장성","1차=천리장성, 2차=강동6주","모두 개경함락","모두 외교"],ex:"각 차수별 결과가 다르다."},
+{id:59,cat:"대외관계",q:"별무반 편성 인물과 성과?",a:"윤관, 동북 9성 → 반환",opts:["윤관, 동북 9성 → 반환","서희, 강동 6주","강감찬, 천리장성","최영, 왜구"],ex:"방어 어려움 + 여진 충성 약속 → 반환."},
+{id:60,cat:"대외관계",q:"대외 무역 중심지?",a:"벽란도",opts:["벽란도","개경","서경","금주"],ex:"송·거란·여진·일본·아라비아."},
+{id:61,cat:"전시과",q:"전지 vs 시지?",a:"전지=곡물 수취권, 시지=땔감 채취권",opts:["전지=곡물 수취권, 시지=땔감 채취권","전지=소유, 시지=집","전지=군사, 시지=민간","전지=세습, 시지=임시"],ex:"수조권 지급. 원칙적 세습 불가."},
+{id:62,cat:"전시과",q:"공음전?",a:"5품 이상 → 유일하게 세습 가능",opts:["5품 이상 → 유일하게 세습 가능","모든 관리 → 세습 불가","6품 이하 → 세습","군인만"],ex:"문벌 귀족 경제적 기반."},
+{id:63,cat:"전시과",q:"시정·개정·경정 전시과 핵심 차이?",a:"시정(경종)=인품+관품, 개정(목종)=전현직, 경정(문종)=현직만",opts:["시정(경종)=인품+관품, 개정(목종)=전현직, 경정(문종)=현직만","모두 동일","시정=현직, 경정=전현직","순서 반대"],ex:"수급 대상 축소 = 토지 부족. → 과전법(경기도)."},
+{id:64,cat:"수취·경제",q:"조세·공납·역 핵심?",a:"양안+호적 / 조세=1/10, 공납=군현별, 역=16~59세 양인 정남",opts:["양안+호적 / 조세=1/10, 공납=군현별, 역=16~59세 양인 정남","호적만","양안만","기준 없음"],ex:"공납: 상공(매년)+별공(필요시). 역: 요역+군역."},
+{id:65,cat:"수취·경제",q:"활구(은병) 가치?",a:"은 1근, 1개=베 100필",opts:["은 1근, 1개=베 100필","금 1근, 50필","은 2근, 200필","철 1근, 10필"],ex:"건원중보(철전) 등은 유통 부진 → 삼베·곡식. 보초=원의 지폐."},
+{id:66,cat:"신분제",q:"양천제와 일천즉천?",a:"양인+천인 / 한 쪽 천인→자녀도 천인",opts:["양인+천인 / 한 쪽 천인→자녀도 천인","골품제 / 양쪽 모두","반상제 / 아버지","사민제 / 어머니"],ex:"노비=재산. 양인 내부도 귀족·정호·백정으로 분화."},
+{id:67,cat:"신분제",q:"정호 vs 백정?",a:"정호=직역 부담→토지 수급, 백정=직역 없는 농민",opts:["정호=직역 부담→토지 수급, 백정=직역 없는 농민","정호=천인","동일","정호=농민, 백정=군인"],ex:"중간 계층 vs 피지배층."},
+{id:68,cat:"신분제",q:"공노비(입역/외거) vs 사노비(솔거/외거)?",a:"입역=궁궐·관청, 외거=따로+몸값 / 솔거=주인 집",opts:["입역=궁궐·관청, 외거=따로+몸값 / 솔거=주인 집","모두 동일","입역=농사","솔거=자유인"],ex:"공노비=국가, 사노비=개인 소유."},
+{id:69,cat:"신분제",q:"이의민 출신?",a:"부친=소금·체 판매, 모친=옥령사 노비 → 장군",opts:["부친=소금·체 판매, 모친=옥령사 노비 → 장군","문벌 귀족","호장","왕족"],ex:"신분적 개방성 사례. 이영(호장→관직), 충주 다인철소(→의안현)도."},
+{id:70,cat:"여성·가족",q:"고려 여성 지위 핵심 3가지?",a:"호주 가능, 별도 재산·상속, 재혼 자유",opts:["호주 가능, 별도 재산·상속, 재혼 자유","모든 권리 제한","재산권만","호주 불가"],ex:"처가 거주. 외가에도 음서·상피제 적용."},
+{id:71,cat:"불교",q:"의천: 종파·사상·간행물?",a:"해동 천태종, 교관겸수(교종 중심 선종 통합), 『교장』",opts:["해동 천태종, 교관겸수(교종 중심 선종 통합), 『교장』","조계종, 돈오점수","화엄종, 참회","법상종, 정혜쌍수"],ex:"사후 다시 분열 → 결사운동."},
+{id:72,cat:"불교",q:"지눌: 장소·사상·방향?",a:"수선사(송광사), 정혜쌍수·돈오점수, 선종 중심",opts:["수선사(송광사), 정혜쌍수·돈오점수, 선종 중심","백련사, 참회","현화사, 교관겸수","흥왕사, 선교일치"],ex:"의천(교종 중심)과 방향이 정반대."},
+{id:73,cat:"불교",q:"요세?",a:"백련사, 참회의 실천 (천태종)",opts:["백련사, 참회의 실천 (천태종)","수선사, 돈오점수","현화사, 교관겸수","흥왕사, 선교일치"],ex:"지눌의 수선사와 함께 개혁 운동의 양대 축."},
+{id:74,cat:"유교·문화",q:"성리학: 최초 소개 → 발전?",a:"안향 → 이제현(만권당)",opts:["안향 → 이제현(만권당)","이제현 → 안향","정도전 → 이색","이색 → 안향"],ex:"안향이 원에서 주희 저서 도입. 이제현이 만권당에서 발전, 이색 등 양성."},
+{id:75,cat:"유교·문화",q:"최충 사학과 관학진흥책?",a:"9재 학당(=문헌공도) → 7재·양현고",opts:["9재 학당(=문헌공도) → 7재·양현고","국자감 → 향교","성균관 → 서원","향교 → 서당"],ex:"사학 번성 → 관학진흥책으로 대응."},
+{id:76,cat:"유교·문화",q:"역사서 저자: 삼국사기·동명왕편·삼국유사·제왕운기?",a:"김부식·이규보·일연·이승휴",opts:["김부식·이규보·일연·이승휴","일연·김부식·이승휴·이규보","이규보·일연·김부식·이승휴","김부식·일연·이규보·이승휴"],ex:"삼국사기=유교적·기전체. 삼국유사=단군·설화. 동명왕편=고구려. 제왕운기=단군."},
+{id:77,cat:"유교·문화",q:"풍수지리설 체계화 인물?",a:"도선 (신라 말)",opts:["도선 (신라 말)","묘청","최승로","안향"],ex:"3경 설치, 서경 천도 운동의 배경. 훈요10조 제2조."},
+{id:78,cat:"유교·문화",q:"정도전의 불교 비판 저작?",a:"『불씨잡변』",opts:["『불씨잡변』","『삼국사기』","『교장』","『삼국유사』"],ex:"성리학 입장에서 불교 폐단 비판."},
+{id:79,cat:"성종",q:"성종 때 설치된 왕실·귀족 자녀 교육 기관은?",a:"교방",opts:["교방","향교","서원","양현고"],ex:"왕자·대신 자제 교육. 유학적 인재 양성."},
+{id:80,cat:"성종",q:"성종이 지방에 파견한 12목의 역할 핵심은?",a:"지방 행정·민정 감찰",opts:["지방 행정·민정 감찰","군사만 전담","세금만 징수","외교"],ex:"중앙이 지방을 통제하는 관 파견 체제."},
+{id:81,cat:"성종",q:"성종이 폐지한 불교 의식 2가지는?",a:"연등회·팔관회",opts:["연등회·팔관회","팔만대장경","칠석","칠순"],ex:"유교적 절제와 재정 절감 등과 연계."},
+{id:82,cat:"성종",q:"국자감에 둔 유학 교관직은?",a:"박사·직강",opts:["박사·직강","낭사","재신","호장"],ex:"경학 교육 담당. 성종대 유학 정치 강화."},
+{id:83,cat:"성종",q:"현종이 완성한 지방 군사 행정 구획은?",a:"5도 양계",opts:["5도 양계","3경","12목","주현제"],ex:"5도 안찰사 + 양계 병마사로 군·민 행정 분리."},
+{id:84,cat:"문벌동요",q:"이자겸의 난(1126)을 진압한 왕은?",a:"인종",opts:["인종","예종","숙종","고종"],ex:"문벌 귀족 세력 견제와 왕권 회복 과제."},
+{id:85,cat:"문벌동요",q:"묘청의 난(1135)에서 관군 지휘로 진압한 인물은?",a:"김부식",opts:["김부식","이자겸","최승로","정중부"],ex:"서경 천도론에 맞선 중앙 관료 진영."},
+{id:86,cat:"문벌동요",q:"문벌 귀족이 관직을 독점한 근거로 가장 직접적인 제도는?",a:"과거+음서",opts:["과거+음서","노비안검법","전시과만","향리제"],ex:"시험 합격과 혈연·가문 특혜가 결합."},
+{id:87,cat:"문벌동요",q:"이의민이 권력을 잡은 배경으로 맞는 것은?",a:"무신 정변 이후 무신 정권기",opts:["무신 정변 이후 무신 정권기","성종 개혁 직후","태조 건국 직후","원 간섭기 초"],ex:"문신 중심에서 무신 집권으로 전환된 시기."},
+{id:88,cat:"원간섭기",q:"원이 고려 왕에게 내린 칭호 변화로 맞는 것은?",a:"조종→왕(황제화)",opts:["조종→왕(황제화)","왕→조종","폐하→왕","왕→제후"],ex:"친원 정책과 고려 왕실 위상 변동."},
+{id:89,cat:"원간섭기",q:"원이 고려 내정에 개입한 대표 기구는?",a:"정동행성·다루가치",opts:["정동행성·다루가치","식목도감","중방","전민변정도감"],ex:"원 관리 파견으로 재정·인사 간섭."},
+{id:90,cat:"원간섭기",q:"권문세족이 국정을 장악한 회의 기구는?",a:"도평의사사",opts:["도평의사사","중서문하성","어사대","국자감"],ex:"원과 연계한 지배층의 실질 권력 기구."},
+{id:91,cat:"원간섭기",q:"공민왕이 폐지를 추진한 원의 기구는?",a:"정동행성 이문소",opts:["정동행성 이문소","중방","교정도감","12목"],ex:"반원 자주화의 상징적 조치."},
+{id:92,cat:"원간섭기",q:"원 간섭기 6부가 개편된 형태는?",a:"4사",opts:["4사","2성","삼사","8도"],ex:"원식 관제에 맞춘 변화."},
+{id:93,cat:"수취·경제",q:"고려 조세의 대표적 비율(곡물)은?",a:"십분의일(1/10)",opts:["십분의일(1/10)","오분의일","이십분의일","삼십분의일"],ex:"토지·곡물 기준의 전통적 세율 암기."},
+{id:94,cat:"수취·경제",q:"공납 중 매년 정기적으로 바치는 것은?",a:"상공",opts:["상공","별공","일시납","역"],ex:"별공은 필요 시 추가."},
+{id:95,cat:"수취·경제",q:"역(役) 부담의 핵심 대상은?",a:"16~59세 양인 정남",opts:["16~59세 양인 정남","모든 천인","승려만","노비만"],ex:"요역·군역 등 부담."},
+{id:96,cat:"수취·경제",q:"호적과 함께 양인을 관리한 제도는?",a:"양안",opts:["양안","공음전","전시과","향리"],ex:"호적+양안으로 과세·역 부과 기초."},
+{id:97,cat:"여성·가족",q:"고려에서 처가에 거주하며 외가에도 음서 등이 적용된 이유와 관련된 제도는?",a:"혼인 관습과 외척 네트워크",opts:["혼인 관습과 외척 네트워크","노비안검법만","과전법","향리제"],ex:"혼맥이 관직·경제와 긴밀히 연결."},
+{id:98,cat:"여성·가족",q:"상피제가 허용된 범위와 가장 관련 깊은 것은?",a:"신분·혼인에 따른 관직 특혜",opts:["신분·혼인에 따른 관직 특혜","농업만","군역 면제만","불교 의식"],ex:"혈연·혼인망을 통한 문벌 강화."},
+{id:99,cat:"여성·가족",q:"고려 여성의 재산권과 관련된 설명으로 맞는 것은?",a:"별도 재산·상속 가능",opts:["별도 재산·상속 가능","재산권 전무","상속 남성만","호주 불가"],ex:"일정한 재산·법적 지위 인정."},
+{id:100,cat:"여성·가족",q:"재혼이 비교적 자유로웠던 사회적 배경으로 적절한 것은?",a:"혼인이 정치·경제 연합",opts:["혼인이 정치·경제 연합","신분 고정으로 금지","유교만 강요","노비만 해당"],ex:"과거·문벌 사회의 혼맥 전략."},
+{id:101,cat:"후삼국",q:"왕건이 개경을 수도로 삼은 연도는?",a:"919",opts:["919","918","935","936"],ex:"고려 건국 직후 천도."},
+{id:102,cat:"후삼국",q:"후삼국 시기 '호족'의 의미에 가까운 것은?",a:"지방 군사·경제력을 가진 세력",opts:["지방 군사·경제력을 가진 세력","중앙 관료만","승려","상인만"],ex:"중앙 약화 속 지방 실권층."},
+{id:103,cat:"태조",q:"태조가 채택한 수도는?",a:"개경",opts:["개경","서경","완산주","송악"],ex:"풍수·불교·정치를 고려한 천도."},
+{id:104,cat:"태조",q:"북진 정책의 대상으로 가장 알맞은 것은?",a:"발해 유민·여진",opts:["발해 유민·여진","송나라","일본","원"],ex:"북방 안보와 인구·토지 확보."},
+{id:105,cat:"광종",q:"광종이 도입한 황제 칭호와 관련된 제도는?",a:"독자 연호·공복",opts:["독자 연호·공복","과전법","위화도 회군","성균관"],ex:"중국과 대등한 외교 위상 표방."},
+{id:106,cat:"광종",q:"노비안검법 이후 호족이 반발한 이유는?",a:"노동력·군사력 약화",opts:["노동력·군사력 약화","세금 증가","불교 탄압","천도"],ex:"불법 노비를 양인화."},
+{id:107,cat:"중앙제도",q:"삼사(三司)의 기능으로 맞는 것은?",a:"재정·회계",opts:["재정·회계","군사만","교육","감찰만"],ex:"곡물·물가·출납 등."},
+{id:108,cat:"지방제도",q:"향·부곡·소의 공통점은?",a:"국가 통제 하 생산·부담",opts:["국가 통제 하 생산·부담","자유 무역","완전 자치","군사만"],ex:"이주·결혼·과거 제한 등."},
+{id:109,cat:"관리임용",q:"승과에 급제하면 임명되는 직책은?",a:"승관",opts:["승관","기술관","어사","안찰사"],ex:"교종선·선종선 등 불교 과목."},
+{id:110,cat:"무신정권",q:"의종 때 무신들이 겪은 대표적 차별은?",a:"문신 중심 정치·대우",opts:["문신 중심 정치·대우","과거 폐지","원 간섭","서경 천도"],ex:"정변의 직접적 배경."},
+{id:111,cat:"무신정권",q:"최충헌이 설치한 기구는?",a:"교정도감",opts:["교정도감","중방","정방","첨의부"],ex:"무신 정권의 실질 최고 기구로 발전."},
+{id:112,cat:"대외관계",q:"강감찬이 거란을 격퇴한 전투로 유명한 것은?",a:"귀주대첩",opts:["귀주대첩","살수대첩","한산도대첩","백강만"],ex:"3차 거란 침입 대응."},
+{id:113,cat:"대외관계",q:"서희가 담판한 상대는?",a:"소손녕",opts:["소손녕","강감찬","왕윤","정도전"],ex:"강동 6주 쟁점."},
+{id:114,cat:"전시과",q:"과전법이 시행된 지역은?",a:"경기도 한정",opts:["경기도 한정","전국","서경만","제주만"],ex:"고려 말 토지 개혁."},
+{id:115,cat:"신분제",q:"양천제에서 '천'에 해당하는 대표 신분은?",a:"노비",opts:["노비","정호","백정","호장"],ex:"천민 계층."},
+{id:116,cat:"불교",q:"결사운동이 전개된 배경으로 맞는 것은?",a:"교종·선종 갈등과 개혁",opts:["교종·선종 갈등과 개혁","유교 폐지","원만 허용","무신정변"],ex:"의천·지눌 이후 재편."},
+{id:117,cat:"유교·문화",q:"이색(李穡)이 주장한 학문 방향은?",a:"성리학 수용",opts:["성리학 수용","천태종만","참회만","불교 폐지만"],ex:"원의 주자학 영향."},
+{id:118,cat:"고려말",q:"과전법을 추진한 인물은?",a:"정도전",opts:["정도전","정몽주","최영","이성계"],ex:"급진파 토지 개혁안."},
+{id:119,cat:"고려말",q:"조선 건국의 연도는?",a:"1392",opts:["1392","1388","1401","936"],ex:"이성계 즉위."},
+{id:120,cat:"훈요10조",q:"훈요 10조의 성격으로 맞는 것은?",a:"태조가 후대 왕에게 남긴 통치 유훈",opts:["태조가 후대 왕에게 남긴 통치 유훈","광종의 행정법전","성종의 과거 시험 규정","묘청의 건의문"],ex:"왕위 계승자가 지켜야 할 10가지 가르침."},
+{id:121,cat:"중앙제도",q:"어사대의 감찰 대상으로 가장 적절한 것은?",a:"관리 비리·풍속",opts:["관리 비리·풍속","군사 기밀만","왕명 출납","불교 교단만"],ex:"대간 체계와 연계."},
+{id:122,cat:"지방제도",q:"안찰사가 맡은 5도의 성격은?",a:"일반 행정",opts:["일반 행정","순수 군사만","교육","재판만"],ex:"양계 병마사와 구분."},
+{id:123,cat:"문벌동요",q:"이자겸의 난 이후 왕권이 약화한 직접적 결과는?",a:"외척·문벌 세력 재편",opts:["외척·문벌 세력 재편","즉시 멸망","원 복속","과전법"],ex:"왕실 통제력 저하."},
+{id:124,cat:"성종",q:"연등회·팔관회 폐지가 상징하는 정책 방향은?",a:"유교적 국가 운영 강화",opts:["유교적 국가 운영 강화","불교 국교화","무신 정권","개경 천도"],ex:"재정·의례 절감과 병행."},
+{id:125,cat:"대외관계",q:"여진을 회유·통제하기 위한 고려의 대책으로 맞는 것은?",a:"동북면 나성·회유 정책",opts:["동북면 나성·회유 정책","서경 천도만","과전법","성리학"],ex:"국경 방어와 외교 병행."},
+{id:126,cat:"불교",q:"백련사와 관련된 인물은?",a:"요세",opts:["요세","지눌","의천","안향"],ex:"참회 실천, 천태종 계열 개혁."},
+{id:127,cat:"신분제",q:"일천즉천의 의미는?",a:"부모 중 한쪽이 천이면 자녀도 천인",opts:["부모 중 한쪽이 천이면 자녀도 천인","양인만 해당","군인만","승려만"],ex:"노비 신분의 세습성."},
+{id:128,cat:"수취·경제",q:"보초(寶鈔)와 관련된 시기는?",a:"원 간섭기",opts:["원 간섭기","태조","성종","무신정권"],ex:"원의 지폐가 유통."},
+{id:129,cat:"유교·문화",q:"만권당과 관련된 인물은?",a:"이제현",opts:["이제현","안향","일연","김부식"],ex:"성리학 연구·교육 거점."},
+{id:130,cat:"후삼국",q:"신라 말 호족 성장과 직결된 현상은?",a:"곡창·군사력의 사유화",opts:["곡창·군사력의 사유화","당나라 직할","일본 침략","과거제 폐지"],ex:"중앙 세력 약화."},
+{id:131,cat:"문종",q:"문종 때 향교 출신자의 중앙 진출을 허용한 것이 의미하는 바는?",a:"향리 독점에 변화",opts:["향리 독점에 변화","향교 폐지","노비만 과거","원 간섭"],ex:"지방 호족·향리 아성에 균열."},
+{id:132,cat:"문종",q:"문종이 정비한 전시과의 특징은?",a:"현직 관리만 수급(경정)",opts:["현직 관리만 수급(경정)","전현직 모두","노비만","군인만"],ex:"문종대 경정전시과."},
+{id:133,cat:"숙종",q:"요동 정벌을 추진하다 신하들의 반대로 중단된 왕은?",a:"숙종",opts:["숙종","문종","인종","공민왕"],ex:"외정 논쟁과 국력 소모 우려."},
+{id:134,cat:"인종",q:"이자겸의 난(1126)이 일어난 왕대는?",a:"인종",opts:["인종","예종","고종","명종"],ex:"문벌 세력 내분과 왕권 위기."},
+{id:135,cat:"예종",q:"여진 정벌을 적극 추진한 왕으로 알려진 인물은?",a:"예종",opts:["예종","성종","현종","충렬왕"],ex:"동북면 경영 강화."},
+{id:136,cat:"고종",q:"몽골에 맞서 강화도로 천도한 왕은?",a:"고종",opts:["고종","공민왕","명종","현종"],ex:"1232년 몽골 재침 대응."},
+{id:137,cat:"고종",q:"팔만대장경(고려대장경) 목판각의 주된 목적은?",a:"불교 국난 극복·경전 보존",opts:["불교 국난 극복·경전 보존","유교 경전만","상업 수입","군사 지도"],ex:"몽골 침입기 국가적 사업."},
+{id:138,cat:"무신정권",q:"경대승이 장악한 사병 조직은?",a:"도방",opts:["도방","삼별초","별무반","야별초"],ex:"무신 정권 초 사병."},
+{id:139,cat:"무신정권",q:"최충헌·최우 시기에 활동한 민란 세력은?",a:"만적·망이·망소이",opts:["만적·망이·망소이","묘청","이자겸","김윤후"],ex:"민중 저항."},
+{id:140,cat:"무신정권",q:"최이가 강화도에 항전한 세력은?",a:"삼별초",opts:["삼별초","도방","중방","정방"],ex:"원에 저항한 지방 군벌."},
+{id:141,cat:"원간섭기",q:"고려 왕이 원의 공주와 혼인한 제도는?",a:"부마국 체제",opts:["부마국 체제","전시과","향리제","교방"],ex:"원 황실과의 혈연·간섭 근거."},
+{id:142,cat:"원간섭기",q:"원이 고려에 부과한 의무로 맞는 것은?",a:"조공·역진·내정 간섭",opts:["조공·역진·내정 간섭","과거만 폐지","불교 금지","철저 자치"],ex:"종주-번국 관계."},
+{id:143,cat:"원간섭기",q:"고려 말 왕이 몽골식 이름·복식을 썼다가 폐지한 왕은?",a:"공민왕",opts:["공민왕","충렬왕","고종","태조"],ex:"반원 자주화."},
+{id:144,cat:"고려말",q:"홍건적이 개경을 함락한 시기는?",a:"고려 말(공민왕대)",opts:["고려 말(공민왕대)","성종대","태조대","광종대"],ex:"외란과 개혁의 교차."},
+{id:145,cat:"고려말",q:"왜구(倭寇)가 고려 연안을 약탈한 시기와 맞는 것은?",a:"고려 말",opts:["고려 말","통일신라 전기","후삼국","발해"],ex:"공민왕대 개혁 배경."},
+{id:146,cat:"대외관계",q:"고려가 거란에 맞서 천리장성을 쌓은 인물은?",a:"강감찬",opts:["강감찬","서희","윤관","최영"],ex:"3차 침입 대응."},
+{id:147,cat:"대외관계",q:"고려가 송과 맺은 관계의 특징으로 맞는 것은?",a:"문화·무역 교류(실리)",opts:["문화·무역 교류(실리)","군사 동맹만","속국","단절"],ex:"벽란도 등 교역."},
+{id:148,cat:"대외관계",q:"금나라(여진)와 고려 사이에 벌어진 주요 갈등은?",a:"이방적·요동 정벌 논쟁",opts:["이방적·요동 정벌 논쟁","삼국 통일","발해 멸망","원 간섭"],ex:"숙종·인종대 외정 논쟁."},
+{id:149,cat:"태조",q:"후백제를 멸망시킨 전투(936)의 승리로는?",a:"고려 통일 완성",opts:["고려 통일 완성","신라 귀부 직후","발해 복국","원정"],ex:"일진·벌양 등 정벌."},
+{id:150,cat:"태조",q:"태조가 후삼국 통일에 활용한 수단으로 맞는 것은?",a:"외교+군사 병행",opts:["외교+군사 병행","불교만","과거만","철수"],ex:"견훤 귀순·경순왕 귀부·정벌."},
+{id:151,cat:"훈요10조",q:"훈요 10조 제7조와 가장 관련 깊은 것은?",a:"민생·진흥",opts:["민생·진흥","황제 칭호","원 동맹","서경 천도 강제"],ex:"농상·구휼 등 백성 돌봄."},
+{id:152,cat:"훈요10조",q:"훈요 10조 제9조(관리 처벌)의 취지는?",a:"탐관오리 엄단",opts:["탐관오리 엄단","불교 폐지","과거 폐지","서경 이전"],ex:"청렴한 관풍."},
+{id:153,cat:"광종",q:"광종이 황제를 자칭한 배경으로 맞는 것은?",a:"독자 국가 위상 과시",opts:["독자 국가 위상 과시","원 봉건","조선 건국","발해 복국"],ex:"중원 왕조와 대등 외교 지향."},
+{id:154,cat:"광종",q:"광종대 황제 칭호·공복과 함께 추진된 것은?",a:"독자 연호",opts:["독자 연호","과전법","위화도 회군","성균관"],ex:"광덕·준풍."},
+{id:155,cat:"성종",q:"성종이 강화한 유학 정책의 중심 기관은?",a:"국자감",opts:["국자감","중방","도평의사사","정동행성"],ex:"경학·유학 교육."},
+{id:156,cat:"중앙제도",q:"고려의 양전(兩稅)이 부과된 대상은?",a:"농토를 가진 양인 농민",opts:["농토를 가진 양인 농민","노비만","승려만","상인만"],ex:"토지·곡물 기준 조세."},
+{id:157,cat:"중앙제도",q:"중서문하성 낭사의 '봉박' 기능은?",a:"왕명·왕언의 부당함을 봉함",opts:["왕명·왕언의 부당함을 봉함","세금 징수","군사 지휘","형벌 재판"],ex:"서경권(언론·견제)."},
+{id:158,cat:"지방제도",q:"향·부곡 주민의 특징으로 맞는 것은?",a:"국가 통제·이동·과거 제한",opts:["국가 통제·이동·과거 제한","완전 자유","군주만","외국인"],ex:"국가 직영 농업 단위."},
+{id:159,cat:"지방제도",q:"고려 5도의 안찰사가 다룬 실정은?",a:"민정·재판 등 일반 행정",opts:["민정·재판 등 일반 행정","전쟁만","불교만","외교만"],ex:"병마사와 역할 분담."},
+{id:160,cat:"관리임용",q:"잡과 급제자가 임명되는 직책은?",a:"기술관",opts:["기술관","승관","낭사","안찰사"],ex:"법률·회계·지리 등."},
+{id:161,cat:"관리임용",q:"고려 과거의 특징으로 맞는 것은?",a:"문벌과 결합·세습 경향",opts:["문벌과 결합·세습 경향","노비만 응시","폐지됨","원만 시행"],ex:"과거+음서+혼인."},
+{id:162,cat:"문벌동요",q:"묘청의 난이 실패한 직접적 결과는?",a:"서경 천도론 좌절·중앙 승리",opts:["서경 천도론 좌절·중앙 승리","고려 멸망","원 복속","과전법 즉시"],ex:"김부식 등 관군 진압."},
+{id:163,cat:"문벌동요",q:"문벌 귀족 사이 경쟁이 격화된 근본 원인은?",a:"관직·경제 이익 독점",opts:["관직·경제 이익 독점","불교 소멸","농업 붕괴","해양 패권"],ex:"한정된 명분 자원."},
+{id:164,cat:"무신정권",q:"의종이 거처하며 향락한 곳으로 유명한 것은?",a:"보현원",opts:["보현원","백련사","만권당","벽란도"],ex:"무신 정변의 직접적 계기."},
+{id:165,cat:"무신정권",q:"정중부가 들어선 배경은?",a:"이의방 정변 이후 집권",opts:["이의방 정변 이후 집권","태조 건국","원 간섭","공민왕 개혁"],ex:"무신 연대 집권."},
+{id:166,cat:"무신정권",q:"최충헌이 제거한 집권자는?",a:"이의민",opts:["이의민","경대승","정중부","왕안석"],ex:"최씨 정권 전환."},
+{id:167,cat:"전시과",q:"전시과 수급이 위축된 근본 원인은?",a:"토지 부족·지배층 팽창",opts:["토지 부족·지배층 팽창","불교 소멸","원만 존재","향교 폐지"],ex:"경종·목종·문종대 조정."},
+{id:168,cat:"전시과",q:"과전법이 시행된 직접적 배경은?",a:"전시과 한계·토지 겸병",opts:["전시과 한계·토지 겸병","태조 건국","삼별초","발해"],ex:"신진사대부와 연계."},
+{id:169,cat:"수취·경제",q:"고려의 상공(常貢)과 별공(別貢)의 차이는?",a:"상공=정기, 별공=수시",opts:["상공=정기, 별공=수시","둘 다 동일","상공만 노비","별공만 군사"],ex:"공납 제도."},
+{id:170,cat:"수취·경제",q:"고려에서 베·곡물이 화폐처럼 쓰인 이유는?",a:"금속 화폐 유통 한계",opts:["금속 화폐 유통 한계","원만 허용","불교 금지","해금"],ex:"실물 경제."},
+{id:171,cat:"신분제",q:"정호가 받는 토지급여와 연결된 의무는?",a:"직역(요역)",opts:["직역(요역)","군역 면제","상업세","원 인질"],ex:"양인 중간층."},
+{id:172,cat:"신분제",q:"백정의 특징으로 맞는 것은?",a:"직역 없는 농민층",opts:["직역 없는 농민층","호장","관료","노비"],ex:"정호와 대비."},
+{id:173,cat:"신분제",q:"공노비 '외거'의 의미는?",a:"주인과 따로 살며 몸값 바침",opts:["주인과 따로 살며 몸값 바침","궁궐 상주","완전 자유","군인"],ex:"사노비 솔거와 구분."},
+{id:174,cat:"여성·가족",q:"고려 왕실 여성의 정치적 역할 사례로 맞는 것은?",a:"왕비·대비를 통한 외척 정치",opts:["왕비·대비를 통한 외척 정치","완전 배제","군사만","원 칙"],ex:"문벌·왕권 구도."},
+{id:175,cat:"불교",q:"고려를 '불교 국가'라 부르는 근거로 가장 적절한 것은?",a:"왕실·국가 의례 중심",opts:["왕실·국가 의례 중심","불교 완전 폐지","유교만","원 종교"],ex:"훈요·사찰·왕비 불교."},
+{id:176,cat:"불교",q:"의천이 주장한 교관겸수의 방향은?",a:"교종 중심으로 선종 통합",opts:["교종 중심으로 선종 통합","선종만","유교만","천주교"],ex:"지눌과 대비."},
+{id:177,cat:"유교·문화",q:"안향이 소개한 성리학의 원전 계열은?",a:"주자학(주희)",opts:["주자학(주희)","천태종","화엄종","유교 경전만"],ex:"원과의 교류."},
+{id:178,cat:"유교·문화",q:"『삼국사기』의 편찬 체재는?",a:"기전체",opts:["기전체","기사체","시조","소설"],ex:"유교사관."},
+{id:179,cat:"유교·문화",q:"『삼국유사』의 특징으로 맞는 것은?",a:"단군 신화·불교 설화 중시",opts:["단군 신화·불교 설화 중시","유교만","법전","과거"],ex:"일연."},
+{id:180,cat:"후삼국",q:"왕건이 견훤을 포용한 방식은?",a:"귀순 후 예우",opts:["귀순 후 예우","즉시 처형","송으로 보냄","발해 연합"],ex:"후백제 정벌 전 단계."},
+{id:181,cat:"후삼국",q:"경순왕이 고려에 귀부한 의미는?",a:"신라의 공식 합류",opts:["신라의 공식 합류","후백제 통합","원 봉건","조선 건국"],ex:"935년."},
+{id:182,cat:"태조",q:"사심관의 역할은?",a:"출신 지역 감시·통제",opts:["출신 지역 감시·통제","세금만","불교만","외교"],ex:"호족 견제."},
+{id:183,cat:"태조",q:"기인제도의 목적은?",a:"호족 자제 인질로 개경 통제",opts:["호족 자제 인질로 개경 통제","농업 장려","불교 확대","과거"],ex:"채찍 정책."},
+{id:184,cat:"광종",q:"노비안검법 시행 연도(대략)로 알려진 것은?",a:"958년",opts:["958년","936년","1392년","918년"],ex:"광종 개혁."},
+{id:185,cat:"성종",q:"12목에 파견된 지방관의 임무는?",a:"주현 행정·감독",opts:["주현 행정·감독","전국 군사만","외교 전담","세금만 징수"],ex:"중앙의 지방 통제 강화."},
+{id:186,cat:"중앙제도",q:"상서성의 육부 중 호부의 기능은?",a:"호적·인구",opts:["호적·인구","형벌","군사","교육"],ex:"이병호형예공의 호."},
+{id:187,cat:"중앙제도",q:"형부의 기능은?",a:"형벌·소송",opts:["형벌·소송","재정","군사","의례"],ex:"형예."},
+{id:188,cat:"중앙제도",q:"예부의 기능은?",a:"의례·교육·외교",opts:["의례·교육·외교","형벌","호적","군사"],ex:"예."},
+{id:189,cat:"중앙제도",q:"공부의 기능은?",a:"토목·수리",opts:["토목·수리","형벌","군사","재정"],ex:"공."},
+{id:190,cat:"대외관계",q:"2차 거란 침입 때 개경 함락 후 거란군이 퇴각한 요인으로 논의되는 것은?",a:"개경 방어·외교 등 복합",opts:["개경 방어·외교 등 복합","즉시 멸망","조선 도움","일본"],ex:"1010년대 전쟁."},
+{id:191,cat:"대외관계",q:"윤관이 동북 9성을 설치한 뒤 반환한 이유로 맞는 것은?",a:"방어 부담·여진 정세",opts:["방어 부담·여진 정세","원 명령","과전법","무신정변"],ex:"지배 유지 어려움."},
+{id:192,cat:"무신정권",q:"최우가 설치한 문인 기구는?",a:"서방",opts:["서방","낭사","재신","향교"],ex:"문신 통제."},
+{id:193,cat:"무신정권",q:"정방이 본격화된 시기는?",a:"최우",opts:["최우","경대승","태조","성종"],ex:"무신 정권 후기."},
+{id:194,cat:"원간섭기",q:"첨의부가 대체한 고려 기구는?",a:"중서문하성",opts:["중서문하성","어사대","향교","국자감"],ex:"원식 관제."},
+{id:195,cat:"원간섭기",q:"4사가 대체한 것은?",a:"6부",opts:["6부","3경","향리","도방"],ex:"원 간섭기 관제."},
+{id:196,cat:"고려말",q:"신돈이 맡은 개혁의 성격은?",a:"권문세족 견제·전민변정",opts:["권문세족 견제·전민변정","원 침략","불교 폐지만","향교 폐지"],ex:"공민왕대."},
+{id:197,cat:"고려말",q:"정몽주가 저항한 개혁안은?",a:"과전법(경기도 한정)",opts:["과전법(경기도 한정)","노비안검법","12목","팔만대장경"],ex:"온건파 논리."},
+{id:198,cat:"고려말",q:"이성계가 위화도에서 회군한 명분은?",a:"요동 정벌의 무리",opts:["요동 정벌의 무리","서경 천도","삼별초","원 명령"],ex:"4대 명분 중 현실 문제."},
+{id:199,cat:"불교",q:"수선사(송광사)와 연결된 인물은?",a:"지눌",opts:["지눌","의천","요세","안향"],ex:"선종 중심 개혁."},
+{id:200,cat:"유교·문화",q:"최충이 설립한 사학의 예는?",a:"문헌공도(9재 학당)",opts:["문헌공도(9재 학당)","성균관","서원","향교 폐지"],ex:"사학 진흥."},
+{id:201,cat:"지방제도",q:"동경이 남경으로 바뀐 시기는?",a:"고려 중기 이후",opts:["고려 중기 이후","태조 즉시","조선","통일신라"],ex:"3경 변천."},
+{id:202,cat:"신분제",q:"양인 내부 신분 분화로 맞는 것은?",a:"귀족·정호·백정 등",opts:["귀족·정호·백정 등","노비만","승려만","원인만"],ex:"복잡한 양인 사회."},
+{id:203,cat:"수취·경제",q:"요역과 군역을 통틀어 이르는 말은?",a:"역",opts:["역","공납","상공","음서"],ex:"16~59세 정남."},
+{id:204,cat:"문벌동요",q:"김윤후·이방적 사건이 속한 왕대는?",a:"인종",opts:["인종","태조","공민왕","성종"],ex:"요동 정벌 논쟁."},
+{id:205,cat:"성종",q:"국자감 유학 교육의 목표는?",a:"유학 관료 양성",opts:["유학 관료 양성","승려만","군인만","상인"],ex:"성리학 이전 단계 유학."},
+{id:206,cat:"훈요10조",q:"훈요에서 민생을 강조한 근거는?",a:"국본(國本)은 백성",opts:["국본(國本)은 백성","군사만","불교 폐지","원 봉건"],ex:"왕조 안정론."},
+{id:207,cat:"태조",q:"북진으로 편입·안착시킨 세력은?",a:"발해 유민 등",opts:["발해 유민 등","송 황실","일본","몽골"],ex:"인구·방어."},
+{id:208,cat:"대외관계",q:"최영이 왜구 토벌에 나선 시기는?",a:"고려 말",opts:["고려 말","태조","성종","무신정권 초"],ex:"공민왕대 활동."},
+{id:209,cat:"중앙제도",q:"이부의 기능은?",a:"인사·전복",opts:["인사·전복","형벌","군사","의례"],ex:"이병호형예공의 이."},
+{id:210,cat:"중앙제도",q:"병부의 기능은?",a:"군사·병마",opts:["군사·병마","재정","형벌","호적"],ex:"병."},
+{id:211,cat:"무신정권",q:"이의방이 정변을 일으킨 장소로 알려진 것은?",a:"연포루 회의",opts:["연포루 회의","벽란도","성균관","강화도"],ex:"무신 정변 발발."},
+{id:212,cat:"고려말",q:"정도전이 주장한 정치 방향은?",a:"성리학적 개혁·조선 건국",opts:["성리학적 개혁·조선 건국","서경 천도","원 복속","불교국교"],ex:"급진파 이론가."},
+{id:213,cat:"고려말",q:"위화도 회군 직후 이성계가 취한 행동은?",a:"개경 환도·개혁 추진",opts:["개경 환도·개혁 추진","즉시 조선 건국","서경 천도","원에 항복"],ex:"우왕·창왕 폐위 이후 정국 수습."},
+{id:214,cat:"고려말",q:"조선 건국 직전 고려 말 실권을 쥔 세력은?",a:"신진사대부·이성계 등 개혁파",opts:["신진사대부·이성계 등 개혁파","삼별초","원 다루가치만","향리만"],ex:"권문세족·구체제 비판."},
+{id:215,cat:"원간섭기",q:"고려 말 권문세족이 토지를 확대한 수단으로 맞는 것은?",a:"은퇴전·탐욕적 겸병",opts:["은퇴전·탐욕적 겸병","과전법","노비안검법","12목"],ex:"국가 재정 악화."},
+{id:216,cat:"불교",q:"팔만대장경이 보존된 장소는?",a:"해인사",opts:["해인사","송광사","개경","벽란도"],ex:"강화도 이전 보존."},
+{id:217,cat:"지방제도",q:"향리가 과거로 중앙에 진출하기 시작한 왕대는?",a:"문종",opts:["문종","태조","원 간섭기","조선"],ex:"문종대 허용."},
+{id:218,cat:"대외관계",q:"고려가 해동천자를 자칭한 의미는?",a:"자주적 천하관",opts:["자주적 천하관","원 속국 인정","일본 번국","청나라"],ex:"중원 왕조와 대등 의식."},
+{id:219,cat:"신분제",q:"노비를 재산으로 다룬 근거는?",a:"매매·증여 가능",opts:["매매·증여 가능","완전 시민권","과거 필수","군주만"],ex:"천민 신분."},
+{id:220,cat:"유교·문화",q:"이규보의 저술로 맞는 것은?",a:"『동명왕편』",opts:["『동명왕편』","『삼국유사』","『제왕운기』","『교장』"],ex:"고구려 역사 서술."},
+{id:221,cat:"유교·문화",q:"이승휴의 저술로 맞는 것은?",a:"『제왕운기』",opts:["『제왕운기』","『삼국사기』","『삼국유사』","『동명왕편』"],ex:"단군 이후 왕통."},
+{id:222,cat:"광종",q:"쌍기 등용 이후 광종 후반기 문제로 지적된 것은?",a:"문사 숙청·소인 득세",opts:["문사 숙청·소인 득세","과거 폐지","원 간섭","서경 천도"],ex:"시무 28조 비판."},
+{id:223,cat:"성종",q:"연등회·팔관회 폐지 후에도 불교 의례가 부활한 시기는?",a:"이후 왕대에 부분 부활",opts:["이후 왕대에 부분 부활","완전 소멸","조선만","원만"],ex:"훈요와의 긴장."},
+{id:224,cat:"무신정권",q:"최항·최의 시기 정권의 특징은?",a:"최씨 무신 정권 말기",opts:["최씨 무신 정권 말기","태조 건국","문벌 전성기","원 직할"],ex:"쇠퇴와 변란."},
+{id:225,cat:"고려말",q:"공민왕이 신돈을 제거한 결과로 맞는 것은?",a:"개혁 동력 약화",opts:["개혁 동력 약화","즉시 성공","원 합병","과거 폐지"],ex:"개혁 실패 요인."},
+{id:226,cat:"후삼국",q:"궁예가 철원으로 천도한 연도는?",a:"905년",opts:["905년","918년","936년","1392년"],ex:"후고구려 태봉."},
+{id:227,cat:"태조",q:"혼인 정책의 정치적 기능은?",a:"호족과의 정략적 연합",opts:["호족과의 정략적 연합","불교 확대","원 봉건","향교"],ex:"29명 부인."},
+{id:228,cat:"지방제도",q:"속현에서 실질 통치를 맡은 층은?",a:"향리",opts:["향리","안찰사","왕","승려"],ex:"수령 미파견."},
+{id:229,cat:"관리임용",q:"명경과 시험의 내용은?",a:"유교 경전",opts:["유교 경전","법률만","불교만","수학만"],ex:"유학 인재."},
+{id:230,cat:"대외관계",q:"벽란도가 번성한 시기는?",a:"고려 전성기~중기",opts:["고려 전성기~중기","조선 후기만","발해만","삼국"],ex:"해양 무역."},
+{id:231,cat:"원간섭기",q:"원 간섭기 고려 왕의 대외적 위상으로 맞는 것은?",a:"원 황실과 부마 관계",opts:["원 황실과 부마 관계","중원 황제와 대등","완전 독립 군주국","향리 연합"],ex:"친원 혼인·칭호 변화."},
+{id:232,cat:"원간섭기",q:"고려가 원에 조공한 대표 품목으로 맞는 것은?",a:"백마·노공·부인 등",opts:["백마·노공·부인 등","없음","조선 인력만","일본 은"],ex:"조공·역진 부담."},
+{id:233,cat:"불교",q:"의천의 저술로 대표되는 것은?",a:"『교장』",opts:["『교장』","『불씨잡변』","『삼국유사』","『제왕운기』"],ex:"교관겸수 이론."},
+{id:234,cat:"유교·문화",q:"일연이 편찬한 책은?",a:"『삼국유사』",opts:["『삼국유사』","『삼국사기』","『동명왕편』","『교장』"],ex:"고려 말 불교사."},
+{id:235,cat:"고려말",q:"조선을 건국한 인물은?",a:"이성계(태조)",opts:["이성계(태조)","정몽주","최영","공민왕"],ex:"1392년 조선 건국."},
+{id:236,cat:"중앙제도",q:"삼사의 기능으로 맞는 것은?",a:"국가 재정·회계",opts:["국가 재정·회계","군사 통솔","형벌 전담","왕위 계승"],ex:"곡물·물가·출납 등."},
+{id:237,cat:"무신정권",q:"임겸·임유무가 관련된 시기는?",a:"무신 정권 후기",opts:["무신 정권 후기","태조","성종","원"],ex:"최씨 정권 이후."},
+{id:238,cat:"문벌동요",q:"문벌 귀족의 혼인 전략 핵심은?",a:"관직·토지 독점 강화",opts:["관직·토지 독점 강화","불교 배척","원 친화","농업 포기"],ex:"문벌 네트워크."},
+{id:239,cat:"성종",q:"2성6부 정비가 의미하는 바는?",a:"당 제도의 고려식 정비",opts:["당 제도의 고려식 정비","관제 폐지","군국주의","원 복종"],ex:"중앙 집권 체제."},
+{id:240,cat:"훈요10조",q:"훈요 10조 제10조의 성격은?",a:"후세 왕에게 당부하는 총결",opts:["후세 왕에게 당부하는 총결","불교 폐지","과거 폐지","천도 명령"],ex:"유훈의 마무리 조."},
+{id:241,cat:"태조",q:"조세 감면과 함께 시행된 민생 정책은?",a:"흑창·구휼",opts:["흑창·구휼","과전법","위화도 회군","4사"],ex:"태조대 안정."},
+{id:242,cat:"광종",q:"황제 칭호를 사용한 고려 왕은?",a:"광종",opts:["광종","태조만","문종만","공민왕만"],ex:"독자 외교 위상."},
+{id:243,cat:"인종",q:"묘청이 주장한 천도지는?",a:"서경",opts:["서경","개경","남경","평양"],ex:"풍수지리설."},
+{id:244,cat:"고려말",q:"과전법이 적용된 지역은?",a:"경기도",opts:["경기도","전국","제주만","서경만"],ex:"점진적 개혁."},
+{id:245,cat:"신분제",q:"사노비 '솔거'의 의미는?",a:"주인 집에 살며 종살이",opts:["주인 집에 살며 종살이","궁궐 상주","독립 농민","관료"],ex:"공노비 입역과 대비."},
+{id:246,cat:"대외관계",q:"1차 거란 침입 뒤 강동 6주 확보와 직결된 활동은?",a:"서희의 담판·외교",opts:["서희의 담판·외교","윤관의 9성","위화도 회군","삼별초"],ex:"강동 6주 분쟁 해결."},
+{id:247,cat:"후삼국",q:"후백제를 건국한 연도는?",a:"900",opts:["900","918","935","936"],ex:"견훤."},
+{id:248,cat:"후삼국",q:"후고구려(태봉)가 세워진 연도는?",a:"901",opts:["901","918","936","1392"],ex:"궁예."},
+{id:249,cat:"고려말",q:"이성계가 즉위한 연도는?",a:"1392",opts:["1392","1388","1400","936"],ex:"조선 건국."},
+{id:250,cat:"유교·문화",q:"김부식이 편찬한 역사서는?",a:"『삼국사기』",opts:["『삼국사기』","『삼국유사』","『동명왕편』","『제왕운기』"],ex:"1145년."},
+];
+
+const CATS=[...new Set(Q.map(q=>q.cat))];
+const shuffle=a=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=0|Math.random()*(i+1);[b[i],b[j]]=[b[j],b[i]];}return b};
+
+const HIST_LS_KEY="history-quiz-progress-v1";
+function emptyHistProg(){return{mastered:{},wrongCnt:{},best:0};}
+function mergeHistProg(raw){
+  const o=emptyHistProg();
+  if(!raw||typeof raw!=="object")return o;
+  if(raw.mastered&&typeof raw.mastered==="object")Object.assign(o.mastered,raw.mastered);
+  if(raw.wrongCnt&&typeof raw.wrongCnt==="object")Object.assign(o.wrongCnt,raw.wrongCnt);
+  if(typeof raw.best==="number"&&raw.best>=0)o.best=raw.best;
+  return o;
+}
+function loadHistProg(){try{const t=localStorage.getItem(HIST_LS_KEY);return mergeHistProg(t?JSON.parse(t):null)}catch(e){return emptyHistProg()}}
+function saveHistProg(){try{localStorage.setItem(HIST_LS_KEY,JSON.stringify({mastered:S.mastered,wrongCnt:S.wrongCnt,best:S.best}))}catch(e){}}
+let S=Object.assign(loadHistProg(),{topView:"quiz",streak:0,queue:shuffle(Q.map(q=>q.id)),sel:null,phase:"menu",catF:null,sess:{c:0,w:0},timer:0,timerOn:false,revIdx:0,showCard:false,lockedQ:null,lockedOpts:[]});
+let timerInterval=null;
+const $=id=>document.getElementById(id);
+const app=$("app");
+
+function bindHistTabs(){
+  const nav=$("histTopnav");
+  if(!nav||nav.dataset.bound)return;
+  nav.dataset.bound="1";
+  nav.addEventListener("click",function(ev){
+    const btn=ev.target.closest("[data-hist-view]");
+    if(!btn)return;
+    const v=btn.getAttribute("data-hist-view");
+    if(!v||S.topView===v)return;
+    if(S.topView==="quiz"&&S.phase==="quiz"&&S.timerOn)stopTimer();
+    S.topView=v;
+    nav.querySelectorAll(".hist-topnav__btn").forEach(function(b){
+      const on=b.getAttribute("data-hist-view")===v;
+      b.classList.toggle("is-on",on);
+      b.setAttribute("aria-selected",on?"true":"false");
+    });
+    if(v==="quiz"&&S.phase==="quiz"&&S.lockedQ)startTimer();
+    render();
+  });
+}
+
+function renderHistoryConcepts(){
+  const tpl=$("histConceptTpl");
+  app.innerHTML="";
+  if(tpl&&tpl.content)app.appendChild(tpl.content.cloneNode(true));
+  else app.innerHTML='<p class="concept-note">역사 개념 템플릿을 불러오지 못했습니다.</p>';
+}
+
+function filt(){return S.catF?Q.filter(q=>q.cat===S.catF):Q}
+function mCnt(){return filt().filter(q=>S.mastered[q.id]).length}
+function pct(){const f=filt();return f.length?Math.round(mCnt()/f.length*100):0}
+function tM(){return Q.filter(q=>S.mastered[q.id]).length}
+function tP(){return Math.round(tM()/Q.length*100)}
+function fmt(s){return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")}
+function nextQ(){const n=S.queue.find(id=>{const q=Q.find(x=>x.id===id);return(!S.catF||q.cat===S.catF)&&!S.mastered[id]});return n?Q.find(q=>q.id===n):null}
+function wrongQs(){return Q.filter(q=>S.wrongCnt[q.id]&&!S.mastered[q.id]).sort((a,b)=>(S.wrongCnt[b.id]||0)-(S.wrongCnt[a.id]||0))}
+function weakCats(){const m={};Q.forEach(q=>{if(!m[q.cat])m[q.cat]={w:0,t:0};m[q.cat].t++;if(S.wrongCnt[q.id])m[q.cat].w+=S.wrongCnt[q.id]});return Object.entries(m).sort((a,b)=>b[1].w/b[1].t-a[1].w/a[1].t).filter(([,v])=>v.w>0).slice(0,3)}
+function catSt(c){const qs=Q.filter(q=>q.cat===c);const m=qs.filter(q=>S.mastered[q.id]).length;return{t:qs.length,m,p:Math.round(m/qs.length*100)}}
+function tickHistTimer(){
+  S.timer++;
+  const el=document.getElementById("hist-quiz-timer");
+  if(el)el.textContent=fmt(S.timer);
+  else render();
+}
+function startTimer(){S.timerOn=true;clearInterval(timerInterval);timerInterval=setInterval(tickHistTimer,1000)}
+function stopTimer(){S.timerOn=false;clearInterval(timerInterval)}
+
+function lockNext(){
+  const nq=nextQ();
+  if(nq){S.lockedQ=nq;S.lockedOpts=shuffle(nq.opts)}
+  else{S.lockedQ=null;S.lockedOpts=[]}
+}
+
+function go(cat){S.catF=cat;S.queue=shuffle(Q.map(q=>q.id));S.sel=null;S.sess={c:0,w:0};S.timer=0;S.lockedQ=null;S.lockedOpts=[];S.phase="quiz";lockNext();startTimer();render()}
+function rev(){S.revIdx=0;S.showCard=false;S.phase="review";render()}
+function rst(){
+  if(!confirm("저장된 진행도(맞춘 문제·오답 횟수·연속 기록)를 모두 지울까요?"))return;
+  S.mastered={};S.wrongCnt={};S.streak=0;S.best=0;S.queue=shuffle(Q.map(q=>q.id));S.sess={c:0,w:0};S.sel=null;S.timer=0;S.lockedQ=null;S.lockedOpts=[];
+  saveHistProg();render();
+}
+function toMenu(){S.phase="menu";stopTimer();S.lockedQ=null;S.lockedOpts=[];S.sel=null;render()}
+
+function pick(o){
+  if(S.sel!==null||!S.lockedQ)return;
+  S.sel=o;const ok=o===S.lockedQ.a;
+  if(ok){S.mastered[S.lockedQ.id]=true;S.sess.c++;S.streak++;if(S.streak>S.best)S.best=S.streak}
+  else{S.wrongCnt[S.lockedQ.id]=(S.wrongCnt[S.lockedQ.id]||0)+1;S.sess.w++;S.streak=0;
+    const rest=S.queue.filter(id=>id!==S.lockedQ.id);S.queue=[...rest,S.lockedQ.id]}
+  saveHistProg();render()
+}
+
+function nxt(){S.sel=null;S.lockedQ=null;S.lockedOpts=[];lockNext();render()}
+
+function esc(s){const d=document.createElement("div");d.textContent=s;return d.innerHTML}
+
+function histNorm(s){return String(s||"").replace(/\s+/g,"")}
+function histMatchedConceptBodies(cat){
+  const tpl=document.getElementById("histConceptTpl");
+  if(!tpl||!cat)return[];
+  const nc=histNorm(cat);
+  const out=[];
+  tpl.content.querySelectorAll("details.concept-nested").forEach(function(det){
+    const sum=det.querySelector(":scope > summary");
+    const body=det.querySelector(":scope > .concept-details-body");
+    if(!sum||!body)return;
+    const nt=histNorm(sum.textContent);
+    let hit=nt.indexOf(nc)>=0;
+    if(!hit){
+      cat.split(/[·\/]/).forEach(function(piece){
+        const np=histNorm(piece);
+        if(np.length>=2&&nt.indexOf(np)>=0)hit=true;
+      });
+    }
+    if(hit)out.push({title:sum.textContent.trim(),html:body.innerHTML});
+  });
+  const seen=new Set();
+  return out.filter(function(x){
+    if(seen.has(x.title))return false;
+    seen.add(x.title);
+    return true;
+  }).slice(0,3);
+}
+function buildHistWrongRefTabsHtml(cat){
+  const bodies=histMatchedConceptBodies(cat);
+  if(!bodies.length)return "";
+  const tabs=bodies.map(function(b){
+    return `<details class="wrong-ref-tab"><summary>${esc(b.title)}</summary><div class="wrong-ref-tab-body concept-details-body">${b.html}</div></details>`;
+  }).join("");
+  return `<div class="wrong-ref-wrap"><p class="wrong-ref-intro"><strong>역사 개념</strong> 탭에서 이 단원과 맞닿은 소제목만 골라 두었습니다. 필요한 제목만 펼쳐 보세요.</p>${tabs}</div>`;
+}
+
+function render(){
+  bindHistTabs();
+  if(S.topView==="concepts"){renderHistoryConcepts();return;}
+  if(S.phase==="menu")renderMenu();
+  else if(S.phase==="review")renderReview();
+  else renderQuiz();
+}
+
+function renderMenu(){
+  const tp=tP(),tm=tM(),wk=weakCats(),wqs=wrongQs();
+  let h=`<p style="text-align:center;font-size:14px;color:#666;line-height:1.65;margin:0 0 24px">${Q.length}문제 · 즉시 피드백·해설 · 틀리면 맨 뒤로 재배치 · 100%=전범위 보장 · 진행도는 이 브라우저에 기억되어 새로고침해도 유지되며, 아래 초기화 버튼으로만 삭제할 수 있습니다.</p>
+  <div class="progress-box">
+    <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px"><span style="font-weight:500;color:var(--color-text-primary)">전체</span><span style="color:var(--color-text-secondary)">${tm}/${Q.length} (${tp}%)</span></div>
+    <div class="bar"><div class="bar-fill" style="width:${tp}%;background:${tp===100?'var(--color-text-success)':'var(--color-text-info)'}"></div></div>
+    ${S.best>0?`<div style="font-size:10px;color:var(--color-text-tertiary);margin-top:4px">최고 연속 정답: ${S.best}</div>`:""}
+  </div>`;
+
+  if(wk.length>0){h+=`<div class="weak-box"><div style="font-size:11px;font-weight:500;color:var(--color-text-warning);margin-bottom:3px">취약 영역</div>${wk.map(([c,v])=>`<div style="font-size:11px;color:var(--color-text-secondary)">${esc(c)} — 오답 ${v.w}회/${v.t}문제</div>`).join("")}</div>`}
+  if(wqs.length>0){h+=`<button class="btn review-btn" onclick="rev()">오답 플래시카드 복습 (${wqs.length}문제)</button>`}
+
+  h+=`<button class="btn btn-main" onclick="go(null)">${tm===0?"학습 시작":"이어서 풀기"} — ${Q.length-tm}문제 남음</button>
+  <div style="font-size:13px;font-weight:700;color:#0ea5e9;margin-bottom:10px">카테고리별</div>`;
+
+  CATS.forEach(c=>{const s=catSt(c);
+    h+=`<button class="btn cat-btn" onclick="go('${esc(c)}')"><span style="color:${s.p===100?'var(--color-text-success)':'var(--color-text-primary)'}">${esc(c)}</span><span style="display:flex;align-items:center;gap:5px"><span style="color:var(--color-text-tertiary);font-size:10px">${s.m}/${s.t}</span><span class="cat-bar"><span class="cat-bar-fill" style="width:${s.p}%;background:${s.p===100?'var(--color-text-success)':'var(--color-text-info)'}"></span></span></span></button>`});
+
+  if(tm>0||Object.keys(S.wrongCnt).length)h+=`<button type="button" onclick="rst()" style="margin-top:18px;padding:10px 28px;border:none;border-radius:8px;background:#888;color:#fff;cursor:pointer;font-size:13px;font-family:inherit;font-weight:600">저장된 진행도 초기화</button>`;
+  app.innerHTML=h;
+}
+
+function renderReview(){
+  const wqs=wrongQs();const rq=wqs[S.revIdx];
+  if(!rq){app.innerHTML=`<div style="text-align:center;padding:2rem 0"><p style="font-size:13px;color:var(--color-text-secondary)">복습할 오답이 없습니다.</p><button class="btn" style="width:auto;display:inline-block;margin-top:10px;padding:8px 18px" onclick="toMenu()">메뉴로</button></div>`;return}
+
+  let h=`<div style="display:flex;justify-content:space-between;margin-bottom:14px"><button class="link-btn" onclick="toMenu()">← 메뉴</button><span style="font-size:10px;color:var(--color-text-tertiary)">${S.revIdx+1}/${wqs.length}</span></div>
+  <div style="font-size:10px;color:var(--color-text-warning);margin-bottom:5px">오답 ${S.wrongCnt[rq.id]}회 — ${esc(rq.cat)}</div>
+  <div class="card" onclick="S.showCard=!S.showCard;render()">`;
+
+    if(!S.showCard){h+=`<div style="font-size:14px;font-weight:500;color:var(--color-text-primary);line-height:1.6;margin-bottom:6px">${esc(rq.q)}</div><div style="font-size:10px;color:var(--color-text-tertiary)">탭하여 정답 보기</div>`}
+  else{h+=`<div style="font-size:10px;font-weight:600;color:var(--color-text-tertiary);margin-bottom:4px">관련 개념(단원)</div><div style="font-size:12px;font-weight:600;color:var(--color-text-primary);margin-bottom:10px">${esc(rq.cat)}</div><div style="font-size:14px;font-weight:500;color:var(--color-text-success);line-height:1.6;margin-bottom:6px">${esc(rq.a)}</div><div style="font-size:11px;color:var(--color-text-secondary);line-height:1.6"><strong style="color:var(--color-text-primary)">해설·풀이</strong> — ${esc(rq.ex)}</div>`}
+
+  h+=`</div><div style="display:flex;gap:6px;margin-top:12px">
+  <button class="btn" style="flex:1;text-align:center;${S.revIdx===0?'color:var(--color-text-tertiary);cursor:default':''}" ${S.revIdx===0?'disabled':''} onclick="S.revIdx--;S.showCard=false;render()">← 이전</button>
+  <button class="btn" style="flex:1;text-align:center;font-weight:500;border-color:var(--color-border-secondary)" onclick="${S.revIdx<wqs.length-1?'S.revIdx++;S.showCard=false;render()':'toMenu()'}">${S.revIdx<wqs.length-1?"다음 →":"완료"}</button></div>`;
+  app.innerHTML=h;
+}
+
+function renderQuiz(){
+  const cur=S.lockedQ;const unmast=filt().filter(q=>!S.mastered[q.id]).length;const done=!cur&&unmast===0;const p=pct();const mc=mCnt();const fl=filt().length;
+  const rate=S.sess.c+S.sess.w>0?Math.round(S.sess.c/(S.sess.c+S.sess.w)*100):0;
+
+  let h=`<div class="header"><button class="link-btn" onclick="toMenu()">← 메뉴</button><div style="display:flex;gap:10px;font-size:10px;color:var(--color-text-tertiary)"><span id="hist-quiz-timer">${fmt(S.timer)}</span>${S.streak>=3?`<span style="color:var(--color-text-warning);font-weight:500">연속 ${S.streak}정답!</span>`:""}</div></div>
+  <div class="meta"><span>${esc(S.catF||"전체")}</span><span>${mc}/${fl} 마스터 · 정답률 ${rate}%</span></div>
+  <div class="bar bar-sm"><div class="bar-fill" style="width:${p}%;background:${p===100?'var(--color-text-success)':'var(--color-text-info)'}"></div></div>`;
+
+  if(done){
+    h+=`<div style="text-align:center;padding:40px 12px"><div style="font-size:48px;margin-bottom:8px;color:#4CAF50;line-height:1">&#10003;</div><h3 style="font-size:1.35em;font-weight:700;color:#0ea5e9;margin:0 0 10px">${esc(S.catF||"전체")} 완료!</h3><p style="font-size:1.05em;color:#666;margin:0 0 6px">${S.sess.c}정답 / ${S.sess.w}오답 · ${fmt(S.timer)}</p>${S.sess.w>0?`<p style="font-size:0.95em;color:#e65100;margin-bottom:4px">오답 ${S.sess.w}문제 → 메뉴에서 복습 가능</p>`:""}<button class="btn btn-next" style="margin-top:18px" onclick="toMenu()">메뉴로</button></div>`;
+  } else if(cur){
+    h+=`<div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:10px;color:var(--color-text-tertiary)">${esc(cur.cat)}</span>${S.wrongCnt[cur.id]>0&&S.sel===null?`<span style="font-size:10px;color:var(--color-text-warning)">이전 오답 ${S.wrongCnt[cur.id]}회</span>`:""}</div>
+    <h3 style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin:0 0 14px;line-height:1.6">${esc(cur.q)}</h3>
+    <div style="display:flex;flex-direction:column;gap:5px">`;
+
+    S.lockedOpts.forEach((o,i)=>{
+      const isA=o===cur.a,isS=o===S.sel;
+      let cls="",lbl="",extra="";
+      if(S.sel!==null){
+        if(isA){cls="bg-ok";lbl="정답";extra="color:var(--color-text-success)"}
+        else if(isS&&!isA){cls="bg-err";lbl="오답";extra="color:var(--color-text-danger)"}
+        else{extra="color:var(--color-text-tertiary)"}
+      }
+      const pad=`padding-left:48px;${lbl?"padding-right:52px":""}`;
+      h+=`<button type="button" class="btn ${cls}" ${S.sel!==null?"disabled":""} onclick="pick('${o.replace(/'/g,"\\'")}')" style="${extra};${pad}"><span class="opt-num" aria-hidden="true">${i+1}</span>${esc(o)}${lbl?`<span class="opt-label">${lbl}</span>`:""}</button>`;
+    });
+    h+=`</div>`;
+
+    if(S.sel!==null){
+      const exHtml=cur.ex?esc(cur.ex):"(이 문항에는 별도 해설이 없습니다.)";
+      h+=`<div style="margin-top:10px">`;
+      if(S.sel!==cur.a){
+        h+=`<div class="wrong-learn-box" style="padding:10px 14px 14px;border-radius:12px;border:1px solid rgba(244,67,54,0.35);background:linear-gradient(135deg,#fff8f8 0%,#ffebee 100%);box-shadow:0 2px 10px rgba(244,67,54,0.08);margin-bottom:10px">
+          <div style="margin-bottom:8px">
+            <div style="font-size:10px;font-weight:600;color:var(--color-text-tertiary);margin-bottom:4px">이 문항 단원</div>
+            <div style="font-size:13px;font-weight:600;color:var(--color-text-primary)">${esc(cur.cat)}</div>
+          </div>
+          <div style="margin-bottom:8px">
+            <div style="font-size:10px;font-weight:600;color:var(--color-text-tertiary);margin-bottom:4px">정답</div>
+            <div style="font-size:14px;font-weight:600;color:#1b5e20">${esc(cur.a)}</div>
+          </div>
+          <div style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(183,28,28,0.12)">
+            <div style="font-size:10px;font-weight:600;color:var(--color-text-tertiary);margin-bottom:4px">해설·문제 풀이</div>
+            <div style="font-size:12px;color:#444;line-height:1.65">${exHtml}</div>
+          </div>
+          ${buildHistWrongRefTabsHtml(cur.cat)}
+        </div>
+        <div style="font-size:11px;color:var(--color-text-danger);margin-bottom:8px">이 문제는 대기열 맨 뒤로 보내져, 다른 문제를 먼저 풉니다.</div>`;
+      }else{
+        h+=`<div class="ex-box"><div style="font-size:10px;font-weight:600;color:var(--color-text-tertiary);margin-bottom:6px">해설</div><div style="font-size:11px;color:var(--color-text-secondary);line-height:1.6">${exHtml}</div></div>`;
+      }
+      h+=`<button class="btn btn-next" onclick="nxt()">다음 →</button></div>`;
+    }
+  } else {
+    h+=`<div style="text-align:center;padding:24px 0;color:var(--color-text-tertiary);font-size:12px">불러오는 중...</div>`;
+  }
+  app.innerHTML=h;
+}
+
+document.addEventListener("keydown",function(ev){
+  if(ev.target&&["INPUT","TEXTAREA","SELECT"].includes(ev.target.tagName))return;
+  if(ev.target&&ev.target.isContentEditable)return;
+  if(S.topView!=="quiz")return;
+  if(ev.key==="Enter"&&S.phase==="quiz"&&S.sel!==null&&S.lockedQ){
+    ev.preventDefault();
+    nxt();
+    return;
+  }
+  if(S.phase!=="quiz"||S.sel!==null||!S.lockedQ||!S.lockedOpts.length)return;
+  const m=/^(?:Digit|Numpad)([1-9])$/.exec(ev.code);
+  if(!m)return;
+  const idx=Number(m[1])-1;
+  if(idx>=S.lockedOpts.length)return;
+  ev.preventDefault();
+  pick(S.lockedOpts[idx]);
+});
+
+render();
+</script>
+  <link rel="stylesheet" href="ai-quiz-ui.css" />
+  <script src="ai-quiz-config.js"></script>
+  <script src="ai-quiz-bridge.js"></script>
+  <script src="ai-quiz-runner.js"></script>
+  <script src="ai-quiz-subjects.js"></script>
+  <link rel="stylesheet" href="bgm-player.css" />
+  <script src="bgm-player.js" defer></script>
+</body>
+</html>

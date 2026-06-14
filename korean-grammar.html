@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>국어 · 문법 — 언어와 매체 · 중세국어</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="site-theme.css" />
+  <style>
+    :root {
+      --font: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --card: rgba(255, 255, 255, 0.97);
+      --shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 24px 48px -12px rgba(14, 165, 233, 0.22);
+      --ink: #1e293b;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --accent: #0284c7;
+      --accent-soft: #e0f2fe;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      color: var(--text);
+      padding: clamp(16px, 3vw, 28px) 16px 120px;
+      min-height: 100vh;
+      }
+    
+    h1 {
+      text-align: center;
+      font-size: clamp(1.35rem, 4vw, 1.85rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.25;
+      margin-bottom: 0.35rem;
+      text-shadow: 0 2px 18px rgba(0, 0, 0, 0.18);
+    }
+    .page-sub {
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      max-width: 36em;
+      margin: 0 auto 1.25rem;
+      line-height: 1.55;
+    }
+    .shell { max-width: 920px; margin: 0 auto; }
+    .card {
+      background: var(--card);
+      color: var(--ink);
+      border-radius: 22px;
+      padding: clamp(22px, 4vw, 36px) clamp(18px, 3.5vw, 32px);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      margin-bottom: 20px;
+    }
+    .eyebrow {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 0.25rem 0.6rem;
+      border-radius: 8px;
+      margin-bottom: 0.65rem;
+    }
+    h2 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #0284c7;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--accent-soft);
+    }
+    h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0284c7;
+      margin: 1.15rem 0 0.5rem;
+    }
+    p, li { font-size: 0.9375rem; line-height: 1.65; color: #334155; }
+    ul, ol { margin: 0.4rem 0 0.6rem 1.25rem; }
+    li { margin-bottom: 0.35rem; }
+    .note {
+      font-size: 0.85rem;
+      color: var(--muted);
+      background: #f8fafc;
+      border-left: 3px solid var(--sky-300);
+      padding: 0.65rem 0.85rem;
+      border-radius: 0 10px 10px 0;
+      margin: 0.65rem 0;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      margin: 0.65rem 0 1rem;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+      min-width: 520px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 0.5rem 0.65rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #f1f5f9;
+      font-weight: 700;
+      color: #475569;
+      white-space: nowrap;
+    }
+    tr:nth-child(even) td { background: #fafafa; }
+    code.hj { font-family: "Noto Sans KR", "Malgun Gothic", sans-serif; font-weight: 600; color: #0f172a; }
+
+    .kg-tablist {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 1.25rem;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--line);
+    }
+    .kg-tab {
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      color: #475569;
+      font-family: inherit;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      padding: 0.5rem 0.85rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .kg-tab:hover { background: #fff; border-color: #94a3b8; }
+    .kg-tab[aria-selected="true"] {
+      background: var(--sky-100);
+      color: var(--sky-600);
+      border-color: var(--sky-200);
+    }
+    a.kg-tab--mock {
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: var(--sky-50);
+      color: var(--sky-600);
+      border-color: var(--sky-100);
+    }
+    a.kg-tab--mock:hover {
+      background: #fff;
+      border-color: #0ea5e9;
+      color: #0369a1;
+    }
+    .kg-panel { display: none; }
+    .kg-panel.kg-panel--active { display: block; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="site-nav" aria-label="페이지 이동">
+      <a class="site-nav__link" href="index.html#midterm">← 중간 대비 메인</a>
+      <a class="site-nav__link" href="word-quiz.html">국어 퀴즈·문학</a>
+    </nav>
+    <h1>국어 · 문법 개념 정리</h1>
+    <p class="page-sub"><strong>선택 과목: 언어와 매체</strong> — 6. 중세국어 및 <strong>한글의 제자 원리</strong>를 수업·교재 흐름에 맞춰 표와 목록으로 정리했습니다. (옛 한글 예문은 일부 현대 표기로 병기합니다.)</p>
+
+    <div class="card">
+      <span class="eyebrow">내부 목차</span>
+      <div class="kg-tablist" role="tablist" aria-label="문법 섹션">
+        <button type="button" class="kg-tab" role="tab" aria-selected="true" aria-controls="panel-hj" id="tab-hj" data-kg-tab="hj">한글 제자·문자 운용</button>
+        <button type="button" class="kg-tab" role="tab" aria-selected="false" aria-controls="panel-mg" id="tab-mg" data-kg-tab="mg">중세 표기</button>
+        <button type="button" class="kg-tab" role="tab" aria-selected="false" aria-controls="panel-mp" id="tab-mp" data-kg-tab="mp">중세 음운</button>
+        <button type="button" class="kg-tab" role="tab" aria-selected="false" aria-controls="panel-orth" id="tab-orth" data-kg-tab="orth">표기 비교·변천</button>
+        <button type="button" class="kg-tab" role="tab" aria-selected="false" aria-controls="panel-stx" id="tab-stx" data-kg-tab="stx">단어·문장 표현</button>
+        <a class="kg-tab kg-tab--mock" href="korean-grammar-quiz.html">객관식 모의고사 (제1~3회)</a>
+      </div>
+
+      <section class="kg-panel kg-panel--active" id="panel-hj" role="tabpanel" aria-labelledby="tab-hj" data-kg-panel="hj">
+        <h2 id="sec-hj">1. 한글의 제자 원리</h2>
+        <h3>1) 초성(자음) 17자 — 상형·가획</h3>
+        <ul>
+          <li><strong>상형의 원리</strong> — 발음 기관(조음 기관)의 모양을 본떠 <code class="hj">ㄱ, ㄴ, ㅁ, ㅅ, ㅇ</code> 다섯 <strong>기본자</strong>를 만듦.</li>
+          <li><strong>가획의 원리</strong> — 기본자에 획을 더해 <strong>가획자</strong>를 만듦. (가획은 기본자보다 소리를 세게 냄을 뜻함.)</li>
+        </ul>
+        <p class="note"><strong>이체자</strong> — 기본자의 모양을 달리 가획한 자음으로, 다른 가획자와 달리 반드시 ‘소리를 더 세게 낸다’는 뜻으로만 이해하기 어려운 계열(교재에서 이체·가획을 구분해 설명)을 가리키기도 합니다. 수업에서는 교과서 표기를 따르세요.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>구분</th>
+                <th>본뜬 모양(요지)</th>
+                <th>기본자</th>
+                <th>1획 가획</th>
+                <th>2획 가획</th>
+                <th>이체(교재 예)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>어금닛소리(아음)</td><td>혀뿌리가 목구멍을 막는 모양</td><td><code class="hj">ㄱ</code></td><td><code class="hj">ㅋ</code></td><td><code class="hj">ㄲ</code></td><td>—</td></tr>
+              <tr><td>혓소리(설음)</td><td>혀끝이 윗잇몸에 닿는 모양</td><td><code class="hj">ㄴ</code></td><td><code class="hj">ㄷ</code></td><td><code class="hj">ㅌ</code></td><td><code class="hj">ㄹ</code> (반설음)</td></tr>
+              <tr><td>입술소리(순음)</td><td>입술의 모양</td><td><code class="hj">ㅁ</code></td><td><code class="hj">ㅂ</code></td><td><code class="hj">ㅍ</code></td><td>—</td></tr>
+              <tr><td>잇소리(치음)</td><td>이의 모양</td><td><code class="hj">ㅅ</code></td><td><code class="hj">ㅈ</code></td><td><code class="hj">ㅊ</code></td><td><code class="hj">ㅿ</code> (반치음, 중세)</td></tr>
+              <tr><td>목구멍소리(후음)</td><td>목구멍의 모양</td><td><code class="hj">ㅇ</code></td><td><code class="hj">ㅎ</code></td><td><code class="hj">ㆆ</code> (여린히읗)</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>2) 중성(모음) 11자 — 천·지·인</h3>
+        <ul>
+          <li>하늘·땅·사람의 모습을 본떠 <code class="hj">ㆍ, ㅡ, ㅣ</code> 세 <strong>기본자</strong>를 만들고, 기본자를 조합해 나머지 여덟 모음을 만듦.</li>
+        </ul>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>제자 원리</th><th>구분</th><th>글자</th><th>설명(요지)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td rowspan="3">기본자</td><td>천(天)</td><td><code class="hj">ㆍ</code></td><td>하늘의 둥근 모양 — 양성 계열과 연계</td></tr>
+              <tr><td>지(地)</td><td><code class="hj">ㅡ</code></td><td>땅의 편평한 모양 — 음성 계열과 연계</td></tr>
+              <tr><td>인(人)</td><td><code class="hj">ㅣ</code></td><td>사람이 선 모양 — 중성(양·음 공통) 축</td></tr>
+              <tr><td rowspan="2">합성</td><td>합성 모음</td><td><code class="hj">ㅗ ㅏ ㅜ ㅓ ㅛ ㅑ ㅠ ㅕ</code> 등</td><td><code class="hj">ㆍ+ㅡ→ㅗ</code>, <code class="hj">ㅣ+ㆍ→ㅏ</code>, <code class="hj">ㅡ+ㆍ→ㅜ</code>, <code class="hj">ㆍ+ㅣ→ㅓ</code> … 겹모음에 <code class="hj">ㆍ</code>를 더해 야·여·요·유 계열</td></tr>
+              <tr><td>초출·재출(교재)</td><td><code class="hj">ㆁ</code> 옛이응 등</td><td>중세 국어 음운·표기에서 별도 설명(아래 음운 탭)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>3) 종성(받침)과 종성부용초성(終聲復用初聲)</h3>
+        <p>받침으로 쓰는 자모는 초성 자모를 <strong>다시 쓴다</strong>는 원리입니다. 현대 맞춤법도 같은 취지로 받침 문자를 운용합니다.</p>
+
+        <h3>4) 문자 운용(글자를 배열하는 법)</h3>
+        <ol>
+          <li><strong>이어쓰기(연서)</strong> — 예: 입술소리 <code class="hj">ㅁ, ㅂ, ㅍ, ㅃ</code> 아래에 <code class="hj">ㅇ</code>을 이어 쓰면 순경음 <code class="hj">ㅱ, ㅸ, ㆄ, ㅹ</code> 등(교재 예: 중세 순경음 계열).</li>
+          <li><strong>나란히 쓰기(병서)</strong>
+            <ul>
+              <li><strong>각자병서</strong> — 같은 자음을 나란히: <code class="hj">ㄲ, ㄸ, ㅃ, ㅆ, ㅉ</code> 등.</li>
+              <li><strong>합용병서</strong> — 서로 다른 자음을 나란히: <code class="hj">ㅺ, ㅼ, ㅳ, ㅶ, ㅵ</code> … (겹자음/표기 단위).</li>
+            </ul>
+          </li>
+          <li><strong>붙여쓰기(부서)</strong> — 중성(모음)은 초성의 <strong>아래</strong>나 <strong>오른쪽</strong>에 붙여 씀.</li>
+        </ol>
+      </section>
+
+      <section class="kg-panel" id="panel-mg" role="tabpanel" aria-labelledby="tab-mg" hidden data-kg-panel="mg">
+        <h2 id="sec-mg">2. 중세 국어의 특징 — 표기</h2>
+        <ol>
+          <li><strong>이어적기(연철)</strong> — 표음주의: 소리 나는 대로, 앞 음절의 종성을 모음으로 시작하는 조사·어미의 초성에 이어 적음. 예: <code class="hj">사ᄅᆞᆷ + 이 → 사ᄅᆞ미</code> (실제 표기는 교과서 예문 따름 → 의미: 사람이).</li>
+          <li><strong>붙여쓰기</strong> — 띄어쓰기 없이 형태소·어절이 연속됨.</li>
+          <li><strong>8종성법</strong> — 종성은 여덟 글자(<code class="hj">ㄱ, ㆁ, ㄷ, ㄴ, ㅂ, ㅁ, ㅅ, ㄹ</code>)로 충분하다는 원리. <strong>팔자가족용(八字可足用)</strong>. 현대와 달리 종성 <code class="hj">ㅅ</code>과 <code class="hj">ㄷ</code>의 음가 구분이 뚜렷했음.</li>
+          <li><strong>한자어의 음표기</strong> — 한자 음이 받침 없이 끝날 때 종성에 음가 없는 <code class="hj">ㅇ</code>을 적기도 함.</li>
+          <li><strong>사잇소리 ‘ㅅ’</strong> — 명사+명사 합성에서 관형격적 기능의 <code class="hj">ㅅ</code>을 표기. 현대와 달리 앞말에 받침이 있어도 쓰는 예가 많고, 위치도 다양.</li>
+          <li><strong>성조 표기</strong>
+            <ul>
+              <li><strong>평성</strong> — 낮은 소리, 방점 없음.</li>
+              <li><strong>거성</strong> — 높은 소리, 방점 1개.</li>
+              <li><strong>상성</strong> — 처음 낮고 끝 높음, 방점 2개.</li>
+            </ul>
+          </li>
+        </ol>
+      </section>
+
+      <section class="kg-panel" id="panel-mp" role="tabpanel" aria-labelledby="tab-mp" hidden data-kg-panel="mp">
+        <h2 id="sec-mp">2. 중세 국어의 특징 — 음운</h2>
+        <ol>
+          <li><strong>된소리 계열</strong>이 새로 등장·확대.</li>
+          <li><strong>어두 자음군</strong> — 초성에 둘 이상의 자음이 올 수 있음 → 현대어로 오면서 대부분 <strong>된소리</strong>로 정리되는 경우가 많음. (예: 뜻, 쌀, 때 등 교재 예)</li>
+          <li><strong>모음 조화</strong> — 대체로 잘 지켜짐. 16세기 이후 <code class="hj">ㆍ</code>(양성)이 <code class="hj">ㅡ</code>(음성) 쪽으로 변하면서 조화가 깨지는 방향.</li>
+        </ol>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>구분</th><th>모음(예)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>양성</td><td><code class="hj">ㆍ, ㅏ, ㅗ, ㆎ, ㅐ, ㅚ, ㅑ, ㅛ, ㅘ</code> …</td></tr>
+              <tr><td>음성</td><td><code class="hj">ㅡ, ㅓ, ㅜ, ㅔ, ㅢ, ㅕ, ㅠ, ㅝ, ㅟ</code> …</td></tr>
+              <tr><td>중성(중립)</td><td><code class="hj">ㅣ</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <ul>
+          <li><strong><code class="hj">ㅸ</code></strong> (순경음 계열), <strong><code class="hj">ㆆ</code></strong> (여린히읗), <strong><code class="hj">ㅿ</code></strong> (반치음), <strong><code class="hj">ㆁ</code></strong> (옛이응), <strong><code class="hj">ㆍ</code></strong> (아래아)의 사용.</li>
+          <li><strong>구개음의 부재</strong> — 구개음화가 오늘과 같이 일반적이지 않음. 예: ‘고치다’ 형태의 표기·발음(교재: 고티다 등).</li>
+          <li>중세에서 <code class="hj">ㅅ, ㅆ, ㅈ, ㅊ, ㅉ, ㅿ</code>는 치음 계열로 묶여 다루는 경우가 많고, 현대에는 치조음과 구개음으로 나뉘는 쪽으로 이해하면 됨.</li>
+          <li><code class="hj">ㅔ, ㅐ, ㅚ, ㅟ</code> 등은 <strong>이중모음</strong>으로 발음되고, 단모음은 일곱(<code class="hj">ㆍ, ㅡ, ㅣ, ㅏ, ㅗ, ㅜ, ㅓ</code>)으로 정리하는 교재가 많음.</li>
+        </ul>
+      </section>
+
+      <section class="kg-panel" id="panel-orth" role="tabpanel" aria-labelledby="tab-orth" hidden data-kg-panel="orth">
+        <h2 id="sec-orth">표기 방식 비교 · 음운 변천(요약)</h2>
+        <h3>1) 이어 적기 · 거듭 적기 · 끊어 적기</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>구분</th>
+                <th>시기·성격</th>
+                <th>요지</th>
+                <th>예(의미)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>이어 적기(연철)</td>
+                <td>중세 국어</td>
+                <td>표음주의 — 앞 음절 받침을 뒤 음절의 모음 초성 자리에 이어 적음</td>
+                <td>사ᄅᆞ미 (사람이)</td>
+              </tr>
+              <tr>
+                <td>거듭 적기(중철·혼철)</td>
+                <td>근대 국어</td>
+                <td>앞 음절 종성을 뒤 음절 초성에도 <strong>다시</strong> 표기</td>
+                <td>사ᄅᆞᆷᄆᆞ (교재식 표기)</td>
+              </tr>
+              <tr>
+                <td>끊어 적기(분철)</td>
+                <td>현대 국어</td>
+                <td>표의주의에 가깝게 형태소 경계를 밝힘. 앞 음절 종성 유지, 모음 시작은 <code class="hj">ㅇ</code></td>
+                <td>사람이</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>2) 음운 변천(교과서 요지)</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>대상</th><th>변화 양상</th><th>비고</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code class="hj">ㅸ</code></td><td>소실 또는 반모음 <code class="hj">ㅗ/ㅜ</code>로</td><td>어간 받침 ㅸ 용언 → 현대 <code class="hj">ㅂ</code> 불규칙 활용 계열과 연결(쉬-, 고와 등 예시)</td></tr>
+              <tr><td><code class="hj">ㆆ, ㅿ, ㆁ</code> 등</td><td>순차적 소실·병합</td><td><code class="hj">ㅿ</code>은 <code class="hj">ㅅ</code>으로의 치우침 등(마음, 한숨, 나아, 지어 …)</td></tr>
+              <tr><td><code class="hj">ㆁ</code></td><td>초성에서는 임진왜란 이후 쓰임 줄어듦. 종성에서는 <code class="hj">ㅇ</code>이 역할 대신</td><td>짐승(즁생 표기 등 교재 예)</td></tr>
+              <tr><td><code class="hj">ㆍ</code></td><td>1단계: 둘째 음절 이하에서 <code class="hj">ㅡ</code>로 / 2단계: 첫 음절에서 <code class="hj">ㅏ</code>로</td><td>문자는 1933 한글 맞춤법 통일안 이후 정리·소멸</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="kg-panel" id="panel-stx" role="tabpanel" aria-labelledby="tab-stx" hidden data-kg-panel="stx">
+        <h2 id="sec-stx">3. 단어와 문장 표현(중세)</h2>
+        <h3>1) 격 조사(교재 분류)</h3>
+        <p>아래는 중세 문헌에서 나타나는 <strong>형태·환경</strong>을 현대 설명으로 옮긴 요약입니다. 실제 표기는 원문을 따릅니다.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>격</th><th>주요 환경(요지)</th><th>예시 취지</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>주격</td><td>주어 뒤</td><td>체언+주격 조사(교재 표기 다양)</td></tr>
+              <tr><td>목적격</td><td>목적어</td><td>모음·받침 환경에 따라 이/을/를 계열이 갈림</td></tr>
+              <tr><td>관형격</td><td>관형 접속</td><td><code class="hj">ㅅ</code> 사잇소리, <code class="hj">의</code> 계열 등</td></tr>
+              <tr><td>부사격</td><td>부사적 부착</td><td><code class="hj">에, 애, 예</code> 등 환경별 대립</td></tr>
+              <tr><td>호격</td><td>높임 명사 뒤</td><td>호격 조사 <strong>하</strong> — 예: 님금하 (임금님이시여)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note">체언의 끝소리(자음/모음, 양성·음성)에 따라 <code class="hj">이, 을, 를, 의</code> 등이 갈리는 규칙은 교과서 표의 중세 예문표를 암기하는 편이 가장 정확합니다.</p>
+
+        <h3>2) 높임 표현</h3>
+        <ul>
+          <li><strong>주체 높임</strong> 선어말 어미: <code class="hj">-시-, -샤-</code> — 자음 어미 앞에서는 가-형, 모음 어미 앞에서는 어간에 맞게 결합(교재: 가시, 노피곰 도ᄯᅡ샤 등 예).</li>
+          <li><strong>객체 높임</strong> 선어말 어미: 어간 끝소리군에 따라 <code class="hj">-옵-, -드립-</code> 등 여러 형태(교재: 막거늘, 도와- 등과 연계).</li>
+          <li><strong>상대 높임</strong>: 평서형·의문형 어미 대립(교재: …다 / …리고 등 형태로 정리).</li>
+        </ul>
+
+        <h3>3) 의문 표현</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>인칭</th><th>유형</th><th>요소(예)</th><th>의미 예</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1·3인칭</td>
+                <td>판정 의문</td>
+                <td>의문 보조사 <code class="hj">-가</code> + 종결 <code class="hj">-녀</code> 등</td>
+                <td>편안한가, 있느냐</td>
+              </tr>
+              <tr>
+                <td>1·3인칭</td>
+                <td>설명 의문</td>
+                <td>의문 보조사 <code class="hj">-고</code> + 종결 <code class="hj">-뇨</code> 등</td>
+                <td>어떠한가, 말하느냐</td>
+              </tr>
+              <tr>
+                <td>2인칭</td>
+                <td>—</td>
+                <td><code class="hj">-ㄴ다 / -는다</code> 계열</td>
+                <td>네가 어찌 알았느냐(교재 예)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var tabs = [].slice.call(document.querySelectorAll("[data-kg-tab]"));
+      var panels = [].slice.call(document.querySelectorAll("[data-kg-panel]"));
+      function activate(id) {
+        tabs.forEach(function (t) {
+          var on = t.getAttribute("data-kg-tab") === id;
+          t.setAttribute("aria-selected", on ? "true" : "false");
+          t.setAttribute("tabindex", on ? "0" : "-1");
+        });
+        panels.forEach(function (p) {
+          var on = p.getAttribute("data-kg-panel") === id;
+          p.classList.toggle("kg-panel--active", on);
+          p.hidden = !on;
+        });
+      }
+      tabs.forEach(function (t) {
+        t.addEventListener("click", function () {
+          activate(t.getAttribute("data-kg-tab"));
+        });
+      });
+    })();
+  </script>
+  <link rel="stylesheet" href="ai-quiz-ui.css" />
+  <script src="ai-quiz-config.js"></script>
+  <script src="ai-quiz-bridge.js"></script>
+  <script src="ai-quiz-runner.js"></script>
+  <script src="ai-quiz-subjects.js"></script>
+  <link rel="stylesheet" href="bgm-player.css" />
+  <script src="bgm-player.js" defer></script>
+</body>
+</html>

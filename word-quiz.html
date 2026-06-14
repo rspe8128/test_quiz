@@ -1,0 +1,3566 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>국어 · 단어·문법·현대시·소설 · 민사 1-1 중간</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="site-theme.css" />
+  <style>
+    :root {
+      --font: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --card-radius: 24px;
+      --shadow-card: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 20px 40px -12px rgba(14, 165, 233, 0.2);
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html { -webkit-font-smoothing: antialiased; }
+    
+    body {
+      font-family: var(--font);
+      padding: clamp(16px, 3vw, 28px) 16px 100px;
+      min-height: 100vh;
+      transition: background 0.45s ease;
+      }
+
+    
+    
+    
+    
+    .question-box {
+      margin-bottom: 20px;
+      padding: 22px;
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: 16px;
+      border: 1px solid rgba(226, 232, 240, 0.95);
+      box-shadow: 0 4px 24px rgba(15, 23, 42, 0.07);
+    }
+    
+    .question-box p {
+      margin-bottom: 15px;
+      font-size: 1.1em;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+      border: 1px solid var(--sky-100);
+      border-radius: 8px;
+      font-size: 1em;
+      font-family: inherit;
+      font-weight: 600;
+      background: var(--sky-50);
+      color: var(--sky-600);
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    
+    button:hover:not(:disabled):not(.correct):not(.incorrect):not(.close-btn) {
+      background: var(--sky-100);
+      border-color: var(--sky-200);
+    }
+    
+    button:active {
+      transform: none;
+    }
+
+    .lit-surface button[data-litbp] {
+      padding: 8px 14px;
+      font-size: 0.88rem;
+      margin: 4px;
+      border-radius: 10px;
+    }
+
+    .lit-surface .lit-mcq-poetry-nav-btn {
+      background: #fff;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    .lit-surface .lit-mcq-poetry-nav-btn:hover:not(:disabled) {
+      background: var(--sky-50);
+      border-color: var(--sky-100);
+      color: var(--sky-600);
+    }
+    
+    button.correct {
+      background-color: #4CAF50;
+      color: white;
+    }
+    
+    button.incorrect {
+      background-color: #f44336;
+      color: white;
+    }
+    
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .problem-title {
+      display: inline-block;
+      font-size: clamp(1rem, 2.4vw, 1.12rem);
+      color: var(--sky-600);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.55;
+      padding-right: 100px;
+    }
+    
+    .check-mark {
+      color: #4CAF50;
+      font-weight: bold;
+      margin-left: 5px;
+      font-size: 1.2em;
+    }
+    
+    .wrong-mark {
+      color: #f44336;
+      font-weight: bold;
+      margin-left: 5px;
+      font-size: 1.2em;
+    }
+    
+    #score {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      z-index: 900;
+      font-size: clamp(0.95rem, 2.5vw, 1.2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--sky-600);
+      background: rgba(255, 255, 255, 0.94);
+      padding: 12px 18px;
+      border-radius: 14px;
+      border: 1px solid var(--sky-100);
+      box-shadow: var(--shadow-card);
+    }
+    
+    #home,
+    #wordSubHome,
+    #litSubHome {
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: var(--card-radius);
+      padding: clamp(56px, 12vw, 88px) clamp(24px, 5vw, 40px);
+      max-width: 520px;
+      margin: clamp(32px, 8vw, 64px) auto;
+      box-shadow: var(--shadow-card);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      text-align: center;
+    }
+    
+    #home .home-lead,
+    #wordSubHome .home-lead,
+    #litSubHome .home-lead {
+      font-size: 0.9375rem;
+      color: #64748b;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+    
+    #home .home-actions,
+    #wordSubHome .home-actions,
+    #litSubHome .home-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      align-items: stretch;
+      max-width: 320px;
+      margin: 0 auto;
+    }
+    
+    #home .home-actions button,
+    #wordSubHome .home-actions button,
+    #litSubHome .home-actions button {
+      padding: 1rem 1.5rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 14px;
+      margin: 0;
+      width: 100%;
+    }
+    
+    #home .home-actions button,
+    #wordSubHome .home-actions button,
+    #litSubHome .home-actions button,
+    #home .home-actions a.home-link-grammar {
+      background: var(--sky-50);
+      color: var(--sky-600);
+      border: 1px solid var(--sky-100);
+      box-shadow: none;
+    }
+    #home .home-actions a.home-link-grammar span { opacity: 1; color: var(--text-muted); }
+    #home .home-actions button.btn-back-korean,
+    #wordSubHome .home-actions button.btn-back-korean,
+    #litSubHome .home-actions button.btn-back-korean {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      box-shadow: none;
+      font-size: 0.95rem;
+    }
+    
+    #home .home-actions button:hover,
+    #wordSubHome .home-actions button:hover,
+    #litSubHome .home-actions button:hover,
+    #home .home-actions a.home-link-grammar:hover {
+      background: var(--sky-100);
+      border-color: var(--sky-200);
+      transform: none;
+      filter: none;
+    }
+    
+    #listSelection {
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: var(--card-radius);
+      padding: clamp(36px, 6vw, 56px) clamp(22px, 4vw, 40px);
+      max-width: 1000px;
+      margin: 24px auto 40px;
+      box-shadow: var(--shadow-card);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+    }
+    
+    #listSelection > h2 {
+      font-size: clamp(1.35rem, 3.5vw, 1.75rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--sky-600);
+      margin-bottom: clamp(28px, 5vw, 40px);
+      text-align: center;
+    }
+    
+    #wordStudySelection {
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: var(--card-radius);
+      padding: clamp(36px, 6vw, 56px) clamp(22px, 4vw, 40px);
+      max-width: 1000px;
+      margin: 24px auto 40px;
+      box-shadow: var(--shadow-card);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+    }
+    
+    #wordStudySelection > h2 {
+      font-size: clamp(1.35rem, 3.5vw, 1.75rem);
+      margin-bottom: clamp(28px, 5vw, 40px);
+      color: #0c4a6e;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      text-align: center;
+    }
+    
+    .list-card {
+      background: linear-gradient(160deg, #f8fafc 0%, #e2e8f0 100%);
+      border-radius: 18px;
+      padding: 26px 22px;
+      text-align: center;
+      min-width: 200px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+    }
+    
+    .list-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    .list-card button {
+      background: var(--sky-100);
+      color: var(--sky-600);
+      border: 1px solid var(--sky-200);
+      width: 100%;
+      padding: 14px 20px;
+      font-size: 1.05em;
+    }
+    .list-card button:first-child {
+      display: block;
+      margin-bottom: 12px;
+    }
+    .list-card button:hover {
+      background: var(--sky-200);
+      border-color: var(--sky-300);
+    }
+    
+    #selection {
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: var(--card-radius);
+      padding: clamp(36px, 6vw, 52px) clamp(22px, 4vw, 40px);
+      max-width: 900px;
+      margin: 24px auto 40px;
+      box-shadow: var(--shadow-card);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      text-align: center;
+    }
+    
+    #selection h2 {
+      color: var(--sky-600);
+      margin-bottom: clamp(22px, 4vw, 32px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      font-size: clamp(1.2rem, 3vw, 1.5rem);
+    }
+    
+    #quiz {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    #results {
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: var(--card-radius);
+      padding: clamp(40px, 7vw, 56px) clamp(24px, 5vw, 40px);
+      max-width: 560px;
+      margin: 24px auto 40px;
+      box-shadow: var(--shadow-card);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      text-align: center;
+    }
+    
+    #results h2 {
+      color: var(--sky-600);
+      margin-bottom: 24px;
+      font-size: clamp(1.35rem, 3.5vw, 1.85rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+    
+    #resultScore {
+      font-size: 3.5em;
+      font-weight: bold;
+      color: #4CAF50;
+      margin: 30px 0;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    #resultPercent {
+      font-size: 1.8em;
+      color: var(--sky-600);
+      margin: 20px 0 40px 0;
+      font-weight: 600;
+    }
+    
+    #results button {
+      padding: 15px 40px;
+      font-size: 1.1em;
+      margin: 10px;
+      background: var(--sky-100);
+      color: var(--sky-600);
+      border: 1px solid var(--sky-200);
+    }
+    
+    .modal {
+      background-color: rgba(0,0,0,0.5);
+    }
+    
+    .modal > div {
+      background: white;
+      border-radius: 15px;
+      max-width: 900px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    }
+    
+    .modal h2 {
+      color: var(--sky-600);
+      font-weight: 700;
+    }
+    
+    .modal button {
+      padding: 12px 30px;
+      background: var(--sky-100);
+      color: var(--sky-600);
+      border: 1px solid var(--sky-200);
+      font-weight: 600;
+    }
+    
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: #666;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    
+    .close-btn:hover {
+      background-color: #f0f0f0;
+      color: #333;
+    }
+    
+    @media (max-width: 600px) {
+      .question-box { padding-top: 52px; }
+      .problem-title { padding-right: 0; }
+    }
+
+    /* 현대시·현대소설 (단어 페이지 통합) */
+    .lit-surface {
+      display: none;
+      max-width: 920px;
+      margin: 0 auto 88px;
+      padding: 0 10px;
+    }
+    .lit-surface .lit-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+    .lit-surface .lit-toolbar button { padding: 10px 18px; font-size: 0.9rem; font-weight: 600; border-radius: 12px; border: 1px solid var(--sky-100);
+      cursor: pointer;
+      font-family: inherit;
+      margin: 0;
+    }
+    .lit-surface .lit-btn-home { background: var(--sky-50); color: var(--text-muted); border: 1px solid var(--border); }
+    .lit-surface .lit-btn-study { background: var(--sky-50); color: var(--sky-600); border: 1px solid var(--sky-100); }
+    .lit-surface .lit-btn-quiz { background: var(--sky-100); color: var(--sky-600); border: 1px solid var(--sky-200); }
+    .lit-surface .lit-card {
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: var(--card-radius);
+      padding: clamp(22px, 4vw, 32px) clamp(18px, 3vw, 28px);
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-card);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      color: #1e293b;
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+    .lit-surface .lit-card h2 {
+      font-size: 1.05rem;
+      color: #0284c7;
+      margin: 0 0 12px;
+      font-weight: 800;
+    }
+    .lit-surface .lit-card h3 {
+      font-size: 0.95rem;
+      color: #0284c7;
+      margin: 14px 0 8px;
+      font-weight: 700;
+    }
+    .lit-surface .lit-toc {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .lit-surface .lit-toc a { font-size: 0.75rem; font-weight: 600; padding: 5px 10px; border-radius: 999px; background: var(--sky-50);
+      color: #0284c7;
+      text-decoration: none;
+      border: 1px solid var(--sky-100);
+    }
+    .lit-surface .lit-gloss {
+      display: grid;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .lit-surface .lit-gloss span { display: block; padding: 8px 10px; border-radius: 10px; background: var(--sky-50); border: 1px solid var(--sky-100);
+      font-size: 0.88rem;
+    }
+    .lit-surface details {
+      margin-bottom: 10px;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .lit-surface details summary {
+      padding: 10px 12px;
+      font-weight: 700;
+      cursor: pointer;
+      background: #f8fafc;
+      color: #475569;
+      font-size: 0.9rem;
+    }
+    .lit-surface details[open] summary {
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .lit-surface details .lit-detail-body {
+      padding: 12px;
+      background: #fff;
+    }
+    .lit-surface .lit-compare {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      margin-top: 8px;
+    }
+    .lit-surface .lit-compare th,
+    .lit-surface .lit-compare td {
+      border: 1px solid #e2e8f0;
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .lit-surface .lit-compare th { background: #f1f5f9; }
+    .lit-surface .lit-q-block {
+      margin: 14px 0;
+      padding: 14px;
+      border-radius: 14px;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+    }
+    .lit-surface .lit-q-block .lit-q {
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 10px;
+      font-size: 0.92rem;
+    }
+    .lit-surface .lit-choices {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .lit-surface .lit-choices li {
+      margin: 6px 0;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: #f1f5f9;
+      cursor: pointer;
+      border: 2px solid transparent;
+      font-size: 0.88rem;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .lit-surface .lit-choices li:hover { background: #e2e8f0; }
+    .lit-surface .lit-choices li.lit-correct {
+      border-color: #22c55e;
+      background: #ecfdf5;
+    }
+    .lit-surface .lit-choices li.lit-wrong {
+      border-color: #f87171;
+      background: #fef2f2;
+    }
+    .lit-surface .lit-bridge-note {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-bottom: 12px;
+    }
+    .lit-surface .lit-essay-head {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #0284c7;
+      margin: 16px 0 6px;
+    }
+    .lit-surface .lit-essay-head:first-child { margin-top: 0; }
+    .lit-surface .lit-tabber { margin-top: 8px; }
+    .lit-surface .lit-subtabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    .lit-surface .lit-subtab {
+      padding: 8px 12px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      font-family: inherit;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      background: #f1f5f9;
+      color: #475569;
+      cursor: pointer;
+      line-height: 1.2;
+    }
+    .lit-surface .lit-subtab:hover { background: #e2e8f0; color: #334155; }
+    .lit-surface .lit-subtab.lit-subtab--active { background: var(--sky-100); color: var(--sky-600); border-color: var(--sky-200); }
+    .lit-surface .lit-subtab-panel {
+      display: none;
+      color: #334155;
+      font-size: 0.875rem;
+      line-height: 1.65;
+    }
+    .lit-surface .lit-subtab-panel.lit-subtab-panel--active { display: block; }
+    .lit-surface .lit-prose h4 {
+      font-size: 0.86rem;
+      color: #0284c7;
+      margin: 16px 0 8px;
+      font-weight: 800;
+    }
+    .lit-surface .lit-prose h4:first-child { margin-top: 0; }
+    .lit-surface .lit-prose p { margin: 0 0 10px; }
+    .lit-surface .lit-prose ul,
+    .lit-surface .lit-prose ol { margin: 6px 0 10px 1.15em; padding: 0; }
+    .lit-surface .lit-prose li { margin-bottom: 4px; }
+    .lit-surface .lit-prose blockquote {
+      margin: 10px 0;
+      padding: 10px 12px;
+      border-left: 4px solid var(--sky-300);
+      background: #f8fafc;
+      font-size: 0.82rem;
+      color: #475569;
+    }
+    .lit-surface .lit-prose .lit-k { color: #0284c7; font-weight: 700; }
+    .lit-surface .lit-poem-full {
+      margin: 0 0 1.1rem;
+      padding: 1rem 1.1rem 1.05rem;
+      background: linear-gradient(180deg, #f8fafc 0%, #fff 55%);
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid #38bdf8;
+    }
+    .lit-surface .lit-poem-meta {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #334155;
+      margin: 0 0 0.55rem;
+    }
+    .lit-surface .lit-poem-src {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: #64748b;
+      margin: 0 0 0.65rem;
+    }
+    .lit-surface .lit-poem-text {
+      margin: 0;
+      font-size: 0.86rem;
+      line-height: 1.8;
+      color: #1e293b;
+      white-space: pre-line;
+      font-family: inherit;
+    }
+    .lit-surface .lit-mcq-poetry-start { display: block; width: 100%; max-width: 320px; margin: 8px auto 0; padding: 14px 20px; font-size: 1rem; font-weight: 700; font-family: inherit; border: 1px solid var(--sky-200); border-radius: 14px; cursor: pointer; color: var(--sky-600); background: var(--sky-100); box-shadow: none; }
+    .lit-surface .lit-mcq-poetry-start:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 28px rgba(14, 165, 233, 0.5);
+    }
+    .lit-surface .lit-mcq-poetry-hud {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      font-size: 0.9rem;
+      color: #334155;
+    }
+    .lit-surface .lit-mcq-poetry-hud strong { color: #0284c7; }
+    .lit-surface #lit-mcq-poetry-only .lit-q-block,
+    .lit-surface #lit-mcq-novel-only .lit-q-block { display: none; }
+    .lit-surface .lit-mcq-paper-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(152px, 1fr));
+      gap: 10px;
+      margin: 14px 0 10px;
+    }
+    .lit-surface .lit-mcq-paper-btn {
+      padding: 12px 14px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      font-family: inherit;
+      border-radius: 12px;
+      border: 1px solid var(--sky-100);
+      background: var(--sky-50);
+      color: #0284c7;
+      cursor: pointer;
+      text-align: left;
+      line-height: 1.35;
+    }
+    .lit-surface .lit-mcq-paper-btn:hover {
+      border-color: var(--sky-300);
+      background: #eef2ff;
+    }
+    .lit-surface .lit-mcq-paper-btn small {
+      display: block;
+      font-weight: 500;
+      color: #64748b;
+      font-size: 0.76rem;
+      margin-top: 5px;
+    }
+    .lit-surface .lit-mcq-poetry-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 18px;
+    }
+    .lit-surface .lit-mcq-poetry-nav-btn {
+      padding: 10px 18px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      font-family: inherit;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      background: #fff;
+      color: #475569;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .lit-surface .lit-mcq-poetry-nav-btn:hover:not(:disabled) {
+      background: #f8fafc;
+      border-color: #94a3b8;
+    }
+    .lit-surface .lit-mcq-poetry-nav-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+    .lit-surface .lit-mcq-poetry-nav-btn--primary { background: var(--sky-100); color: var(--sky-600); border: 1px solid var(--sky-200); }
+    .lit-surface .lit-mcq-poetry-nav-btn--primary:hover:not(:disabled) {
+      filter: brightness(1.05);
+    }
+    .lit-surface .lit-mcq-poetry-result {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 16px;
+      background: var(--sky-50);
+      border: 1px solid var(--sky-100);
+      text-align: center;
+    }
+    .lit-surface .lit-mcq-poetry-result-title {
+      font-weight: 800;
+      color: #0284c7;
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+    .lit-surface .lit-mcq-poetry-result-score {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+    .lit-surface .lit-mcq-poetry-result-hint {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-bottom: 16px;
+    }
+    .lit-surface .lit-mcq-poetry-result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <nav class="site-nav">
+    <a class="site-nav__link" href="index.html#midterm">&larr; 중간 대비 메인</a>
+  </nav>
+  <div id="score" style="display: none;">푼 문제 수: 0 / 60</div>
+  <h1>국어 · 단어·문법·현대시·소설</h1>
+  
+  <div id="home">
+    <p class="home-lead">먼저 <strong>국어 단어</strong>, <strong>문법</strong>(개념 탭에서 모의고사로 이동), <strong>국어 현대시·현대소설</strong> 중 어디로 들어갈지 고르세요.</p>
+    <p class="home-lead" style="font-size:0.85rem;margin-top:-0.5rem">단어 퀴즈를 풀다가 나가거나 새로고침해도 이어서 풀 수 있습니다. 삭제는 아래 버튼으로만 됩니다.</p>
+    <button type="button" onclick="discardSavedWordQuiz()" style="margin:0 auto 12px;display:block;padding:8px 16px;font-size:0.85rem;font-weight:600;border-radius:10px;border:1px solid #cbd5e1;background:#f1f5f9;color:#475569;cursor:pointer;font-family:inherit">저장된 퀴즈 풀이 삭제</button>
+    <div class="home-actions">
+      <button type="button" onclick="goToWordSubHome()">국어 단어</button>
+      <button type="button" onclick="goToLitSubHome()">국어 현대시·현대소설</button>
+      <a class="home-link-grammar" href="korean-grammar.html">문법 · 개념 정리<span>한글 제자 원리 · 중세국어 · 조사·높임 — 상단 탭에서 객관식 모의고사</span></a>
+    </div>
+  </div>
+
+  <div id="wordSubHome" style="display: none;">
+    <p class="home-lead"><strong>국어 단어</strong> — 암기할지, 빈칸 퀴즈를 풀지 선택하세요.</p>
+    <div class="home-actions">
+      <button type="button" onclick="goToWordStudy()">단어 암기</button>
+      <button type="button" onclick="goToListSelection()">단어 퀴즈</button>
+      <button type="button" class="btn-back-korean" onclick="backToKoreanMain()">← 국어 처음</button>
+    </div>
+  </div>
+
+  <div id="litSubHome" style="display: none;">
+    <p class="home-lead"><strong>국어 현대시·현대소설</strong> — 시와 소설 중 하나를 고르세요.</p>
+    <div class="home-actions">
+      <button type="button" onclick="openLitPoetry()">현대시</button>
+      <button type="button" onclick="openLitNovel()">현대소설</button>
+      <button type="button" class="btn-back-korean" onclick="backToKoreanMain()">← 국어 처음</button>
+    </div>
+  </div>
+
+  <div id="litSection" class="lit-surface" style="display: none;">
+    <div class="lit-toolbar">
+      <button type="button" class="lit-btn-home" onclick="backToLitSubFromLit()">← 현대시·소설 선택</button>
+      <button type="button" class="lit-btn-home" onclick="backToKoreanMain()">← 국어 처음</button>
+      <button type="button" class="lit-btn-study" onclick="goToWordStudyFromLit()">단어 암기</button>
+      <button type="button" class="lit-btn-quiz" onclick="goToListSelectionFromLit()">단어 퀴즈</button>
+    </div>
+
+    <div id="litPoetryWrap" style="display: none;">
+    <div class="lit-card" id="lit-toc-poetry">
+      <h2>현대시 정리</h2>
+      <p class="lit-bridge-note" style="margin-bottom:0">「엘리베이터 속의 파리」(최승호), 「즐거운 편지」(황동규), 「너를 기다리는 동안」(황지우), 바르트 『사랑의 단상』(김민찬T 정리). <strong>시 작품·심화</strong> 탭에 <strong>시 원문</strong>을 넣었고, <strong>바르트·심화</strong> 카드에서는 개념을 나누어 두었습니다. <strong>맥락 빈칸</strong>은 단어 리스트 어휘입니다. <strong>객관식</strong>은 제1~5회 모의고사(회차별 기록·초기화)입니다. <strong>단답·서술형</strong>은 예시답을 펼쳐 확인합니다.</p>
+      <div class="lit-toc" style="margin-top:12px">
+        <a href="#lit-terms-p">용어</a>
+        <a href="#lit-poems">시 작품·심화</a>
+        <a href="#lit-barthes">바르트·심화</a>
+        <a href="#lit-bridge-poetry">맥락 빈칸</a>
+        <a href="#lit-mcq-poetry">객관식</a>
+        <a href="#lit-short-poetry">단답형</a>
+        <a href="#lit-essay-poetry">서술형</a>
+      </div>
+    </div>
+
+    <div class="lit-card" id="lit-terms-p">
+      <h2>문학·국어 개념 (시)</h2>
+      <div class="lit-gloss">
+        <span><strong>표현상 반어</strong> — 말의 겉뜻(「사소한 일」)과 시가 실제로 강조하는 방향(끊이지 않는 마음)이 엇갈려 읽힘. <strong>의미상 반어</strong>와 구분: 의미상 반어가 되려면 실제로는 ‘사소하지 않은 일’이 되어야 하는데, 수업 정리에서는 그렇게 단정하기 어렵다고 보았다.</span>
+        <span><strong>규범적 진술(Normative)</strong> — ‘무엇이 되어야 하는가’에 답하는 가치·당위·선언(「즐거운 편지」 화자의 태도). <strong>기술적 진술(Descriptive)</strong> — 있는 그대로의 현상 기술(바르트 『사랑의 단상』).</span>
+        <span><strong>구조적(관계적) 부재</strong> — 단순히 떨어져 있음이 아니라, 사랑·욕망의 구조 속 비대칭(일방통행)에서 생기는 부재. 상대는 지시대상으로는 빠져 있으나 말은 그쪽을 향한다는 편지의 역설과 연결된다.</span>
+        <span><strong>존재론적 부패 vs 가치론적 부패</strong> (엘리베이터 속의 파리) — 전자: 주체성 없는 삶·가치 절하. 후자: 도덕·인간성의 부패. 인식했으나 할 수 없는 존재가 인식조차 없는 존보다 무력감이 크다는 정리와 맞물린다.</span>
+        <span><strong>반복·리듬</strong> — 같은 구절이 이어질수록 사건 정보는 늘지 않아도, 독자는 주관적 시간의 정체·팽창을 체험한다. 시는 ‘무슨 일이 일어났는가’보다 ‘그 시간이 어떤 무게였는가’를 드러내는 데 반복을 쓴다.</span>
+        <span><strong>상상의 증폭</strong> — 부재 속에서 발자국·나뭇잎처럼 사소한 자극이 전부 상대와 연결되는 읽기. 바르트의 『사랑의 단상』과 연결하면, 기다림의 고통이 감각 이미지로 어떻게 구현되는지 설명하기 쉽다.</span>
+      </div>
+    </div>
+
+    <div class="lit-card" id="lit-poems">
+      <h2>현대시 작품 — 구연·화자별 심화</h2>
+      <p class="lit-bridge-note">탭을 눌러 작품을 전환합니다. 각 탭 상단에 <strong>시 원문</strong>을 두었고, 아래는 수업지(김민찬T)를 바탕으로 한 구연·심화입니다. (인용본은 교과서·시집에 따라 띄어쓰기·줄나눔이 조금 다를 수 있습니다.)</p>
+      <div class="lit-tabber" data-lit-tabber>
+        <div class="lit-subtabs" role="tablist">
+          <button type="button" class="lit-subtab lit-subtab--active" data-lit-tab="elev">엘리베이터 속의 파리</button>
+          <button type="button" class="lit-subtab" data-lit-tab="letter">즐거운 편지</button>
+          <button type="button" class="lit-subtab" data-lit-tab="wait">너를 기다리는 동안</button>
+        </div>
+        <div class="lit-subtab-panel lit-subtab-panel--active lit-prose" data-lit-panel="elev">
+          <div class="lit-poem-full">
+            <p class="lit-poem-meta">엘리베이터 속의 파리 · 최승호</p>
+            <p class="lit-poem-src">시집 『세속도시의 즐거움』 등에 실린 작품을 옮김.</p>
+            <p class="lit-poem-text">썩어서도 거드름 피우는
+그 놈들 코에 가 붙지 않고
+
+하필 파리가 내 뺨에 붙었을 때 나는 죽은 꽁치들이 빽빽한 통조림 속에
+머리를 내밀고 있는 느낌이었다
+
+불쾌했다
+내 안에서 부패가 진행되고 있는 느낌이랄까
+
+나는 손을 들어 파리를 쫓았다
+그 동작이 늪 수렁에 빠져 살려고 버둥거리는 허우적거림으로 비쳤을지 모르겠다
+죽음에 둘러싸여
+무력했지만 파리 쫓을 힘은 있었다
+
+빌딩을 오르내리는 날개 없는 요일들
+엘리베이터가 올라가고 있었다
+올라가도 거대한 수렁 속으로 빠져드는 듯 함몰과 큰 추락에 대한 공포에 나는 떨고 있었다</p>
+          </div>
+          <p>이 시는 도시의 엘리베이터·빌딩이라는 일상 공간에서 <strong>부패·무력감·추락 공포</strong>를 겹쳐 보이게 한다. 화자는 ‘나’이면서도 사회 속 자신의 위치를 끊임없이 의심하고, 작은 사건(파리 한 마리)을 통해 거대한 구조 인식으로 나아간다.</p>
+          <h4>1연 — 썩어서도 거드름 피우는 그 놈들, 코</h4>
+          <p><span class="lit-k">➊ 「썩어서도 거드름 피우는 그 놈들」</span> 수업에서는 두 갈래로 읽는다. <strong>첫째</strong> 이미 육체적·도덕적으로 ‘썩어’ 있고, 원래 파리가 붙어야 마땅한 존재들—즉 부패와 파리의 상징이 자연스럽게 맞닿는 층. <strong>둘째</strong> 사회적 지위가 높아 거드름(권위)을 피우는 존재들—여기서 파리는 굳이 붙지 않는다는 설정이 ‘코에 가 붙지 않고’와 연결된다.</p>
+          <p>어느 쪽이든, 파리는 <strong>더럽힘·부패·천시</strong>의 이미지를 끌어오고, ‘그 놈들’과 화자 사이에 누가 더 부패한가를 뒤흔드는 장치가 된다.</p>
+          <p><span class="lit-k">➋ 「코」</span> ‘거드름 피운다’는 관용이 콧대·코와 연결되므로, 코에 붙지 않는다는 말은 <strong>거들먹거리는 권위층</strong>과 부패 상징(파리)의 관계를 한 번에 압축한다.</p>
+          <h4>2연 — 뺨에 붙은 파리, 꽁치 통조림, 불쾌·내면의 부패</h4>
+          <p><span class="lit-k">➊</span> 파리는 원래 붙어야 할 대상(‘그 놈들’)이 아니라 화자의 <span class="lit-k">➋ 뺨</span>에 붙는다. 뺨은 남에게 보이는 얼굴의 일부이자, 맞대면할 때 수치심이 올라오는 부위로 읽혀 <strong>당혹·부끄러움</strong>을 강조한다.</p>
+          <p><span class="lit-k">➌ 통조림·꽁치</span> 죽은 생선이 통 속에 빽빽이 들어 찌그러져 있는 이미지는, <strong>이미 죽었거나 죽어가는 존재들로 가득한 사회</strong>를 은유한다. 화자는 그 통 속에 머리만 내밀고 있는 듯한 답답함·포함감을 느낀다. 즉 개인의 신체 감각이 아니라 <strong>사회 구조 전체의 부패·죽음</strong>으로 시선이 확장된다.</p>
+          <p><span class="lit-k">➍ 「불쾌했다」</span> 수업에서는 층을 나눈다. <strong>첫째</strong> 부당함: 부패한 쪽은 ‘그 놈들’인데 왜 ‘나’에게 붙었는가—겉으로는 부패하지 않았다고 믿고 싶은 자아에 대한 모욕. <strong>둘째</strong> ‘내 안에서 부패가 진행되고 있다’는 자각이 동시에 일어난다. <strong>셋째</strong> 파리는 그 자각을 <strong>처음 끌어내는 매개체</strong>로 기능한다.</p>
+          <h4>3연 — 파리를 쫓는 손, 늪·허우적거림</h4>
+          <p><span class="lit-k">➊</span> 손을 들어 쫓는 행위는 ‘나는 그런 부패와 다르다’고 <strong>몸으로 선언</strong>하는 일에 가깝다. 그러나 시는 곧바로 그 선언을 신뢰하지 않는다.</p>
+          <p><span class="lit-k">➋</span> 그 동작이 늪·수렁에서 허우적거리는 것처럼 보일지 모른다는 문장은, 부정하려는 몸짓이 오히려 <strong>빠져 나오지 못하는 함몰</strong>의 이미지와 겹칠 수 있음을 시인 스스로 허용한다. 즉 ‘저항’이 ‘탈출’로 이어지지 않을 수 있다.</p>
+          <p><span class="lit-k">➌</span> 죽음에 둘러싸여 무력했지만 파리를 쫓을 힘은 있었다—구조를 바꾸거나 관계를 바꿀 힘은 없으나, <strong>자기 부패를 부정하는 힘</strong>만큼은 남아 있다는 역설. 그 힘이 충분한지·허상인지는 독자에게 열린 질문으로 남는다.</p>
+          <h4>4연 — 날개 없는 요일, 엘리베이터, 수렁</h4>
+          <p><span class="lit-k">➊</span> ‘날개 없는’은 비상하지 못함·도약 불가를 뜻하고, ‘요일’은 반복되는 달력의 기계성을 뜻한다. 엘리베이터는 빌딩을 오르내리나 화자에게는 <strong>자기 결정으로 움직이는 이동이 아닌, 시스템에 태워진 이동</strong>이다.</p>
+          <p><span class="lit-k">➋</span> 올라가도 수렁으로 빠져드는 듯한 함몰·추락 공포는, 겉으로는 상승(층수·직위·도시의 높이)이나 실제로는 <strong>자유로운 상승이 아닌 가두임</strong>이라는 모순을 드러낸다. 2연의 통조림 이미지와 합쳐져 ‘도시=부패한 존재를 운반·보존하는 장치’로 읽힐 수 있다.</p>
+          <p><span class="lit-k">부패의 두 층위</span> <strong>존재론적 부패</strong>는 주체성이 빠져 있고 가치가 절하된 삶이다. <strong>가치론적 부패</strong>는 도덕·인간성의 타락이다. 수업에서는 한 걸음 더 나가, <strong>부패를 알면서도 손쓸 수 없는 존재</strong>가 부패를 모르는 존보다 무력감이 크다고 정리한다—알면 알수록 견디기 어렵기 때문이다.</p>
+          <p><strong>작품 전체 정리 한 줄</strong> 도시 기계(엘리베이터) 안에서 화자는 자기 부패를 부정하려 하지만, 그 부정이 또 다른 함몰 이미지와 겹치며 <strong>존재론적 위기</strong>를 드러낸다.</p>
+        </div>
+        <div class="lit-subtab-panel lit-prose" data-lit-panel="letter">
+          <div class="lit-poem-full">
+            <p class="lit-poem-meta">즐거운 편지 · 황동규</p>
+            <p class="lit-poem-src">1958년 발표. 아래는 교과서 등에서 널리 인용되는 전문에 가깝게 옮김.</p>
+            <p class="lit-poem-text">Ⅰ
+
+내 그대를 생각함은 항상
+그대가 앉아 있는 배경에서
+해가 지고 바람이 부는 일처럼
+사소한 일일 것이나
+언젠가 그대가 한없이 괴로움 속을 헤매일 때에
+오랫동안 전해 오던 그 사소함으로
+그대를 불러 보리라.
+
+Ⅱ
+
+진실로 진실로
+내가 그대를 사랑하는 까닭은
+내 나의 사랑을 한없이 잇닿은
+그 기다림으로 바꾸어 버린 데 있었다.
+
+밤이 들면서 골짜기엔 눈이 퍼붓기 시작했다.
+내 사랑도 어디쯤에선 반드시 그칠 것을 믿는다.
+다만 그때 내 기다림의 자세를 생각하는 것뿐이다.
+그 동안에 눈이 그치고 꽃이 피어나고
+낙엽이 떨어지고 또 눈이 퍼붓고 할 것을 믿는다.</p>
+          </div>
+          <p>이 시는 <strong>편지</strong>라는 형식을 통해 ‘너’에게 말하지만, 실제로는 화자의 <strong>사랑관·시간관·존재 방식</strong>을 드러낸다. 받는 이의 반응이 텍스트에 거의 나타나지 않기 때문에, 독자는 ‘대화’보다 <strong>한쪽 방향의 고백</strong>에 가깝게 읽게 된다.</p>
+          <h4>제목 「즐거운 편지」</h4>
+          <p><span class="lit-k">즐거움</span> 기다림의 고통을 사랑 안에서 의미화·완성했기에 즐거울 수 있다는 해석이 중심이다. 다만 수업에서는 한 걸음 더 나가, ‘즐거움’이 <strong>스스로를 설득하는 말</strong>일 수도 있다는 층위를 짚을 수 있다—고통이 사라졌다고 단정하기보다, 고통을 사랑의 언어로 <strong>재명명</strong>하려는 태도로 읽는 것이다.</p>
+          <p><span class="lit-k">편지</span> 마음의 전달·자기 표현이다. 전달이 확실하지 않으면 기능적으로는 독백에 가깝다. 그러나 편지 장르는 답장·수신을 전제로 하므로 <strong>기다림을 장르적으로 내장</strong>한다는 점이 수업에서 강조된다. 즉 제목만 보면 ‘완성된 기쁨’처럼 보이나, 장르 자체는 <strong>지연·불확실·공백</strong>을 끌어안는다.</p>
+          <h4>5연 — 배경, 사소한 일, 언젠가 불러 보리라</h4>
+          <p><span class="lit-k">➊ 배경</span> 전경과 대비되는 말이다. 스포트라이트 밖, 주목받지 않는 자리. 화자는 ‘그대 곁의 주인공’이 아니라 <strong>항상 뒤·배경</strong>처럼 존재한다고 말한다. 이는 사랑의 위계를 넘어서기보다, <strong>자기 위치를 낮추는 수사</strong>로 읽힌다.</p>
+          <p><span class="lit-k">➋ 사소한 일</span> 해가 지고 바람이 부는 일처럼 일상적·반복적이다. 그래서 겉으로는 ‘사소’하지만, 그만큼 <strong>끊이지 않는 마음</strong>과 맞닿는다. 수업에서는 여기서 <strong>표현상 반어</strong>(말의 방향과 실제 강조가 엇갈림)로 읽을 여지를 인정하되, 실제 내용이 ‘사소하지 않은 일’로 뒤집혀야 하는 <strong>의미상 반어</strong>로 단정하기는 어렵다고 구분한다.</p>
+          <p><span class="lit-k">➌</span> 그대가 한없이 괴로울 때, 오랫동안 전해 오던 그 사소함으로 불러 보리라—배경에 머물던 화자가 <strong>전경으로 나와 위로</strong>하겠다는 약속이다. <span class="lit-k">언젠가</span>는 날짜가 박히지 않은 미래이므로, 다시 <strong>기다림·불확실성</strong>이 드러난다.</p>
+          <h4>6연 — 진실로 진실로, 내 나의, 기다림으로 바꾸어 버린</h4>
+          <p><span class="lit-k">➊ 진실로 진실로</span> 말의 힘을 모으는 반복이다. 감정의 과장이 아니라, <strong>선언의 무게</strong>를 높인다. <span class="lit-k">➋ 내 나의</span> ‘나’가 두 번 박히면서, 사랑이 ‘관계의 교환’만이 아니라 <strong>나의 존재 방식 전체</strong>와 겹친다는 인상을 준다.</p>
+          <p>사랑(감정)이어야 할 것이 기다림이 되고, 기다림이 곧 사랑의 완성으로 선언된다. <span class="lit-k">바꾸어</span>는 능동적 선택처럼 읽히고, <span class="lit-k">버린</span>은 보조용언이 주는 비가역성—한번 그렇게 삼키면 쉽게 되돌리기 어렵다—을 강조한다. 여기서 화자는 고통을 없애기보다, 고통의 이름을 <strong>사랑의 이름으로 바꾸는 언어 행위</strong>에 서 있다.</p>
+          <h4>7연 — 밤·골짜기·눈, 사랑의 유한성과 기다림의 자세</h4>
+          <p><span class="lit-k">➊</span> 밤은 어둠·배경, 골짜기는 깊이·빠져나오기 어려움의 이미지다. 눈이 퍼붓는 장면은 시각적·청각적 정숙함과 함께, 기다림의 <strong>무게·정지</strong>를 강화한다.</p>
+          <p><span class="lit-k">➋</span> 사랑도 어디쯤에선 그칠 것을 믿는다—유한성을 인정하는 문장이다. 그 인정이 오히려 ‘지금의 기다림’을 날카롭게 만든다. 사랑이 영원하지 않다면, 기다림은 무엇을 남기는가라는 질문이 생긴다.</p>
+          <p><span class="lit-k">➌</span> 그때 내 기다림의 <strong>자세</strong>를 생각하는 것뿐—결과(만남·해소)보다, 견뎌 온 <strong>태도·애씀</strong>이 의미의 중심이라는 응답이다. 수업에서는 이를 바르트가 말하는 수동적 고통만으로 환원하지 말고, 화자가 스스로에게 부여한 <strong>윤리적·규범적 자기선언</strong>으로도 읽을 수 있음을 짚는다.</p>
+          <p><span class="lit-k">➍ 그 동안에</span> 계절이 돌고 시간이 흐른다는 믿음—기다림이 ‘영원한 정지’가 아니라 <strong>살아 있는 시간</strong> 위에서 지속된다는 믿음과 맞닿는다.</p>
+          <p><strong>한 줄 정리</strong> 황동규 시는 기다림의 고통을 부정하지 않되, 그 고통을 사랑 안에서 <strong>의미화·선언</strong>함으로써 제목의 ‘즐거움’과 긴장 있게 맞선다.</p>
+        </div>
+        <div class="lit-subtab-panel lit-prose" data-lit-panel="wait">
+          <div class="lit-poem-full">
+            <p class="lit-poem-meta">너를 기다리는 동안 · 황지우</p>
+            <p class="lit-poem-src">시집 『게 눈 속의 연꽃』(문학과지성사, 1991) 등에 실린 작품을 옮김.</p>
+            <p class="lit-poem-text">너를 기다리는 동안
+
+네가 오기로 한 그 자리에
+내가 미리 가 너를 기다리는 동안
+
+다가오는 모든 발자국은
+내 가슴에 쿵쿵 거린다
+바스락 거리는 나뭇잎 하나도
+다 내게 온다
+
+기다려 본 적이 있는 사람은 안다
+세상에서
+기다리는 일처럼 가슴 애리는 일 있을까
+
+네가 오기로 한 그자리
+내가 미리 와 있는 이곳에서
+문을 열고 들어오는 모든 사람이
+너였다가
+너일 것이었다가
+다시 문이 닫힌다
+
+사랑하는 이여
+오지 않는 너를 기다리며 마침내 나는 너에게 간다
+
+아주 먼데서 나는 너에게 가고
+아주 오랜 세월을 다하여
+너는 지금 오고 있다
+아주 먼데서
+지금도 천천히 오고 있는 너를
+
+너를 기다리는 동안
+나도 가고 있다
+남들이 열고 들어오는 문을 통해
+
+내 가슴에 쿵쿵 거리는
+모든 발자국 따라
+너를 기다리는 동안
+나는 너에게 가고 있다</p>
+          </div>
+          <p>이 시는 기다림의 순간을 <strong>감각·리듬·상상</strong>으로 확장한다. 정보는 적은데 감정의 밀도는 높다. 그래서 독자는 ‘무슨 일이 일어났는가’보다 ‘어떤 심장박동으로 시간이 지나가는가’에 끌린다.</p>
+          <h4>1연 — 그 자리, 발자국·나뭇잎</h4>
+          <p><span class="lit-k">➊ 「그 자리」</span> 지시 관형사 ‘그’는 나와 너 사이에 <strong>공유된 약속·맥락</strong>이 있어야 성립한다. 자리가 특정되지 않아도, ‘그 자리’라는 말만으로 독자는 이미 <strong>약속된 만남</strong>의 공기를 느낀다.</p>
+          <p><span class="lit-k">➋</span> 다가오는 모든 발자국이 가슴에 쿵쿵거리고, 나뭇잎 하나도 다 내게 온다—이는 바르트가 말한 <strong>상상의 증폭</strong>이다. 세계의 사소한 사건이 전부 ‘너와 연결된 신호’처럼 읽힌다. 그래서 기쁨만이 아니라, <strong>오판·실망의 가능성</strong>도 함께 커진다.</p>
+          <h4>2연 — 가슴 애리는 일</h4>
+          <p>「기다려본 사람은 안다」는 화법은 독자를 동료로 끌어들이면서, 앞 연의 이미지를 <strong>언어로 명명</strong>한다. 상상 증폭이 낳는 불안·초조가 ‘애린다’는 말로 구체화된다. 여기서 시는 설명이 아니라 <strong>공감의 확인</strong>에 가깝다.</p>
+          <h4>3연 — 너였다가…</h4>
+          <p>반복과 변주(너였다가 → 너일 것이었다가)로 기대와 좌절이 순환한다. 문이 닫힐 때마다 부재가 재확인되어, 바르트가 말한 기다림의 <strong>비대칭·고통</strong> 구조와 맞닿는다. 문장이 짧을수록 호흡은 빨라지고, 독자의 몸도 같이 조여진다.</p>
+          <h4>4~5연 — 마침내 나는 너에게, 쿵쿵거림의 전환</h4>
+          <p><span class="lit-k">마침내 나는 너에게 간다</span> 황동규 「즐거운 편지」가 ‘내 마음 안의 완성’에 무게를 두는 것과 달리, 본 시는 <strong>관계적 만남·도래</strong>를 믿는 능동적 대응을 드러낸다. 시공간을 아주 멀게·아주 오랜 세월로 넓히며, ‘지금의 부재’를 ‘오고 있음’으로 재해석한다.</p>
+          <p><span class="lit-k">쿵쿵거림</span> 1연에서는 남의 발자국이 내 가슴을 두드리는 <strong>수동적 불안</strong>에 가깝다. 후반으로 갈수록 같은 리듬이 ‘나의 발걸음’·‘너를 향한 지향’으로 의미가 전환될 여지가 생긴다는 정리가 가능하다.</p>
+          <h4>「즐거운 편지」와의 비교 요지</h4>
+          <p>둘 다 기다림에 능동적 의미를 부여하나, 즐거운 편지는 수신 불확실 속에서도 <strong>내 마음 안에서 사랑을 완성</strong>하겠다는 선언에 가깝고, 본 시는 <strong>만남·관계·이동</strong> 쪽으로 무게가 실린다. 전자가 ‘언어·태도의 재구성’이라면, 후자는 ‘세계 속에서의 도래’에 더 가깝다.</p>
+          <table class="lit-table" style="margin-top:0.75rem">
+            <thead><tr><th>비교</th><th>「즐거운 편지」(황동규)</th><th>「너를 기다리는 동안」(황지우)</th></tr></thead>
+            <tbody>
+              <tr><td>기다림의 초점</td><td>자세·의미 부여·내적 완결</td><td>감각·상상 증폭·도래</td></tr>
+              <tr><td>시간의 이미지</td><td>계절 순환, 언젠가</td><td>발자국·문·쿵쿵거림</td></tr>
+              <tr><td>바르트와의 거리</td><td>고통을 사랑의 언어로 전환</td><td>고통 구조를 드러낸 뒤 능동성으로 열기</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="lit-card" id="lit-barthes">
+      <h2>롤랑 바르트 『사랑의 단상』— 수업 정리·황동규와의 비교</h2>
+      <p class="lit-bridge-note">1977년 작. 사랑에 빠진 자의 경험을 80개의 ‘단상(figure)’으로 해부한 실험적 텍스트. 중심 개념은 <strong>기다림(attente)</strong>이다.</p>
+      <table class="lit-compare" style="margin-bottom:14px">
+        <tr><th>항목</th><th>바르트</th><th>「즐거운 편지」</th></tr>
+        <tr><td>기다림</td><td>부재·수동·고통의 숙명</td><td>능동적 선택, 의미 부여로 사랑의 완성</td></tr>
+        <tr><td>진술 방식</td><td>기술적 진술(있는 그대로)</td><td>규범적 진술(어떻게 살·사랑할 것인가)</td></tr>
+        <tr><td>편지</td><td>불확실성·불안·수신 욕망 전제</td><td>역설 구조는 같으나 수신 욕망이 약하고 즐거움·내적 완결</td></tr>
+      </table>
+      <div class="lit-tabber" data-lit-tabber>
+        <div class="lit-subtabs" role="tablist">
+          <button type="button" class="lit-subtab lit-subtab--active" data-lit-tab="b1">기다림·고통</button>
+          <button type="button" class="lit-subtab" data-lit-tab="b2">부재·상상·언어</button>
+          <button type="button" class="lit-subtab" data-lit-tab="b3">편지의 역설</button>
+          <button type="button" class="lit-subtab" data-lit-tab="b4">흐름 정리·시와의 접점</button>
+        </div>
+        <div class="lit-subtab-panel lit-subtab-panel--active lit-prose" data-lit-panel="b1">
+          <p>바르트에게 기다림은 사랑의 본질적 속성이면서 동시에 가장 고통스러운 경험이다. 고통은 단순히 ‘오래 걸린다’는 시간의 길이 때문만이 아니라, <strong>욕망의 대상의 부재</strong>에서 온다. 대상이 없을 때 사랑은 오히려 더 선명해지는 역설이 있다.</p>
+          <p>기다리는 자는 구조적으로 수동적이다—오는 것은 상대이고, 나는 기다릴 수밖에 없다. 그래서 기다림은 능동적 선택만으로는 설명되지 않는 <strong>운명 같은 층</strong>을 갖는다.</p>
+          <blockquote>「나는 사랑하고 있는 걸까? - 그래, 기다리고 있으니까. 그 사람, 그 사람은 결코 기다리지 않는다. … 사랑하는 사람의 숙명적인 정체는 기다리는 사람, 바로 그것이다.」</blockquote>
+          <p>여기서 ‘기다림=사랑의 증거’라는 등식은 낭만적이기보다, <strong>비대칭을 인정하는 문장</strong>으로 읽힌다. 상대는 기다리지 않는데 나는 기다린다—이 간극이 사랑의 현실이다.</p>
+          <p>기다림이 고통인 이유는 시간 때문만이 아니라, <strong>그 없음</strong>이 나와 그 사람 사이에 메울 수 없는 간격을 만들기 때문이다. 그 간격은 정보로 채워지지 않는다. 전화가 오지 않는 이유를 알 수 없을 때, 상상은 공백을 채우려 하고 그 과정에서 불안이 커진다.</p>
+          <blockquote>「사랑의 부재는 일방통행이다. … 사랑하는 것만큼 사랑받지 못한다는 것을.」</blockquote>
+          <p>수업에서는 이를 황동규 시의 ‘기다림을 사랑으로 바꾸어 버린’ 선언과 대비해 읽는다. 바르트는 ‘어떻게 살아야 하는가’의 답을 주기보다, <strong>있는 그대로의 고통</strong>을 언어로 밀도 있게 포착한다.</p>
+        </div>
+        <div class="lit-subtab-panel lit-prose" data-lit-panel="b2">
+          <p><strong>4. 부재</strong> 단순히 떨어져 있는 물리적 이별이 아니라, 사랑·욕망의 구조 속에서 생기는 <strong>관계적 부재</strong>다. 마음속의 상대는 완벽하게 구성되지만, 실제 사람은 그 이미지와 어긋난다. 그 차이 때문에 대상은 끝없이 ‘닿지 않는 곳’에 남고, 나는 기다릴 수밖에 없다.</p>
+          <p>「즐거운 편지」에서는 물리적 거리(멀리 있음)와 구조적 부재(내 마음 안에서만 완성되는 사랑)가 동시에 작동한다. 수업에서는 후자가 더 강하게 드러난다고 정리할 수 있다—‘그대’는 말 속에서만 현존하고, 답장의 유무는 텍스트가 열어 둔다.</p>
+          <p><strong>5. 상상의 증폭</strong> 부재할수록 상대에 대한 생각이 강렬해지고, 세상의 모든 것을 그 사람과 연결해 읽는다. 바르트는 이를 이미지의 작업이라 부른다. 「너를 기다리는 동안」의 발자국·나뭇잎 이미지는 이 메커니즘을 시적으로 보여 주는 사례로 연결할 수 있다.</p>
+          <p><strong>부재가 만드는 둘째</strong> 의미의 공백이다. 왜 오지 않는지, 무엇을 하고 있는지 알 수 없을 때, 머리는 가능한 시나리오를 채운다. 그 채움이 곧 불안이다. <strong>셋째</strong> 부재가 언어를 만든다. 상대가 옆에 있으면 말하지 않아도 되는 것들을, 부재는 편지·속삭임·독백으로 밀어 낸다. 사랑의 언어는 본질적으로 <strong>부재를 향한 화살</strong>이다.</p>
+        </div>
+        <div class="lit-subtab-panel lit-prose" data-lit-panel="b3">
+          <blockquote>「나는 부재하는 그 사람을 향해 끊임없이 담론을 이어간다. 실제로는 우스꽝스러운 상황이다. 그 사람은 지시대상으로는 부재하지만, 말 건네는 상대로는 현존한다.」</blockquote>
+          <p>즉 <strong>지시대상으로의 부재</strong>와 <strong>담화 속 현존</strong>이 동시에 성립한다. 말은 ‘너’를 부르지만, ‘너’는 그 자리에 없다. 그럼에도 말은 멈추지 않는다—이것이 편지·연애 담화의 역설이다.</p>
+          <p>바르트적 관점에서 보면, 이 역설은 코미디처럼 보이기도 하지만 실제로는 <strong>존재론적으로 진지한 상황</strong>이다. 사랑하는 사람은 말로만 붙잡을 수밖에 없기 때문이다.</p>
+          <p>그러나 편지가 어떻게 읽힐지, 전달될지는 기다리는 이에게 불투명하다. 사랑의 언어는 늘 이 불확실성 안에 있다. 수업에서는 여기서 <strong>수신 욕망</strong>(답장, 확인, 도착의 증거)이 생기고, 그 욕망이 충족되지 않을 때 고통이 커진다고 정리한다.</p>
+          <p>「즐거운 편지」도 이 역설 구조를 공유하나, 바르트가 말하는 수신·전달에 대한 불안이 전면에 서기보다는, 화자가 <strong>배경의 나</strong> 안에서 사랑을 완성하겠다는 선언으로 정서가 이동한다. 그래서 같은 ‘편지’라도, 읽히는 무게중심이 다르다.</p>
+        </div>
+        <div class="lit-subtab-panel lit-prose" data-lit-panel="b4">
+          <p><strong>흐름 요약</strong> 바르트의 『사랑의 단상』은 사랑 → 부재 → 기다림 → 고통의 연쇄를 <strong>기술적 진술</strong>로 밀도 있게 포착한다. 황동규 「즐거운 편지」는 그 고통을 <strong>어떻게 다룰 것인지</strong>에 대한 <strong>규범적 진술</strong>에 가깝다—기다림에 의미를 부여해 사랑으로 승화하고, 배경의 나 안에서 사랑을 완성하겠다는 선언이므로 제목의 ‘즐거움’이 성립할 수 있다.</p>
+          <p>황지우 「너를 기다리는 동안」은 바르트가 설명한 상상의 증폭·기다림의 수동성 위에서, 후반 <strong>마침내 나는 너에게 간다</strong>로 관계적 능동성을 드러낸다. 쿵쿵거림은 앞부분의 불안 리듬이 뒤에서는 ‘향함’의 리듬으로 읽힐 여지가 있다는 점에서, 황동규 「즐거운 편지」와의 대비로도 계보를 잡을 수 있다.</p>
+          <p><strong>시험용 한 줄 비교</strong> 바르트는 사랑의 구조를 <strong>해부</strong>하고, 황동규 「즐거운 편지」는 그 구조 위에서 <strong>살아갈 태도를 선언</strong>하며, 황지우 「너를 기다리는 동안」은 감각의 층위에서 기다림을 드러낸 뒤 <strong>이동·도래</strong>로 열어 둔다.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="lit-card" id="lit-bridge-poetry">
+      <h2>맥락 빈칸 (시 · 단어장 어휘)</h2>
+      <p class="lit-bridge-note">낱말은 단어 암기·퀴즈 리스트 표기입니다.</p>
+      <div class="question-box" style="margin-bottom:14px">
+        <p class="problem-title"><strong>빈칸 1:</strong> 「너를 기다리는 동안」 화자는 오지 않는 너를 생각하며 숨을 ____게 몰아쉰다.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:10px">
+          <button type="button" data-litbp="0" data-litw="가쁘다" onclick="checkLitBridgePoetry(0,'가쁘다')">가쁘다</button>
+          <button type="button" data-litbp="0" data-litw="굼뜨다" onclick="checkLitBridgePoetry(0,'굼뜨다')">굼뜨다</button>
+          <button type="button" data-litbp="0" data-litw="괄괄하다" onclick="checkLitBridgePoetry(0,'괄괄하다')">괄괄하다</button>
+          <button type="button" data-litbp="0" data-litw="객쩍다" onclick="checkLitBridgePoetry(0,'객쩍다')">객쩍다</button>
+          <button type="button" data-litbp="0" data-litw="게걸스럽다" onclick="checkLitBridgePoetry(0,'게걸스럽다')">게걸스럽다</button>
+        </div>
+      </div>
+      <div class="question-box" style="margin-bottom:14px">
+        <p class="problem-title"><strong>빈칸 2:</strong> 「즐거운 편지」에서 그대를 향한 화자의 마음은 ____다.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:10px">
+          <button type="button" data-litbp="1" data-litw="애달프다" onclick="checkLitBridgePoetry(1,'애달프다')">애달프다</button>
+          <button type="button" data-litbp="1" data-litw="매몰차다" onclick="checkLitBridgePoetry(1,'매몰차다')">매몰차다</button>
+          <button type="button" data-litbp="1" data-litw="껄끄럽다" onclick="checkLitBridgePoetry(1,'껄끄럽다')">껄끄럽다</button>
+          <button type="button" data-litbp="1" data-litw="얍삽하다" onclick="checkLitBridgePoetry(1,'얍삽하다')">얍삽하다</button>
+          <button type="button" data-litbp="1" data-litw="데데하다" onclick="checkLitBridgePoetry(1,'데데하다')">데데하다</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="lit-card" id="lit-mcq-poetry">
+      <h2>시 · 객관식 모의고사 (제1~5회 · 각 20문항)</h2>
+      <div id="lit-mcq-poetry-intro">
+        <p class="lit-bridge-note">제1회는 본문·개념과 맞물린 <strong>심화·변별형</strong> 문항입니다. 제2~5회는 <strong>작품별·교차 비교·오독 방지</strong>형 고난도 문항 각 20문항입니다. 맞힘은 <strong>각 문항 첫 선택</strong>만 반영합니다. 아래에서 회차를 고른 뒤 응시하세요.</p>
+        <div class="lit-mcq-paper-grid" id="litMcqPoetryPaperGrid">
+          <button type="button" class="lit-mcq-paper-btn" data-lit-poetry-start="1">제1회 · 핵심 심화<small id="litMcqPoetryStat1">기록 없음</small></button>
+          <button type="button" class="lit-mcq-paper-btn" data-lit-poetry-start="2">제2회 · 심화 A<small id="litMcqPoetryStat2">기록 없음</small></button>
+          <button type="button" class="lit-mcq-paper-btn" data-lit-poetry-start="3">제3회 · 심화 B<small id="litMcqPoetryStat3">기록 없음</small></button>
+          <button type="button" class="lit-mcq-paper-btn" data-lit-poetry-start="4">제4회 · 심화 C<small id="litMcqPoetryStat4">기록 없음</small></button>
+          <button type="button" class="lit-mcq-paper-btn" data-lit-poetry-start="5">제5회 · 심화 D<small id="litMcqPoetryStat5">기록 없음</small></button>
+        </div>
+        <button type="button" class="lit-mcq-poetry-nav-btn" id="litMcqPoetryResetProgress" style="margin:10px auto 0;display:block">현대시 모의고사 기록 초기화</button>
+      </div>
+      <div id="lit-mcq-poetry-runner" style="display:none">
+        <div class="lit-mcq-poetry-hud">
+          <span><span id="litMcqPoetryPaperLabel" style="font-weight:700;color:#4338a3">제1회</span> — 문항 <strong id="litMcqPoetryCur">1</strong> / <span id="litMcqPoetryTot">20</span></span>
+          <span>맞힘 <strong id="litMcqPoetryScore">0</strong> <span style="font-weight:500;color:#64748b">(첫 선택)</span></span>
+        </div>
+        <div id="lit-mcq-poetry-only">
+      <div class="lit-mcq-paper" data-lit-paper="1">
+      <div class="lit-q-block" data-lit-ans="1">
+        <p class="lit-q">1. 「엘리베이터 속의 파리」에서 파리를 쫓는 동작이 「늪 수렁의 허우적거림」으로 비치는 까닭으로 가장 적절한 것은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">부패를 부정하는 몸짓이 오히려 무력·추락 공포와 맞닿기 때문이다.</li>
+          <li data-i="2">늪 이미지가 엘리베이터의 실제 고장을 기술하기 때문이다.</li>
+          <li data-i="3">화자가 스스로를 ‘깨끗한 타자’로 분리해 읽으려다 오히려 함몰 이미지와 겹치기 때문이다.</li>
+          <li data-i="4">파리를 쫓는 동작이 곧바로 사회 개혁으로 연결되기 때문이다.</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">부정이 역설적으로 함몰 이미지와 겹친다.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">2. 「날개 없는 요일들」의 의미로 알맞은 것은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">도시 빌딩의 물리적 높이만을 찬양한다.</li>
+          <li data-i="2">주체성이 박탈된 채 반복되는 수동적 시간이다.</li>
+          <li data-i="3">신앙적 속죄의 시간으로만 읽힌다.</li>
+          <li data-i="4">계절 순환에 따른 농경 리듬이다.</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">날개 없음=비상 불가, 요일 반복=기계적 삶.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">3. 「즐거운 편지」의 「사소한 일」에 대한 설명으로 타당한 것은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">화자의 마음이 정말 하찮다는 뜻이다.</li>
+          <li data-i="2">일상적·반복적이라 겉으론 사소하나 그 안에 깊은 마음이 있다.</li>
+          <li data-i="3">그대를 생각하지 않는다는 반어뿐이다.</li>
+          <li data-i="4">의미상 반어가 명백히 성립한다.</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">표현상 반어 논의와 연결.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="3">
+        <p class="lit-q">4. 바르트의 기다림과 황동규 시의 기다림을 가르는 대비는?</p>
+        <ul class="lit-choices">
+          <li data-i="1">바르트는 규범적 선언, 황동규는 현상 기술에 가깝다.</li>
+          <li data-i="2">바르트는 수신 불확실을 제거하고, 황동규는 고통을 부정한다.</li>
+          <li data-i="3">바르트는 현상 기술, 황동규는 규범적 가치 부여에 가깝다.</li>
+          <li data-i="4">둘 다 기다림을 구조적으로 부정한다.</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">기술적 vs 규범적 진술 방식.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="1">
+        <p class="lit-q">5. 「너를 기다리는 동안」이 황동규 「즐거운 편지」와 다른 점은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">만남·관계를 전제로 한 능동적 지향이 드러난다.</li>
+          <li data-i="2">기다림의 고통을 내적 완성으로만 수렴시킨다.</li>
+          <li data-i="3">상상의 증폭을 전면 배제한다.</li>
+          <li data-i="4">편지 장르의 형식을 그대로 따른다.</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">「마침내 나는 너에게 간다」 등.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="3">
+        <p class="lit-q">6. 「썩어서도 거드름 피우는 그 놈들」에 대한 해석으로 <strong>수업 정리와 맞지 않는</strong> 것은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">이미 부패한 사람들·원래 파리가 붙는 존재로 읽을 수 있다.</li>
+          <li data-i="2">사회적 지위가 높은 존재로 읽을 수 있다.</li>
+          <li data-i="3">화자의 이웃 주민 전체를 가리키는 실사적 인물로만 본다.</li>
+          <li data-i="4">상징·은유로 다층적으로 읽을 수 있다.</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">두 가지 해석 축(부패·지위)이 정리의 핵심이다.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">7. 「코에 가 붙지 않고」의 「코」가 연결되는 표현적 특성은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">청각 이미지</li>
+          <li data-i="2">거드름·콧대 높음</li>
+          <li data-i="3">계절 감각</li>
+          <li data-i="4">시각적 원근법</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">거드름 피운다=콧대 높다와 연결.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">8. 이 시에서 말하는 「부패」 중 <strong>존재론적 부패</strong>에 해당하는 설명은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">도덕적 타락만을 뜻한다.</li>
+          <li data-i="2">주체성이 없는 삶·가치의 절하에 가깝다.</li>
+          <li data-i="3">오직 육체적 썩음만을 뜻한다.</li>
+          <li data-i="4">화자의 직업 불안정을 뜻한다.</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">가치론적 부패(도덕·인간성)와 구분.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">9. 바르트에게 기다림이 본질적이면서도 고통스럽다고 이해되는 까닭으로 알맞은 것은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">기다림이 곧 사랑의 완성이기 때문이다.</li>
+          <li data-i="2">욕망의 대상이 부재하고, 오는 쪽은 상대라 나는 수동적이기 때문이다.</li>
+          <li data-i="3">부재가 곧바로 언어를 소멸시키기 때문이다.</li>
+          <li data-i="4">시간이 흐를수록 주체성이 강화되기 때문이다.</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">부재와 수동성.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="1">
+        <p class="lit-q">10. 「즐거운 편지」의 「사소한 일」을 <strong>의미상 반어</strong>로 보기 어렵다고 한 이유는?</p>
+        <ul class="lit-choices">
+          <li data-i="1">반어라면 실제로는 사소하지 않은 일이 되어야 하는데 그렇게 단정하기 어렵기 때문이다.</li>
+          <li data-i="2">시어가 짧기 때문이다.</li>
+          <li data-i="3">화자가 거짓말을 하기 때문이다.</li>
+          <li data-i="4">배경이라는 단어가 없기 때문이다.</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">표현상 반어와 구분하는 정리.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">11. 바르트의 논의에서 「부재가 언어를 만든다」와 직접 맞닿는 예는?</p>
+        <ul class="lit-choices">
+          <li data-i="1">공동체의 언어 규범만</li>
+          <li data-i="2">편지·말 건네기</li>
+          <li data-i="3">상대의 현존이 확정된 대화</li>
+          <li data-i="4">법전의 조문 나열</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">사랑의 언어는 부재를 향한다.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">12. 「진실로 진실로」의 표현 효과로 가장 알맞은 것은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">서정의 속도를 늦추어 무게를 준다.</li>
+          <li data-i="2">강조·확언</li>
+          <li data-i="3">독자에게 질문을 던지는 반어이다.</li>
+          <li data-i="4">화자의 망설임을 드러내는 완곡 표현이다.</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">마음의 진심을 되풀이해 박는다.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">13. 「사랑을 … 기다림으로 바꾸어 <strong>버린</strong> 데」의 「버린」(보조용언)이 드러내는 층위는?</p>
+        <ul class="lit-choices">
+          <li data-i="1">문장을 끊기 위한 막연한 어미</li>
+          <li data-i="2">비가역성·더 이상 쉽게 되돌리기 어려운 전환</li>
+          <li data-i="3">화자의 후회</li>
+          <li data-i="4">상대를 비난함</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">「바꾸어」의 능동 선택과 짝을 이룸.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">14. 바르트의 편지(불안·고통)와 「즐거운 편지」의 정서 차이를 가르는 요인으로 적절한 것은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">편지가 담긴 문학사 시기의 차이</li>
+          <li data-i="2">수신·전달에 대한 욕망을 전제하느냐의 차이</li>
+          <li data-i="3">배경·전경 은유의 유무만</li>
+          <li data-i="4">화자의 직업·신분에 따른 어휘 선택</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">역설 구조는 공통이나 정서는 다름.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">15. 「내 사랑도 어디쯤에선 반드시 그칠 것을 믿는다」가 던지는 성찰에 가장 가까운 것은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">사랑의 시작 시점을 확인하려는 회상이다.</li>
+          <li data-i="2">유한한 사랑 속에서 기다림의 의미는 무엇인가</li>
+          <li data-i="3">계절 순환을 과학적으로 설명하려는 태도이다.</li>
+          <li data-i="4">상대의 귀환 시점을 달력으로 환산한다.</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">「그때 내 기다림의 자세」로 이어지는 질문.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">16. 「올라가도 거대한 수렁 속으로 빠져드는 듯」이 드러내는 구조 인식은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">엘리베이터가 고장 난 사건</li>
+          <li data-i="2">겉으로의 상승·이동이 실제로는 함몰·부패의 구조와 맞닿음</li>
+          <li data-i="3">빌딩 높이 찬양</li>
+          <li data-i="4">날씨 묘사</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">통조림·수렁 이미지와 연결.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="1">
+        <p class="lit-q">17. 「부패를 인식했으나 아무것도 할 수 없는 존재」와 「부패를 인식하지 못한 존재」 중 무력감이 더 크다고 정리한 쪽은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">인식했으나 할 수 없는 존재</li>
+          <li data-i="2">인식하지 못한 존재</li>
+          <li data-i="3">둘은 항상 같다</li>
+          <li data-i="4">시에 등장하지 않는다</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">수업에서 제시한 대조 정리.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">18. 「네가 오기로 한 <strong>그</strong> 자리」의 「그」가 전제하는 것은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">화자만 아는 비밀 장소</li>
+          <li data-i="2">나와 너 사이에 공유된 약속·맥락</li>
+          <li data-i="3">지도상 좌표 고정</li>
+          <li data-i="4">시 제목의 어원</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">지시 관형사의 공유성.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">19. 5연에서 「쿵쿵거림」이 1연과 달리 읽히는 층위는?</p>
+        <ul class="lit-choices">
+          <li data-i="1">청각이 사라졌다</li>
+          <li data-i="2">불안의 수용에서 너를 향한 능동적 지향으로 의미가 전환된다</li>
+          <li data-i="3">리듬만 맞춘다</li>
+          <li data-i="4">화자가 잠들었다</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">같은 이미지, 다른 의미 층위.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="1">
+        <p class="lit-q">20. 「즐거운 편지」와 「너를 기다리는 동안」의 능동적 대응을 가르는 핵심은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">전자는 내적 완성에, 후자는 관계적 만남·도래에 무게가 있다.</li>
+          <li data-i="2">전자만 기다림이 있다.</li>
+          <li data-i="3">후자만 편지를 쓴다.</li>
+          <li data-i="4">둘 다 수동만 강조한다.</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">비교 정리 요지.</div></details>
+      </div>
+      </div>
+        </div>
+        <div class="lit-mcq-poetry-nav">
+          <button type="button" class="lit-mcq-poetry-nav-btn" id="litMcqPoetryPrev" disabled>이전</button>
+          <button type="button" class="lit-mcq-poetry-nav-btn lit-mcq-poetry-nav-btn--primary" id="litMcqPoetryNext" disabled>다음 문항</button>
+          <button type="button" class="lit-mcq-poetry-nav-btn" id="litMcqPoetryQuit">처음으로</button>
+        </div>
+        <div id="litMcqPoetryResult" class="lit-mcq-poetry-result" style="display:none">
+          <p class="lit-mcq-poetry-result-title">모의 테스트 결과</p>
+          <p class="lit-mcq-poetry-result-score"><span id="litMcqPoetryResultNum">0</span> / <span id="litMcqPoetryResultTot">20</span></p>
+          <p class="lit-mcq-poetry-result-hint">틀린 문항은 해설을 펼쳐 복습한 뒤, 「다시 풀기」로 같은 회차를 다시 볼 수 있습니다. 다른 회차는 안내 화면에서 선택하세요.</p>
+          <div class="lit-mcq-poetry-result-actions">
+            <button type="button" class="lit-mcq-poetry-nav-btn lit-mcq-poetry-nav-btn--primary" id="litMcqPoetryRetry">다시 풀기</button>
+            <button type="button" class="lit-mcq-poetry-nav-btn" id="litMcqPoetryBackIntro">안내 화면으로</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lit-card" id="lit-short-poetry">
+      <h2>단답형</h2>
+      <p class="lit-bridge-note">문항을 펼치면 요지 답이 나옵니다.</p>
+      <details><summary>A1. 「엘리베이터 속의 파리」 1연, 「그 놈들」의 해석 두 가지</summary><div class="lit-detail-body">① 이미 부패한 사람들·파리가 원래 붙는 존재 ② 사회적 지위가 높은 존재(권위적 존재).</div></details>
+      <details><summary>A2. 「뺨」에 붙은 파리가 화자에게 주는 감정 층위</summary><div class="lit-detail-body">수치·부끄러움, 불쾌, 자기 안의 부패 인식 촉발 등.</div></details>
+      <details><summary>A3. 「죽은 꽁치 통조림」 이미지의 요지</summary><div class="lit-detail-body">부패한 존재로 가득한 사회 구조 속에 포함된 느낌·죽음에 둘러싸인 느낌.</div></details>
+      <details><summary>A4. 「손을 들어 파리를 쫓았다」의 성격</summary><div class="lit-detail-body">자기 부패를 인정하지 않으려는(부정하는) 행위. 근본 극복과는 거리가 있을 수 있음.</div></details>
+      <details><summary>A5. 「날개 없는 요일들」·엘리베이터가 드러내는 삶</summary><div class="lit-detail-body">자유·주체성의 부재, 수동적 반복.</div></details>
+      <details><summary>A6. 「즐거운 편지」 제목의 「즐거움」 요지</summary><div class="lit-detail-body">기다림의 고통을 사랑 안에서 의미화·완성하여 즐거울 수 있다는 태도.</div></details>
+      <details><summary>A7. 「배경」의 의미(전경과 대비)</summary><div class="lit-detail-body">주목받지 않는 자리·초점 밖·화자가 그대의 뒤·배경처럼 존재.</div></details>
+      <details><summary>A8. 「사소한 일」이 특별하지 않으면서도 특별해지는 이유</summary><div class="lit-detail-body">매일 반복되는 일상적 생각이지만, 그만큼 끊임없이 그대를 생각함을 드러냄.</div></details>
+      <details><summary>A9. 「언젠가 … 불러 보리라」의 전개</summary><div class="lit-detail-body">그대가 괴로울 때 배경에서 전경으로 나와 위로·호명. 오랫동안 쌓인 마음의 힘.</div></details>
+      <details><summary>A10. 「내 나의」 반복이 강조하는 것</summary><div class="lit-detail-body">「나」라는 존재의 사랑 방식·그대의 괴로움에 직접 영향을 주지 못하는 자리와의 긴장.</div></details>
+      <details><summary>A11. 바르트 「사랑의 부재는 일방통행」 요지</summary><div class="lit-detail-body">주체와 타자 자리의 교환 불가·사랑의 비대칭·구조적 부재.</div></details>
+      <details><summary>A12. 편지의 역설(바르트) 한 줄</summary><div class="lit-detail-body">지시대상으로는 부재하나, 말을 거는 순간 말 건네는 상대로는 현존하는 것처럼 성립.</div></details>
+      <details><summary>A13. 「너였다가 너였다가 너일 것이었다가」의 효과</summary><div class="lit-detail-body">반복·변주로 기대와 좌절의 순환, 불안·초조 심화. 바르트적 기다림의 고통과 맞닿음.</div></details>
+      <details><summary>A14. 「마침내 나는 너에게 간다」가 드러내는 태도</summary><div class="lit-detail-body">기다림에 대한 능동적 대응·관계 쪽으로의 지향.</div></details>
+      <details><summary>A15. 가치론적 부패의 뜻(엘리베이터 속의 파리)</summary><div class="lit-detail-body">도덕성·인간성의 부패 등 가치 차원의 썩음.</div></details>
+    </div>
+
+    <div class="lit-card" id="lit-essay-poetry">
+      <h2>서술형 · 예시답</h2>
+      <p class="lit-bridge-note">스스로 답을 쓴 뒤 「예시답」을 펼쳐 대조해 보세요.</p>
+
+      <p class="lit-essay-head">『엘리베이터 속의 파리』</p>
+      <div class="lit-q-block" style="margin-top:0">
+        <p class="lit-q">서술 1. 2·3연을 중심으로 「파리」가 화자에게 갖는 기능(매개체)과 화자 심리를 논하시오.</p>
+        <details><summary>예시답</summary><div class="lit-detail-body"><p>파리는 원래 부패·권위 쪽에 붙어야 할 상징이 화자의 뺨에 붙으며 수치와 불쾌를 일으키고, 겉부패와 안부패의 괴리를 드러낸다. 이는 자기 안의 부패를 인식하게 하는 매개체가 된다. 파리를 쫓는 행위는 부패를 부정하려는 반응이나, 늪·허우적거림으로 비칠 수 있다는 시적 자각은 그 부정이 근본적 극복으로 이어지지 않을 수 있음을 열어, 무력감과 연결된다.</p><p>2연에서는 통조림·꽁치 이미지로 사회 전체의 부패로 시선이 확장되고, 3연에서는 ‘쫓을 힘은 있으나 구조를 바꿀 힘은 없다’는 역설까지 이어지므로, 파리 한 마리가 <strong>개인 심리→사회 구조→존재론적 무력감</strong>으로 확장되는 지점을 반드시 짚어 쓰면 좋다.</p></div></details>
+      </div>
+      <div class="lit-q-block">
+        <p class="lit-q">서술 2. 4연에서 엘리베이터의 상승과 함몰·추락 공포가 동시에 제시되는 구조가 주제와 맞물리는 방식을 설명하시오.</p>
+        <details><summary>예시답</summary><div class="lit-detail-body"><p>상승은 겉으로 이동·진행이나 「날개 없는 요일」과 맞물려 주체성 없는 반복 시간으로 읽힌다. 그런데도 수렁·함몰 공포가 겹치는 것은, 도시 구조가 사람을 자유롭게 올려보내는 듯하면서 실제로는 통조림처럼 부패한 존재를 가두는 모순적 장치로 작동한다는 인식 때문이다. 이 모순이 화자의 떨림을 통해 존재론적 위기를 강화한다.</p><p>엘리베이터는 ‘높이 올라간다’는 진보·상승의 은유와도 맞닿지만, 시는 그 이동을 <strong>자율적 비상이 아닌 시스템에 태워진 이동</strong>으로 뒤집어, 겉의 상승이 실제로는 가두임·추락 공포와 겹친다고 정리할 수 있다.</p></div></details>
+      </div>
+
+      <p class="lit-essay-head">『즐거운 편지』</p>
+      <div class="lit-q-block" style="margin-top:0">
+        <p class="lit-q">서술 3. 5연을 근거로 「배경」에 머무는 사랑이 「불러 보리라」로 전개되는 논리를 설명하시오.</p>
+        <details><summary>예시답</summary><div class="lit-detail-body"><p>화자는 주목 밖의 배경에 머무는 자리를 자처한다. 그대를 생각함은 해 지고 바람 부는 일처럼 사소해 보이나 매일 이어지므로 실제로는 끊이지 않는 마음이다. 그대가 한없이 괴로울 때 비로소 그 오랜 사소함으로 그대를 부를 수 있다는 것은, 배경적 지지가 위로의 순간에 전경으로 이동할 수 있음을 뜻하며, 힘은 일시적 화려함이 아니라 오래 쌓인 마음의 두께에서 나온다.</p><p>「언젠가」는 미래의 불확실성을 남기므로, ‘불러 보리라’는 약속이 곧바로 현실화를 보장하지는 않는다. 그럼에도 화자는 그 불확실성 안에서 기다림의 가치를 지키려는 태도를 드러낸다.</p></div></details>
+      </div>
+      <div class="lit-q-block">
+        <p class="lit-q">서술 4. 7연에서 사랑의 유한성과 기다림의 지속이 동시에 놓이는 모순을 정서(믿음·불확실성)와 연결해 설명하시오.</p>
+        <details><summary>예시답</summary><div class="lit-detail-body"><p>사랑이 그칠 것을 믿는다는 말은 유한성을 인정한다. 그러나 그동안 계절이 순환하듯 시간은 흐를 것이고, 중심은 사랑의 결과보다 그때까지의 「기다림의 자세」에 있다. 「언젠가」의 불확실성과 맞물려 기다림은 고통이면서도 스스로 부여한 가치로 읽힌다.</p><p>밤·골짜기·눈은 기다림의 무게를 감각적으로 붙잡고, ‘사랑의 끝’이라는 냉정한 인식과 ‘그때까지 견뎌 온 태도’라는 따뜻한 인식이 동시에 놓이는 <strong>정서의 이중층</strong>을 논하면 좋다.</p></div></details>
+      </div>
+
+      <p class="lit-essay-head">바르트 『사랑의 단상』 비교</p>
+      <div class="lit-q-block" style="margin-top:0">
+        <p class="lit-q">서술 5. 「부재가 상상을 증폭시킨다」를 7연에 대입하여 설명하시오.</p>
+        <details><summary>예시답</summary><div class="lit-detail-body"><p>부재 속에서 화자는 그대의 현재를 직접 확인하지 못한 채, 사랑이 그칠 미래와 눈·꽃·낙엽의 순환을 머릿속 시나리오로 펼친다. 이는 상대의 현존 없이도 사랑과 기다림을 상상 속에서 확장하는 작업으로 바르트의 논지와 맞닿는다. 다만 이 시는 그 상상을 불안만이 아니라 기다림의 자세라는 방향으로 정리하려는 점에서 차이가 난다.</p><p>바르트가 말한 ‘의미의 공백’이 채워지는 방식이 오직 불안만은 아니라는 점을, 화자가 스스로에게 부여한 <strong>규범적 자기선언</strong>(어떻게 기다릴 것인가)으로 읽어 내면 비교가 선명해진다.</p></div></details>
+      </div>
+      <div class="lit-q-block">
+        <p class="lit-q">서술 6. 바르트의 흐름(사랑→부재→기다림→고통)과 달리 「즐거운 편지」가 제시하는 대응 서사를 「의미 부여」로 설명하시오.</p>
+        <details><summary>예시답</summary><div class="lit-detail-body"><p>바르트는 사랑 경험을 기술적 진술로 드러내 부재·수동적 기다림의 고통 구조를 진단한다. 황동규의 시는 그 고통을 없앤다기보다 기다림에 가치를 부여하고 사랑을 기다림의 방식으로 완성하겠다는 규범적 선언에 가깝다. 같은 부재 위에서 전자는 체험의 진단, 후자는 내면적 승화와 태도의 선언으로 갈린다.</p><p>제목의 「즐거움」은 이 ‘의미 부여’가 성립할 때 비로소 겉으로 드러나는 감정이라고 연결하면, 형식(편지)과 정서(즐거움)의 관계까지 한 번에 설명할 수 있다.</p></div></details>
+      </div>
+
+      <p class="lit-essay-head">『너를 기다리는 동안』(황지우)</p>
+      <div class="lit-q-block" style="margin-top:0">
+        <p class="lit-q">서술 7. 3연의 반복·변주가 바르트적 기다림의 고통과 어떻게 겹치는지 분석하시오.</p>
+        <details><summary>예시답</summary><div class="lit-detail-body"><p>문이 열릴 때마다 너이기를 바라는 기대가 반복되고, 확정에서 가능성으로 미끄러지는 변주로 불확실성이 커진다. 문이 닫히며 부재가 매번 재확인되는 구조는, 오지 않는 상대를 향한 해석과 상상의 반복이라는 바르트적 기다림의 고통과 맞닿는다.</p><p>1연의 발자국·나뭇잎처럼 세계 전체가 신호처럼 읽히는 상상의 증폭과, 3연의 문 앞에서의 좌절이 같은 리듬 안에서 이어지므로, ‘기다림’이 감정만이 아니라 <strong>인지 작용</strong>임을 밝히면 깊이가 더해진다.</p></div></details>
+      </div>
+      <div class="lit-q-block">
+        <p class="lit-q">서술 8. 「즐거운 편지」와 「너를 기다리는 동안」의 능동적 대응을 공통점과 차이로 비교하시오.</p>
+        <details><summary>예시답</summary><div class="lit-detail-body"><p>공통적으로 기다림을 순수 수동에만 두지 않고 화자의 의지적 태도로 재구성한다. 차이로는 즐거운 편지는 수신이 불확실해도 내 마음 안에서 사랑을 완성하는 내향적 완결에 가깝고, 너를 기다리는 동안은 시공간을 넓혀 부재를 오고 있음으로 해석하며 만남·관계적 도래를 믿는 지향이 강하다.</p><p>쿵쿵거림의 의미 전환(불안의 리듬 → 향함의 리듬)을 한 문장으로 짚으면, 후자 시가 ‘관계’ 쪽으로 열린다는 논지를 구체화할 수 있다.</p></div></details>
+      </div>
+
+      <p class="lit-essay-head">통합</p>
+      <div class="lit-q-block" style="margin-top:0">
+        <p class="lit-q">서술 9. 세 텍스트(엘리베이터 속의 파리, 바르트, 대기의 시 두 편)를 「부재」 개념으로만 묶어 간단히 논증하시오.</p>
+        <details><summary>예시답</summary><div class="lit-detail-body"><p>엘리베이터 속의 파리의 부재는 연애보다 주체성의 부재·구조에 갇힌 존재의 부재에 가깝다. 바르트의 부재는 사랑의 구조적 비대칭에서 나온 운명적 부재이며 편지의 역설을 낳는다. 즐거운 편지와 너를 기다리는 동안은 이 부재를 기다림의 의미 부여와 내적 완성, 또는 관계적 만남의 믿음으로 각각 대응한다.</p><p>즉 같은 말(부재)이라도 레벨이 다르다: <strong>존재론(엘리베이터) — 관계론(바르트) — 정서·윤리의 자기응답(황동규·황지우의 기다림 시)</strong>으로 층을 나누어 쓰면 논증이 정돈된다.</p></div></details>
+      </div>
+    </div>
+    </div>
+
+    <div id="litNovelWrap" style="display: none;">
+    <div class="lit-card" id="lit-toc-novel">
+      <h2>현대소설 정리</h2>
+      <p class="lit-bridge-note" style="margin-bottom:0">≪잉여인간≫·『서울, 1964년 겨울』(2026 공통국어 정리). 맥락 빈칸은 단어 리스트 어휘입니다. 객관식은 제1~5회 모의고사·단답·서술형 예시답을 함께 씁니다.</p>
+      <div class="lit-toc" style="margin-top:12px">
+        <a href="#lit-terms-n">용어</a>
+        <a href="#lit-novels">작품·심화</a>
+        <a href="#lit-era">50·60년대 비교</a>
+        <a href="#lit-bridge-novel">맥락 빈칸</a>
+        <a href="#lit-mcq-novel">객관식</a>
+        <a href="#lit-short-novel">단답형</a>
+        <a href="#lit-essay-novel">서술형</a>
+      </div>
+    </div>
+
+    <div class="lit-card" id="lit-terms-n">
+      <h2>문학·국어 개념 (소설)</h2>
+      <div class="lit-gloss">
+        <span><strong>1인칭 서술의 아이러니</strong> — 모든 것을 ‘나’의 목소리로 말하지만, ‘나’는 자신의 무관심·책임 회피를 제대로 인식하지 못한다. 독자는 화자의 말·행동의 간극에서 무관심의 민낯을 본다. 목격자이자 공범.</span>
+        <span><strong>무관심의 고의성</strong> — 단순 냉담이 아니라 개인주의·자기 보호를 위해 타인의 고통에서 거리를 두는 ‘선택’. 「혼자 놓아두면 죽지 않을 줄 알았다」는 변명이 책임 회피·자기기만을 드러낸다.</span>
+        <span><strong>구조적 소외</strong> — 개인 탓만으로 설명되지 않는 시대(전쟁·빈곤·산업화·정치 좌절)가 만든 관계 단절. 익명의 도시·돈이 관계를 매개하는 장면과 연결된다.</span>
+        <span><strong>잉여인간(손창섭)</strong> — 사전: 남음·쓸모없음. 문학: 리시니 첼로벡 계보, 자의 과잉·현실 부적응·표류. 손창섭은 선량하나 제대로 살지 못하는 이를 ‘쓸모없다’ 여기며 잉여라 칭한다는 정리.</span>
+        <span><strong>도시성·익명성</strong> — 성명보다 직업·호칭·돈이 관계를 매개한다. 공동체가 약해진 도시에서는 타인이 ‘이웃’이 아니라 우연히 겹친 ‘사건’이 되기 쉽고, 그때 무관심은 도덕적 게으름을 넘어 구조적으로 재생산될 수 있다.</span>
+        <span><strong>존엄 vs 거래</strong> — 전후 빈곤 속에서도 연대·장례 같은 장면으로 존엄의 잔상을 읽을 수 있는 텍스트와, 시신·돈이 값으로 전면에 나오는 텍스트를 대비하면 시대별 인간관계의 문법 차이를 논증할 수 있다.</span>
+      </div>
+    </div>
+
+    <div class="lit-card" id="lit-novels">
+      <h2>소설 — 수업지 심화 (탭)</h2>
+      <p class="lit-bridge-note">≪잉여인간≫·『서울, 1964년 겨울』 해설 자료를 가능한 한 옮겼습니다.</p>
+      <div class="lit-tabber" data-lit-tabber>
+        <div class="lit-subtabs" role="tablist">
+          <button type="button" class="lit-subtab lit-subtab--active" data-lit-tab="n1">잉여 개념·시대</button>
+          <button type="button" class="lit-subtab" data-lit-tab="n2">잉여 인물·공간</button>
+          <button type="button" class="lit-subtab" data-lit-tab="n3">잉여 평가·현대</button>
+          <button type="button" class="lit-subtab" data-lit-tab="n4">서울1964 시대·제목</button>
+          <button type="button" class="lit-subtab" data-lit-tab="n5">서울 인물·주제</button>
+        </div>
+        <div class="lit-subtab-panel lit-subtab-panel--active lit-prose" data-lit-panel="n1">
+          <h4>‘잉여인간’ 개념</h4>
+          <p><strong>사전</strong> 잉여=다 쓰고 남은 것·남아도는 것 → 사회에서 쓸모없다고 여겨지거나 스스로 그렇게 느끼며 소외된 채 사는 인간.</p>
+          <p><strong>문학적 어원</strong> 러시아 문학의 리쉬니 첼로벡(лишенец-человек)에서 유래한다는 설명. 자의식은 높으나 현실 적응 실패, 관계 단절, 무기력한 표류.</p>
+          <p><strong>손창섭의 시선</strong> 선량하나 제대로 된 삶을 영위하지 못하는 사람을 ‘쓸모없다’ 여긴다는 정리.</p>
+          <p><strong>네 측면 규정</strong> ➊소외 ➋무기력 ➌자기혐오 ➍경계인(어느 집단에도 완전히 속하지 못함).</p>
+          <h4>현대 맥락(수업 예시)</h4>
+          <p>대학생의 다수가 스스로 잉여를 경험했다는 조사 언급 등—오늘날은 청년 실업·취업 압박·SNS 담론 속에서 ‘잉여’가 재생산된다. 1950년대 텍스트와 공통점은 <strong>구조에 편입되지 못한다는 자각·무기력·존재 회의</strong>, 차이는 시대적 매체·고용 구조 등이다. 시대를 불문하고 잉여는 <strong>구조적 모순이 개인에게 투사된 결과</strong>라는 틀로 정리한다.</p>
+          <h4>1950년대 한국·전후 문학</h4>
+          <p>한국전쟁으로 인한 상흔·가족 해체·피난, 생산 기반 붕괴와 실업, ‘배운 실업자’ 증가, 남북 분단 속 이념 표류, 도시로의 이주이나 도시도 소외·빈곤의 공간이었다는 점. 손창섭의 인식: 전쟁 후 한국은 수많은 ‘쓸모없는 인간’을 만들어 냈다.</p>
+          <p><strong>전후 문학의 특징</strong> 전쟁의 상처·실존 탐구, 허무·실존주의, 사회 부적응자를 주인공으로, 희망 없는 현실의 사실적 묘사.</p>
+          <p><strong>손창섭 문학</strong> 비정상 인물·병적 현실, 고통받는 존재에 대한 연민, 통념에 저항하는 캐릭터, 언어의 절제와 냉소적 시선.</p>
+          <p><strong>≪잉여인간≫</strong> 1959년 중편, 전후 소외 지식인 군상의 집약, 인물 유형의 전형성·보편성, ‘잉여’를 문학으로 구현했다는 위치.</p>
+        </div>
+        <div class="lit-subtab-panel lit-prose" data-lit-panel="n2">
+          <h4>채익준 — 비분강개(悲憤慷慨)파</h4>
+          <p>분노·열정은 있으나 사회 변혁으로 이어지지 않는다. 치과에 매일 출근해 신문을 읽고 부조리에 격분하나 <strong>실천력은 없다</strong>. 신문을 읽다 「이런 놈들은 총살이다」라고 책상을 내리치나 분노는 방 안에서 허공으로 사라진다. <strong>주의</strong> 사업 시도가 있다고 해서 잉여가 아니라는 뜻이 아니다는 수업 강조.</p>
+          <h4>천봉우 — 실의의 인간</h4>
+          <p>아내 외도를 알면서도 저항하지 못하고 묵인·체념. 주체적 행동·자존감이 극도로 낮다. 채익준의 ‘분노하는 잉여’와 대비되는 ‘체념하는 잉여’. 봉우처가 서만기에게 추파를 던질 때도 말 못 하는 장면이 핵심.</p>
+          <h4>서만기</h4>
+          <p>겉으론 기품·교양 있는 치과의사로 ‘정상’에 가깝게 보이나 내면은 공허하고 방향을 잃었다. 잉여들의 구심점이나 타인 삶을 실질적으로 바꾸는 힘은 약하고, 봉우처 경제 의존·월급 밀림 등이 잉여 논의의 근거가 된다.</p>
+          <h4>봉우의 아내·홍인숙</h4>
+          <p>봉우처: 남편 경멸·서만기 유혹, 체제 순응·능동 생존자이나 윤리적 문제. 수업에서는 ‘능동’이 곧바로 긍정이 아니라, <strong>생존 전략이 도덕을 덮는 순간</strong>으로 읽히는지를 짚을 수 있다. 천봉우의 침묵과 맞물릴 때, 가정 안의 권력·성별·경제가 어떻게 교차하는지 논증 거리가 된다.</p>
+          <p>홍인숙: 관찰자·내레이터적 위치로 잉여 세계를 독자에게 중계한다. 냉소적 거리를 유지하면서도 익준의 자녀 등에 대한 연민이 스며드는 이중 시선이, 작품 전체의 톤(비판+이해)과 맞닿는다.</p>
+          <h4>만기 치과·구도</h4>
+          <p>세 인물이 모이는 유일한 사회 공간, 다섯 평의 좁음이 전후 세대의 축소된 삶의 반경을 상징. 채익준의 분노 vs 천봉우의 체념이 지식인의 두 대응 양식으로 대비된다. 도입부에 세 인물을 집약해 이후 갈등의 토대를 놓는 서사 기능.</p>
+        </div>
+        <div class="lit-subtab-panel lit-prose" data-lit-panel="n3">
+          <h4>문학적 평가</h4>
+          <p>전후 소외 문학의 정점으로 손창섭을 평가하는 시각. 인물의 전형성·보편성으로 특정 시대를 넘는 ‘소외된 인간’의 원형을 제시. 비정상 인물을 전면에 내세워 그 비정상을 만든 사회 구조를 고발—잉여는 희생자다.</p>
+          <p>냉소 뒤에는 익준의 아이들 등에 대한 연민이 공존한다는 층위: 비판하면서도 이해하고, 이해하면서도 고발한다.</p>
+          <h4>현대적 재해석</h4>
+          <p>청년 실업·‘잉여’ 자칭 문화, 구조적 소외(개인 나태만이 아님), 문학이 소외된 존재에게 언어를 부여한다는 기능론까지 수업에서 확장 가능.</p>
+        </div>
+        <div class="lit-subtab-panel lit-prose" data-lit-panel="n4">
+          <h4>김승옥·작품</h4>
+          <p>1941년 오사카 출생, 순천 성장, 서울대 불어불문과, 1962 「생명연습」 등단, 1965 동인문학상(본 작). 김주연 평: 「1960년대 소설 문학은 김승옥과 그의 영향에 의해 지배되었다」.</p>
+          <h4>4·19 혁명</h4>
+          <p>3·15 부정선거 규탄, 4월 19일 발포로 사망자가 나왔으나 이승만 하야. 민중의 힘으로 독재를 무너뜨린 최초의 혁명으로 기록. 문학적으로는 집단·민족 서사에서 <strong>자아 각성·개인의 발견</strong>으로 이어진다. 소설의 나·안은 25세로 4·19를 겪은 세대이나 이상 좌절 후 무기력 속에 놓인다.</p>
+          <h4>5·16 군사쿠데타</h4>
+          <p>4·19로 탄생한 민주당 정부를 군부가 전복. 혁명 공약과 달리 민주 절차 파괴·군사 독재·국가 주도 산업화. 문학적 의미: 자유의 공간이 짓밟히며 지식인·청년에게 정신적 상처, 냉소·무기력·극단적 개인주의가 팽창. 소설에서 나·안의 무관심은 개인 냉담만이 아니라 <strong>공적 이상 좌절 이후 사적 세계로의 도피</strong>로 읽힌다.</p>
+          <h4>경개·도시화·6·3</h4>
+          <p>1차 경개(1962~66)로 농촌 인구가 서울로 유입, 공동체 해체·익명 군중. 사내가 처갓집도 모름, 성씨만으로 불림 등이 익명화와 연결된다. 6·3 한일국교 반대 시위가 계엄으로 진압된 해—공적 저항 불가능 이후 ‘사소한 실천’만 남는 시대. 작가는 6·3 직후인 1964년 겨울을 배경으로 삼는다.</p>
+          <h4>제목의 시공간</h4>
+          <p><strong>서울</strong> 자본주의화된 도시, 이주민의 집합, 포장마차·하숙집·여관 등 임시 거처, 네온·광고판이 욕망을 드러냄. <strong>1964년</strong> 이상이 꺼진 해, 경개 진행, 단자적·개인주의 세계관이 내면화되기 시작한 시기. <strong>겨울</strong> 어둠·절망·냉각, 사건이 밤에만 전개, 관계의 냉기·사내 자살과 연결.</p>
+          <h4>줄거리(하룻밤)</h4>
+          <p>포장마차에서 나와 안이 만나 대화 → 사내 합류·시신 매매 고백 → 중국집·양품점·화재 구경 → 사내가 불 속에 돈을 던짐 → 여관 각자의 방 → 새벽 사내 자살 → 나와 안은 짜증·도피처럼 헤어짐. 부부가 죽었는데 안타까움이 아닌 짜증은 시대적 무관심을 드러낸다는 해석.</p>
+        </div>
+        <div class="lit-subtab-panel lit-prose" data-lit-panel="n5">
+          <h4>나(김)</h4>
+          <p>25세, 구청 병사계, 사관학교 시험 실패 후 체념, 미아리 하숙, 무의미한 사실 수집(가로등 불 등). 기회주의적 회색 지대—안의 무관심에 편승. 파리 대화(이상과 현실), 사내 고백 직후 사환·음식으로 시선 전환, 화재 앞 ‘동감입니다’, 자살 후 짐작 못 했다·욕설 등 결정적 장면들.</p>
+          <h4>안(安)</h4>
+          <p>25세 대학원생, 부유층, 자기 세계·데모를 관찰 대상으로 삼는 냉소·허무. 「서울은 모든 욕망의 집결지」, 「화재는 화재 자신의 것」, 사내가 울 때 눈짓으로 꺼지자고 함, 사후 「혼자 놓아두면 죽지 않을 줄 알았다」, 「너무 늙어버린 것 같다」로 자기 세계의 균열·곽상순 논의와 연결.</p>
+          <h4>사내</h4>
+          <p>36세 외판원, 아내 뇌막염 사망 후 시신 매매·사천 원, 굴뚝 연기 장면, 불 속 돈, 「혼자 있기 싫습니다」와 안의 거절. 공동체 세대의 마지막, 상품화의 희생양, 자살은 개인 선택만이 아니라 연대 부재의 사회적 죽음으로 읽힌다.</p>
+          <h4>무관심·단절 네 양상</h4>
+          <p>①언어적(유희적 대화) ②감정적(형식적 위로) ③공간적(각자의 방) ④세대 간(사내 vs 나·안).</p>
+          <h4>핵심 주제 정리</h4>
+          <p>소외·단절, 무관심의 의도성, 익명·정체성 상실, 세대 가치 충돌. 1964년 겨울을 2024년으로 바꿔도 손색 없을 만큼 소외는 지속된다는 비평적 문장을 수업에서 인용 가능.</p>
+          <table class="lit-table" style="margin-top:0.75rem">
+            <thead><tr><th>인물</th><th>나(김)</th><th>안(安)</th><th>사내</th></tr></thead>
+            <tbody>
+              <tr><td>연령·위치</td><td>25세, 구청 병사계, 하숙</td><td>25세 대학원생, 부유층</td><td>36세 외판원, 상실·빚</td></tr>
+              <tr><td>태도</td><td>기회주의·회색, 안에 편승</td><td>냉소·관찰자, 철학으로 무관심 포장</td><td>비통·도움 요청, 전통적 연대 욕구</td></tr>
+              <tr><td>결정적 장면</td><td>‘동감입니다’, 사후 욕설·외면</td><td>눈짓 거절, 화재 화법, 사후 발언</td><td>시신 매매 고백, 불 속 돈, 자살</td></tr>
+              <tr><td>주제와의 연결</td><td>방관의 일상화</td><td>무관심의 의도성·언어화</td><td>상품화·세대 단절의 희생</td></tr>
+            </tbody>
+          </table>
+          <p style="margin-top:0.75rem"><strong>장면별로 묶어 쓰기</strong> 포장마차(유희적 대화) → 사내 고백(윤리적 시험) → 화재(안의 화법·나의 동조) → 여관(공간적 단절) → 새벽(결과에 대한 짜증) 순으로 서술하면, ‘한 밤의 표류’가 어떻게 <strong>무관심의 층위</strong>를 차곡차곡 쌓는지 논증하기 쉽다.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="lit-card" id="lit-era">
+      <h2>1950년대 vs 1960년대 — 수업에서 요구한 비교 초점</h2>
+      <p class="lit-bridge-note">두 시대를 대표하는 작품 하나씩을 읽히며, <strong>시대·사회적 배경이 소설에 어떻게 반영되는지</strong>, 또는 <strong>소설이 그 배경 중 무엇을 드러내려 하는지</strong>에 초점을 둔다는 점을 명시한 정리입니다.</p>
+      <table class="lit-compare">
+        <tr><th>비교 축</th><th>≪잉여인간≫ (1950년대)</th><th>『서울, 1964년 겨울』 (1960년대)</th></tr>
+        <tr><td>핵심 모순·상황</td><td>전쟁 상흔, 빈곤, 이념 혼란, 배운 실업자·피난민</td><td>4·19 이상 좌절, 5·16, 경개·도시화, 6·3 이후 공적 행동 불가</td></tr>
+        <tr><td>인간관계·존엄</td><td>만기가 돈 없이도 돈을 빌려 익준 처의 장례를 치러 주는 등 존엄이 돈보다 우선되는 면이 상징적으로 대비될 수 있음</td><td>나·안이 사내와 동행한 이유가 돈, 시신 매매·사천 원, 타인 고통의 상품화 극단</td></tr>
+        <tr><td>공간·익명</td><td>만기 치과라는 좁은 물리 공간, 그러나 만남의 밀도</td><td>포장마차·여관·각자의 방, 이름 대신 나·안·사내로 불리는 익명</td></tr>
+        <tr><td>주인공의 삶</td><td>분노형·체념형 잉여의 정지된 반복</td><td>방관·철학화된 무관심·개인주의 세대의 밤거리 표류</td></tr>
+        <tr><td>연민·서술</td><td>냉소와 연민의 공존, 제3의 연민적 시선 가능성</td><td>1인칭 아이러니로 독자만이 윤리적 거리에서 본다</td></tr>
+      </table>
+      <div class="lit-prose" style="margin-top:12px;font-size:0.88rem;color:#475569">
+        <p>즉, 50년대 텍스트는 <strong>전쟁과 빈곤이 만든 ‘쓸모없음’의 체감</strong>을 좁은 무대에 모아 놓고, 60년대 텍스트는 <strong>근대화·독재·계엄이 만든 ‘연결 불가능’과 무관심의 고의성</strong>을 밤의 도시와 우연한 동행에 실어 낸다고 비교할 수 있다.</p>
+        <p><strong>서술·윤리 거리</strong> ≪잉여인간≫은 인물 군상을 통해 소외를 ‘유형’으로 보여 주고, 냉소와 연민이 공존하는 시선으로 독자가 한 걸음 물러서 비판·이해를 동시에 할 여지를 남긴다. 『서울, 1964년 겨울』은 1인칭 화자의 말과 태도가 곧 사건의 온도이므로, 독자는 화자와 동일시하기 어렵고 <strong>아이러니 너머의 윤리적 판단</strong>을 스스로 해야 한다.</p>
+        <p><strong>돈·존엄</strong> 50년대 텍스트에서도 생존과 돈의 문제는 중요하지만, 만기의 장례 지원처럼 <strong>존엄과 연대의 잔상</strong>이 상징적으로 남는 장면을 짚을 수 있다. 반면 60년대 텍스트는 시신 매매·사천 원·동행의 대가처럼, 고통이 <strong>거래 가능한 값</strong>으로 전락하는 극단을 통해 무관심을 드러낸다.</p>
+        <p><strong>에세이로 이어질 때</strong> 한 작품만 깊게 쓰되, 결론에서 다른 시대 작품의 ‘만약 이 인물이 서울의 밤을 걷는다면’ 같은 가상 비교로 <strong>시대적 조건이 인물에게 부여한 선택지</strong>를 논증하면 좋다.</p>
+      </div>
+    </div>
+
+    <div class="lit-card" id="lit-bridge-novel">
+      <h2>맥락 빈칸 (소설 · 단어장 어휘)</h2>
+      <p class="lit-bridge-note">낱말은 단어 암기·퀴즈 리스트 표기입니다.</p>
+      <div class="question-box" style="margin-bottom:14px">
+        <p class="problem-title"><strong>빈칸 1:</strong> 『서울, 1964년 겨울』에서 사내는 아내에 관한 사실을 털어 놓으며 비통한 마음을 ____하였다.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:10px">
+          <button type="button" data-litbn="0" data-litw="피력" onclick="checkLitBridgeNovel(0,'피력')">피력</button>
+          <button type="button" data-litbn="0" data-litw="넋두리" onclick="checkLitBridgeNovel(0,'넋두리')">넋두리</button>
+          <button type="button" data-litbn="0" data-litw="얼버무리다" onclick="checkLitBridgeNovel(0,'얼버무리다')">얼버무리다</button>
+          <button type="button" data-litbn="0" data-litw="시부렁거리다" onclick="checkLitBridgeNovel(0,'시부렁거리다')">시부렁거리다</button>
+          <button type="button" data-litbn="0" data-litw="왜장치다" onclick="checkLitBridgeNovel(0,'왜장치다')">왜장치다</button>
+        </div>
+      </div>
+      <div class="question-box" style="margin-bottom:14px">
+        <p class="problem-title"><strong>빈칸 2:</strong> 안(安)은 사내의 부탁을 ____게 거절한다.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:10px">
+          <button type="button" data-litbn="1" data-litw="매몰차다" onclick="checkLitBridgeNovel(1,'매몰차다')">매몰차다</button>
+          <button type="button" data-litbn="1" data-litw="겸연쩍다" onclick="checkLitBridgeNovel(1,'겸연쩍다')">겸연쩍다</button>
+          <button type="button" data-litbn="1" data-litw="껄끄럽다" onclick="checkLitBridgeNovel(1,'껄끄럽다')">껄끄럽다</button>
+          <button type="button" data-litbn="1" data-litw="굼뜨다" onclick="checkLitBridgeNovel(1,'굼뜨다')">굼뜨다</button>
+          <button type="button" data-litbn="1" data-litw="머쓱하다" onclick="checkLitBridgeNovel(1,'머쓱하다')">머쓱하다</button>
+        </div>
+      </div>
+      <div class="question-box" style="margin-bottom:14px">
+        <p class="problem-title"><strong>빈칸 3:</strong> 포장마차에서 나와 안의 대화는 때로 실속 없는 ____처럼 느껴진다.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:10px">
+          <button type="button" data-litbn="2" data-litw="너스레" onclick="checkLitBridgeNovel(2,'너스레')">너스레</button>
+          <button type="button" data-litbn="2" data-litw="넋두리" onclick="checkLitBridgeNovel(2,'넋두리')">넋두리</button>
+          <button type="button" data-litbn="2" data-litw="야료" onclick="checkLitBridgeNovel(2,'야료')">야료</button>
+          <button type="button" data-litbn="2" data-litw="험구" onclick="checkLitBridgeNovel(2,'험구')">험구</button>
+          <button type="button" data-litbn="2" data-litw="중상" onclick="checkLitBridgeNovel(2,'중상')">중상</button>
+        </div>
+      </div>
+      <div class="question-box" style="margin-bottom:14px">
+        <p class="problem-title"><strong>빈칸 4:</strong> ≪잉여인간≫ 채익준의 분노는 실천으로 이어지지 않고, 그의 삶은 ____게만 흘러간다.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:10px">
+          <button type="button" data-litbn="3" data-litw="굼뜨다" onclick="checkLitBridgeNovel(3,'굼뜨다')">굼뜨다</button>
+          <button type="button" data-litbn="3" data-litw="발자하다" onclick="checkLitBridgeNovel(3,'발자하다')">발자하다</button>
+          <button type="button" data-litbn="3" data-litw="괄괄하다" onclick="checkLitBridgeNovel(3,'괄괄하다')">괄괄하다</button>
+          <button type="button" data-litbn="3" data-litw="살핏하다" onclick="checkLitBridgeNovel(3,'살핏하다')">살핏하다</button>
+          <button type="button" data-litbn="3" data-litw="해사하다" onclick="checkLitBridgeNovel(3,'해사하다')">해사하다</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="lit-card" id="lit-mcq-novel">
+      <h2>소설 · 객관식 모의고사 (제1~5회 · 각 20문항)</h2>
+      <div id="lit-mcq-novel-intro">
+        <p class="lit-bridge-note">제1회는 ≪잉여인간≫·『서울, 1964년 겨울』 <strong>심화·변별형</strong> 문항입니다. 제2~5회는 <strong>작품별·교차 비교·오독 방지</strong>형 고난도 문항 각 20문항입니다. 맞힘은 <strong>각 문항 첫 선택</strong>만 반영합니다.</p>
+        <div class="lit-mcq-paper-grid" id="litMcqNovelPaperGrid">
+          <button type="button" class="lit-mcq-paper-btn" data-lit-novel-start="1">제1회 · 핵심 심화<small id="litMcqNovelStat1">기록 없음</small></button>
+          <button type="button" class="lit-mcq-paper-btn" data-lit-novel-start="2">제2회 · 심화 A<small id="litMcqNovelStat2">기록 없음</small></button>
+          <button type="button" class="lit-mcq-paper-btn" data-lit-novel-start="3">제3회 · 심화 B<small id="litMcqNovelStat3">기록 없음</small></button>
+          <button type="button" class="lit-mcq-paper-btn" data-lit-novel-start="4">제4회 · 심화 C<small id="litMcqNovelStat4">기록 없음</small></button>
+          <button type="button" class="lit-mcq-paper-btn" data-lit-novel-start="5">제5회 · 심화 D<small id="litMcqNovelStat5">기록 없음</small></button>
+        </div>
+        <button type="button" class="lit-mcq-poetry-nav-btn" id="litMcqNovelResetProgress" style="margin:10px auto 0;display:block">현대소설 모의고사 기록 초기화</button>
+      </div>
+      <div id="lit-mcq-novel-runner" style="display:none">
+        <div class="lit-mcq-poetry-hud">
+          <span><span id="litMcqNovelPaperLabel" style="font-weight:700;color:#4338a3">제1회</span> — 문항 <strong id="litMcqNovelCur">1</strong> / <span id="litMcqNovelTot">20</span></span>
+          <span>맞힘 <strong id="litMcqNovelScore">0</strong> <span style="font-weight:500;color:#64748b">(첫 선택)</span></span>
+        </div>
+        <div id="lit-mcq-novel-only">
+      <div class="lit-mcq-paper" data-lit-paper="1">
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">1. 채익준의 특징으로 알맞은 것은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">부조리에 무관심해 신문을 읽지 않는다.</li>
+          <li data-i="2">분노·비판은 크나 실천으로 이어지지 못한다.</li>
+          <li data-i="3">부조리에 격분하나 그 분노가 제도적 개혁으로 이어진다.</li>
+          <li data-i="4">치과 원장으로서 생계를 완전히 벗어난 무직자이다.</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">비분강개형 잉여.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="3">
+        <p class="lit-q">2. 천봉우와 채익준의 대립 축은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">도시 vs 농촌</li>
+          <li data-i="2">부자 vs 가난</li>
+          <li data-i="3">분노하는 잉여 vs 체념하는 잉여</li>
+          <li data-i="4">진보 vs 보수</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">반응 양식 대비.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="4">
+        <p class="lit-q">3. 안의 「화재는 화재 자신의 것」 발언의 성격은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">과학적 규명이다.</li>
+          <li data-i="2">소방 윤리 설명이다.</li>
+          <li data-i="3">작품 비평이다.</li>
+          <li data-i="4">무관심을 철학으로 포장한 것이다.</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">공동체 책임 회피.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="3">
+        <p class="lit-q">4. 「나」가 사내 고백 직후 사환·음식을 떠올리는 효과는?</p>
+        <ul class="lit-choices">
+          <li data-i="1">사내의 고백을 풍자로 승화시킨다.</li>
+          <li data-i="2">배고픔이라는 생리적 주제로 화제를 바꾼다.</li>
+          <li data-i="3">타자의 고통 앞 시선 회피·무감각이다.</li>
+          <li data-i="4">1인칭과 3인칭을 교차시킨다.</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">충격 회피 방어기제.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">5. 두 소설을 관통하는 공통 주제에 가까운 것은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">개인의 천재성에 대한 찬미</li>
+          <li data-i="2">구조 속 소외·무기력</li>
+          <li data-i="3">전원 복귀와 공동체의 화해</li>
+          <li data-i="4">역사 서술의 객관성 확보</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">시대 메커니즘은 다르다.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">6. ‘잉여인간’의 사전적 정의에 가장 가까운 것은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">반사회적 행위를 일삼는 범죄자형 인간이다.</li>
+          <li data-i="2">사회에서 쓸모없다고 여겨지거나 스스로 소외된 채 사는 인간</li>
+          <li data-i="3">경제적 부를 축적한 중산층 이상을 통칭한다.</li>
+          <li data-i="4">농촌에 정착하지 못한 유목민만을 뜻한다.</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">잉여=남음·남아도는 것에서 연장.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="3">
+        <p class="lit-q">7. 정리된 잉여인간 규정 네 측면(소외·무기력·자기혐오·경계인)에 <strong>포함되기 어려운</strong> 것은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">구조 속에서 느끼는 소외</li>
+          <li data-i="2">행동으로 옮기지 못하는 무기력</li>
+          <li data-i="3">적극적 시민 참여와 실천</li>
+          <li data-i="4">어느 집단에도 완전히 속하지 못함(경계인)</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">실천적 주체성은 오히려 대비된다.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">8. ≪잉여인간≫ 만기 치과의원의 공간적 상징으로 알맞은 것은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">국가 권력의 중심이다</li>
+          <li data-i="2">전후 세대의 축소된 삶·좁은 사회적 만남의 장이다</li>
+          <li data-i="3">해외 관광지이다</li>
+          <li data-i="4">농경 공동체의 전통 공간이다</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">다섯 평·세 인물이 모이는 유일한 사회 공간.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="4">
+        <p class="lit-q">9. 서만기를 잉여성 있는 인물로 보는 근거로 <strong>적절하지 않은</strong> 것은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">구심점이나 타인 삶을 실질적으로 바꾸는 힘은 약하다</li>
+          <li data-i="2">봉우처에게 경제적으로 의존한다</li>
+          <li data-i="3">월급이 밀린 상황이 있다</li>
+          <li data-i="4">타인을 수술만으로 완전히 구원한다</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">겉 안정·내면 공허·구심점의 아이러니.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">10. 천봉우의 아내에 대한 설명으로 타당한 것은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">잉여인간의 전형이다</li>
+          <li data-i="2">현실 적응형이나 윤리적으로 문제적이다</li>
+          <li data-i="3">작가의 분신이다</li>
+          <li data-i="4">관찰자이다</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">잉여의 대척점에 놓인 능동 생존.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">11. 홍인숙(간호원)의 위치에 가까운 것은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">소설의 반역자</li>
+          <li data-i="2">잉여들의 일상을 가까이 관찰·중계하는 인물</li>
+          <li data-i="3">치과 원장의 스승</li>
+          <li data-i="4">시골 농부</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">관찰자·내레이터적 기능.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">12. 5·16 군사쿠데타가 『서울, 1964년 겨울』 세대(나·안)와 맞닿게 설명되는 층위는?</p>
+        <ul class="lit-choices">
+          <li data-i="1">집단 의식의 강화</li>
+          <li data-i="2">4·19가 연 공간의 폐쇄·냉소·극단적 개인주의 심화</li>
+          <li data-i="3">농촌 복귀 열풍</li>
+          <li data-i="4">왕조 복고 사상</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">혁명 공약과 실제의 괴리, 정신적 상처.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">13. 작품이 ‘1964년 겨울’을 시간 배경으로 삼는 이유와 가장 맞닿는 것은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">하계 올림픽 개최</li>
+          <li data-i="2">6·3 이후 공적 저항의 좌절·개인 차원으로의 후퇴</li>
+          <li data-i="3">1980년대 민주화 운동</li>
+          <li data-i="4">조선 전기 실학 운동</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">좌절된 계절·밤 서사.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">14. 제목 속 ‘서울’의 의미로 알맞은 것은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">전통 마을 공동체의 회복</li>
+          <li data-i="2">자본주의·도시화의 중심이자 익명 군중이 모이는 공간</li>
+          <li data-i="3">농업 중심 지역</li>
+          <li data-i="4">해외 도시</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">욕망의 집결지·이주·단절.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">15. ‘겨울’의 상징으로 가장 알맞은 것은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">봄의 희망과 성장</li>
+          <li data-i="2">냉각·절망·관계의 얼어붙음·공동체 의식의 소멸</li>
+          <li data-i="3">여름 휴가와 휴식</li>
+          <li data-i="4">추수와 풍년</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">밤만 전개·차가운 거리 이미지와 연결.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">16. ‘나(김)’에 대한 설명으로 알맞은 것은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">서울대 의대생이다</li>
+          <li data-i="2">25세·구청 병사계·사관학교 시험 실패 후 체념적 삶</li>
+          <li data-i="3">재벌 2세이다</li>
+          <li data-i="4">시골 농장 주인이다</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">미아리 하숙·무의미한 사실 수집.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">17. 안이 데모를 말하는 태도에 가까운 것은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">매일 시위 현장을 이끈다</li>
+          <li data-i="2">꿈틀거림의 대표이나 직접 참여가 아닌 관찰의 대상이다</li>
+          <li data-i="3">군 입대를 준비한다</li>
+          <li data-i="4">농촌 계몽 운동을 한다</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">행동에서 관찰로 위축된 시대.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">18. 사내가 아내 시신을 팔고 받은 ‘사천 원’에 부여되는 의미로 알맞은 것은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">순수한 애정의 상징</li>
+          <li data-i="2">가난 속 존엄의 상품화·죄책감의 물질화</li>
+          <li data-i="3">장학금이다</li>
+          <li data-i="4">복권 당첨금이다</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">빨리 써 없애고 싶은 죄책감.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="3">
+        <p class="lit-q">19. 『서울, 1964년 겨울』에서 무관심·단절의 양상으로 보기 <strong>어려운</strong> 것은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">언어적 단절(유희적 대화)</li>
+          <li data-i="2">감정적 단절(형식적 위로)</li>
+          <li data-i="3">세대 간 연대의 완전한 실현</li>
+          <li data-i="4">공간적 단절(각자의 방)</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">정리된 네 가지 단절 유형과 대조.</div></details>
+      </div>
+      <div class="lit-q-block" data-lit-ans="2">
+        <p class="lit-q">20. ≪잉여인간≫과 비교할 때 『서울, 1964년 겨울』의 인간관계·존엄 서사에 가까운 점은?</p>
+        <ul class="lit-choices">
+          <li data-i="1">돈보다 존엄이 항상 우선인 관습이 지배한다</li>
+          <li data-i="2">돈이 관계를 매개하고 타인의 고통·죽음이 상품화되는 극단이 드러난다</li>
+          <li data-i="3">완전한 마을 공동체가 회복된다</li>
+          <li data-i="4">신비 체험이 중심이다</li>
+        </ul>
+        <details><summary>해설</summary><div class="lit-detail-body">수업지: 만기가 돈 빌려 장례 vs 사천 원·시신 매매.</div></details>
+      </div>
+      </div>
+        </div>
+        <div class="lit-mcq-poetry-nav">
+          <button type="button" class="lit-mcq-poetry-nav-btn" id="litMcqNovelPrev" disabled>이전</button>
+          <button type="button" class="lit-mcq-poetry-nav-btn lit-mcq-poetry-nav-btn--primary" id="litMcqNovelNext" disabled>다음 문항</button>
+          <button type="button" class="lit-mcq-poetry-nav-btn" id="litMcqNovelQuit">처음으로</button>
+        </div>
+        <div id="litMcqNovelResult" class="lit-mcq-poetry-result" style="display:none">
+          <p class="lit-mcq-poetry-result-title">모의 테스트 결과</p>
+          <p class="lit-mcq-poetry-result-score"><span id="litMcqNovelResultNum">0</span> / <span id="litMcqNovelResultTot">20</span></p>
+          <p class="lit-mcq-poetry-result-hint">틀린 문항은 해설을 펼쳐 복습한 뒤 「다시 풀기」로 같은 회차를 다시 볼 수 있습니다. 다른 회차는 안내 화면에서 고르세요.</p>
+          <div class="lit-mcq-poetry-result-actions">
+            <button type="button" class="lit-mcq-poetry-nav-btn lit-mcq-poetry-nav-btn--primary" id="litMcqNovelRetry">다시 풀기</button>
+            <button type="button" class="lit-mcq-poetry-nav-btn" id="litMcqNovelBackIntro">안내 화면으로</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lit-card" id="lit-short-novel">
+      <h2>소설 · 단답형</h2>
+      <p class="lit-bridge-note">펼치면 요지 답입니다.</p>
+      <details><summary>N1. 잉여인간 규정 네 가지</summary><div class="lit-detail-body">소외·무기력·자기혐오·경계인.</div></details>
+      <details><summary>N2. 채익준의 핵심 모순</summary><div class="lit-detail-body">분노·비판은 크나 자신의 삶은 사회적 역할 없이 변화를 만들지 못함.</div></details>
+      <details><summary>N3. 채익준의 사업 시도와 잉여 판단</summary><div class="lit-detail-body">사업 시도 자체가 잉여가 아님을 증명한다고 보기 어렵다는 주의(수업).</div></details>
+      <details><summary>N4. 천봉우의 잉여성 한 줄</summary><div class="lit-detail-body">분노하는 잉여와 대비되는 체념·실의의 잉여.</div></details>
+      <details><summary>N5. 서만기의 잉여성 요지</summary><div class="lit-detail-body">구심점이나 실질적 개선 힘·주체성 부족, 내면 공허, 경제적 의존 등.</div></details>
+      <details><summary>N6. 4·19의 문학적 의미(김승옥)</summary><div class="lit-detail-body">자아 각성·개인의 발견·이전 세대의 집단 서사에서 개인 내면 탐구로.</div></details>
+      <details><summary>N7. ‘1964년’ 제목의 역사적 함의</summary><div class="lit-detail-body">6·3 직후, 공적 저항 좌절, 개인 차원 후퇴·1차 경개 진행 등.</div></details>
+      <details><summary>N8. ‘나’의 무의미 수집 행위의 의미</summary><div class="lit-detail-body">실용 없는 사실 소유로 존재를 확인·공적 이상 대신 사적 소유.</div></details>
+      <details><summary>N9. 1인칭 서술의 아이러니(나)</summary><div class="lit-detail-body">‘나’의 말과 독자가 읽는 의미의 간극·무관심을 스스로 인식하지 못함.</div></details>
+      <details><summary>N10. 안의 자기 세계 균열을 드러내는 대사</summary><div class="lit-detail-body">「너무 늙어버린 것 같다」·두려움 등(사내 죽음 이후).</div></details>
+      <details><summary>N11. 사내 자살의 의미(구조적)</summary><div class="lit-detail-body">연대 부재 속 개인 파멸·무관심의 도덕적 공범 문제 제기.</div></details>
+      <details><summary>N12. 무관심의 고의성 핵심 장면</summary><div class="lit-detail-body">「혼자 놓아두면 죽지 않을 줄 알았다」 등 책임 회피·자기기만.</div></details>
+      <details><summary>N13. 고의적 무관심의 네 단절</summary><div class="lit-detail-body">언어적·감정적·공간적(각자의 방)·세대 간 단절.</div></details>
+      <details><summary>N14. 인물 이름이 성씨·나·안·사내로만 불리는 효과</summary><div class="lit-detail-body">도시의 익명성·정체성 상실.</div></details>
+    </div>
+
+    <div class="lit-card" id="lit-essay-novel">
+      <h2>소설 · 서술형 · 예시답</h2>
+      <p class="lit-bridge-note">먼저 직접 써 보고 예시답과 대조하세요.</p>
+
+      <p class="lit-essay-head">≪잉여인간≫</p>
+      <div class="lit-q-block" style="margin-top:0">
+        <p class="lit-q">서술 N1. 채익준과 천봉우를 ‘잉여인간’으로서 비교하시오. (분노형 vs 체념형, 핵심 장면을 포함)</p>
+        <details><summary>예시답</summary><div class="lit-detail-body"><p>채익준은 비분강개형으로 부조리에 격분하고 신문을 샅샅이 읽으며 비판하지만 그 분노는 치과 방 안에서 허공으로 소멸하고 사회 변혁으로 이어지지 않는다. 천봉우는 실의형으로 아내의 외도를 알면서도 저항하지 못하고 묵인·체념한다. 전자는 ‘분노하는 잉여’, 후자는 ‘체념하는 잉여’로 전후 지식인의 두 대응 양식을 대조한다. 봉우처 앞 무능한 장면과 채익준이 책상을 내리치는 장면이 각각 상징적으로 겹친다.</p><p>만기 치과라는 좁은 공간에서 두 유형이 동시에 놓이므로, 시대가 요구하는 ‘행동하는 지식인’과의 거리를 구체적 장면으로 입증하는 것이 핵심이다.</p></div></details>
+      </div>
+      <div class="lit-q-block">
+        <p class="lit-q">서술 N2. 서만기를 잉여인간으로 볼 수 있다면 그 근거를 논하시오.</p>
+        <details><summary>예시답</summary><div class="lit-detail-body"><p>겉으로는 교양·기품 있는 치과의사로 ‘정상’에 가깝게 보이나, 잉여들의 구심점이 되는 공간의 주인이면서도 타인의 삶을 실질적으로 바꾸는 힘은 약하다. 봉우처에게 경제적으로 의존하고 월급이 밀리는 등 주체적 삶의 방향이 불안정하다. 잉여들의 중심이라는 아이러니 속에서 내면의 공허와 주체성 결여가 드러난다.</p></div></details>
+      </div>
+      <div class="lit-q-block">
+        <p class="lit-q">서술 N3. 봉우의 아내와 홍인숙이 잉여인간인지 판단하고 근거를 서술하시오.</p>
+        <details><summary>예시답</summary><div class="lit-detail-body"><p>봉우의 아내는 무능한 남편을 경멸하고 서만기에게 능동적으로 접근하는 ‘현실 적응형’으로 잉여의 대척점에 놓인다. 윤리적 문제는 있으나 구조 속에서 생존 전략을 취하는 인물로 읽힌다. 홍인숙은 잉여들의 일상을 가까이 목격하고 독자에게 중계하는 관찰자·정상적 사회인 쪽에 가깝다. 둘을 동일선상의 잉여로 단정하기는 어렵다.</p></div></details>
+      </div>
+
+      <p class="lit-essay-head">『서울, 1964년 겨울』</p>
+      <div class="lit-q-block" style="margin-top:0">
+        <p class="lit-q">서술 N4. 제목의 시공간(서울·1964년·겨울)이 각각 갖는 상징을 설명하시오.</p>
+        <details><summary>예시답</summary><div class="lit-detail-body"><p>서울은 산업화·자본주의의 중심이자 농촌을 떠난 이들이 모이나 익명 군중으로 단절되는 공간이다. 1964년은 6·3 직후 공적 저항이 좌절되고 개인 차원으로 후퇴한 시점이다. 겨울은 냉각·절망·관계의 얼어붙음을 은유하고, 사건이 밤에만 전개되는 점과 맞물린다.</p></div></details>
+      </div>
+      <div class="lit-q-block">
+        <p class="lit-q">서술 N5. 「화재는 화재 자신의 것」이라는 안의 논리가 무관심을 어떻게 정당화하는지 서술하시오.</p>
+        <details><summary>예시답</summary><div class="lit-detail-body"><p>타인의 고통·화재를 누구와도 무관한 사건으로 환원하여 공동체적 책임과 개입을 철학적 언어로 거부한다. 겉으로는 중립적·지적 담론 같으나 실제로는 무관심을 세련되게 포장한 것이다. 화재 자리에 타인의 죽음을 넣어도 태도는 같다는 지적과 연결된다.</p></div></details>
+      </div>
+      <div class="lit-q-block">
+        <p class="lit-q">서술 N6. ‘나’의 1인칭 서술이 갖는 아이러니와 소설 주제와의 관계를 설명하시오.</p>
+        <details><summary>예시답</summary><div class="lit-detail-body"><p>모든 것을 ‘나’의 시점으로 말하지만 ‘나’는 자신의 무관심·책임 회피를 제대로 인식하지 못한다. 독자는 화자의 말과 행동의 간극에서 무관심의 민낯을 본다. ‘나’는 목격자이자 공범이며, 이 역설이 무관심의 고의성과 도덕 문제를 독자에게 넘긴다.</p><p>예를 들어 화재 장면의 형식적 동조(「동감입니다」)나 사내 사후 반응은 화자가 말로는 평범한 시민처럼 보이려 하나, 독자가 읽기엔 책임이 전가되는 순간으로 읽힌다는 식으로 <strong>장면 1~2개를 인용</strong>하면 논증이 탄탄해진다.</p></div></details>
+      </div>
+      <div class="lit-q-block">
+        <p class="lit-q">서술 N7. 사내의 비극을 ‘연대의 부재’와 ‘상품화’ 관점에서 통합하여 설명하시오.</p>
+        <details><summary>예시답</summary><div class="lit-detail-body"><p>사내는 공동체적 연대를 갈망하나 가난 속 아내 시신을 돈으로 바꾸는 상품화의 폭력을 겪는다. 사천 원은 죄책감의 물질화이고, 굴뚝 연기는 상품화된 죽음의 이미지다. 나와 안은 돈 때문에 동행을 허락했을 뿐 연대를 거부하고, ‘혼자 있기 싫다’는 호소를 거절한다. 연대 부재가 구조적으로 그를 파멸로 이끈다.</p></div></details>
+      </div>
+
+      <p class="lit-essay-head">통합·비교</p>
+      <div class="lit-q-block" style="margin-top:0">
+        <p class="lit-q">서술 N8. 수업에서 강조한 대로 ≪잉여인간≫(1950년대)과 『서울, 1964년 겨울』(1960년대)에 시대·사회적 배경이 각각 어떻게 반영되는지 한 작품씩 짚으시오.</p>
+        <details><summary>예시답</summary><div class="lit-detail-body"><p>잉여인간은 한국전쟁의 상흔·빈곤·이념 혼란·배운 실업자 증가 속에서 ‘쓸모없는 인간’이 양산되는 구조를 좁은 치과 공간에 집약한다. 서울, 1964년 겨울은 4·19 이상의 좌절·5·16·경개·도시화·6·3 이후 공적 행동 불가능 속에서 익명·돈 매개 관계·무관심의 고의성을 포장마차·각자의 방으로 드러낸다. 전자는 존엄이 돈보다 우선되는 면(만기의 장례 지원)이 상징적으로 대비되기도 하고, 후자는 존엄의 상품화 극단을 보여 준다.</p><p>비교할 때는 인물 심리만이 아니라 <strong>돈이 관계를 어떻게 매개하는지</strong>(빌려 주는 돈 vs 사천 원·동행의 대가)를 한 축으로 잡으면 시대 차이가 선명해진다.</p></div></details>
+      </div>
+      <div class="lit-q-block">
+        <p class="lit-q">서술 N9. 현대 청년의 ‘잉여’ 자칭 담론과 1950년대 소설의 잉여인간을 공통점과 차이로 비교하시오.</p>
+        <details><summary>예시답</summary><div class="lit-detail-body"><p>공통점은 구조에 편입되지 못한다는 자각, 무기력·목적 상실, 존재 회의 등이다. 차이는 현대는 취업난·SNS 등 온라인 자칭 문화로 재생산되고, 1950년대 텍스트는 전쟁·빈곤·이념의 직접적 상흔에 가깝다. 양쪽 모두 개인 나태만이 아니라 구조적 소외의 투사라는 점에서 만난다.</p></div></details>
+      </div>
+    </div>
+    </div>
+  </div>
+  
+
+  <div id="listSelection" style="display: none;">
+    <h2>📚 학습 리스트를 선택하세요</h2>
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 40px;">
+      <div class="list-card" style="display: flex; flex-direction: column; align-items: center;">
+        <button onclick="selectList(1)" style="padding: 20px 40px; margin-bottom: 10px; font-size: 1.3em; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: white; border: none; border-radius: 10px; cursor: pointer; width: 200px;">리스트 1<br>(60개)</button>
+        <button onclick="showPreview(1)" style="padding: 10px 25px; font-size: 1em; background-color: #e0e0e0; color: #333; border: none; border-radius: 8px; cursor: pointer;">미리보기</button>
+      </div>
+      <div class="list-card" style="display: flex; flex-direction: column; align-items: center;">
+        <button onclick="selectList(2)" style="padding: 20px 40px; margin-bottom: 10px; font-size: 1.3em; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: white; border: none; border-radius: 10px; cursor: pointer; width: 200px;">리스트 2<br>(80개)</button>
+        <button onclick="showPreview(2)" style="padding: 10px 25px; font-size: 1em; background-color: #e0e0e0; color: #333; border: none; border-radius: 8px; cursor: pointer;">미리보기</button>
+      </div>
+      <div class="list-card" style="display: flex; flex-direction: column; align-items: center;">
+        <button onclick="selectList(3)" style="padding: 20px 40px; margin-bottom: 10px; font-size: 1.3em; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: white; border: none; border-radius: 10px; cursor: pointer; width: 200px;">리스트 3<br>(60개)</button>
+        <button onclick="showPreview(3)" style="padding: 10px 25px; font-size: 1em; background-color: #e0e0e0; color: #333; border: none; border-radius: 8px; cursor: pointer;">미리보기</button>
+      </div>
+    </div>
+    <div style="text-align: center; margin-top: 30px;">
+      <button onclick="backToHomeFromQuizSelection()" style="padding: 12px 40px; font-size: 1em; background-color: #999; color: white;">홈으로</button>
+    </div>
+  </div>
+  
+  <div id="wordStudySelection" style="display: none;">
+    <h2>📖 단어 암기 리스트를 선택하세요</h2>
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 40px;">
+      <div class="list-card" style="display: flex; flex-direction: column; align-items: center;">
+        <button onclick="startWordStudy(1)" style="padding: 20px 40px; margin-bottom: 10px; font-size: 1.3em; background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); color: white; border: none; border-radius: 10px; cursor: pointer; width: 200px;">리스트 1<br>(60개)</button>
+        <button onclick="showPreview(1)" style="padding: 10px 25px; font-size: 1em; background-color: #e0e0e0; color: #333; border: none; border-radius: 8px; cursor: pointer;">미리보기</button>
+      </div>
+      <div class="list-card" style="display: flex; flex-direction: column; align-items: center;">
+        <button onclick="startWordStudy(2)" style="padding: 20px 40px; margin-bottom: 10px; font-size: 1.3em; background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); color: white; border: none; border-radius: 10px; cursor: pointer; width: 200px;">리스트 2<br>(80개)</button>
+        <button onclick="showPreview(2)" style="padding: 10px 25px; font-size: 1em; background-color: #e0e0e0; color: #333; border: none; border-radius: 8px; cursor: pointer;">미리보기</button>
+      </div>
+      <div class="list-card" style="display: flex; flex-direction: column; align-items: center;">
+        <button onclick="startWordStudy(3)" style="padding: 20px 40px; margin-bottom: 10px; font-size: 1.3em; background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); color: white; border: none; border-radius: 10px; cursor: pointer; width: 200px;">리스트 3<br>(60개)</button>
+        <button onclick="showPreview(3)" style="padding: 10px 25px; font-size: 1em; background-color: #e0e0e0; color: #333; border: none; border-radius: 8px; cursor: pointer;">미리보기</button>
+      </div>
+    </div>
+    <div style="text-align: center; margin-top: 30px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+      <button onclick="goToQuizFromWordStudy()" style="padding: 12px 40px; font-size: 1em; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: white;">단어 퀴즈</button>
+      <button onclick="backToHome()" style="padding: 12px 40px; font-size: 1em; background-color: #999; color: white;">홈으로</button>
+    </div>
+  </div>
+  
+  <div id="wordStudy" style="display: none;">
+    <div style="max-width: 800px; margin: 0 auto; padding: 40px 20px;">
+      <div style="text-align: center; margin-bottom: 30px;">
+        <h2 id="wordStudyTitle">단어 암기 - 리스트 1</h2>
+        <div style="font-size: 1.2em; margin: 10px 0;" id="wordStudyProgress">1 / 60</div>
+      </div>
+      
+      <div style="background: white; border-radius: 15px; padding: 40px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 30px;">
+        <div style="text-align: center;">
+          <div style="font-size: 2.5em; font-weight: bold; color: #3498db; margin-bottom: 30px;" id="currentWord">단어</div>
+          
+          <div id="meaningSection" style="display: none;">
+            <div style="font-size: 1.3em; color: #333; margin-bottom: 20px;" id="currentSentence">문장 예시</div>
+            
+            <button onclick="showMeaning()" id="showMeaningBtn" style="padding: 15px 40px; font-size: 1.2em; background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); color: white; border: none; border-radius: 10px; cursor: pointer; margin: 20px 0;">뜻 보기</button>
+            
+            <div style="background: #f5f7fa; padding: 20px; border-radius: 10px;" id="currentMeanings">의미들</div>
+          </div>
+        </div>
+      </div>
+      
+      <div style="display: flex; justify-content: center; gap: 20px;">
+        <button onclick="previousWord()" id="prevBtn" style="padding: 15px 30px; font-size: 1.1em; background-color: #999; color: white; border: none; border-radius: 8px; cursor: pointer;">이전</button>
+        <button onclick="nextWord()" id="nextBtn" style="padding: 15px 30px; font-size: 1.1em; background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); color: white; border: none; border-radius: 8px; cursor: pointer;">다음</button>
+      </div>
+      
+      <div style="text-align: center; margin-top: 30px;">
+        <button onclick="backToWordStudySelection()" style="padding: 12px 40px; font-size: 1em; background-color: #999; color: white;">리스트 선택</button>
+      </div>
+    </div>
+  </div>
+  
+  <div id="selection" style="display: none;">
+    <h2 id="selectionTitle">풀 문제 수를 선택하세요</h2>
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-bottom: 30px;">
+      <button onclick="generateQuiz(10)" style="padding: 15px 35px; font-size: 1.1em; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: white;">10문제</button>
+      <button onclick="generateQuiz(20)" style="padding: 15px 35px; font-size: 1.1em; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: white;">20문제</button>
+      <button onclick="generateQuiz(30)" style="padding: 15px 35px; font-size: 1.1em; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: white;">30문제</button>
+      <button id="buttonMax" onclick="generateQuiz(60)" style="padding: 15px 35px; font-size: 1.1em; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: white;">60문제</button>
+    </div>
+    <button onclick="backToListSelection()" style="padding: 12px 40px; font-size: 1em; background-color: #999; color: white;">뒤로가기</button>
+  </div>
+  
+  <div id="quiz" style="display: none;"></div>
+  <div id="results" style="display: none;">
+    <div id="resultIntro">
+      <h2 id="resultIntroTitle">&#xB2F9;&#xC2E0;&#xC758; &#xC810;&#xC218;&#xB294;...</h2>
+      <div style="display: flex; justify-content: center; margin-top: 35px;">
+        <button onclick="showFinalResults()" style="padding: 15px 35px; font-size: 1.1em; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: white;">&#xB2E4;&#xC74C;</button>
+      </div>
+    </div>
+    <div id="resultFinal" style="display: none;">
+      <h2 id="resultTitle"></h2>
+      <p style="font-size: 4em; font-weight: bold; color: #4CAF50; margin: 30px 0;" id="resultScore"></p>
+      <p style="font-size: 1.8em; color: #0ea5e9; font-weight: 600; margin-bottom: 20px;" id="resultMessage"></p>
+      <p style="font-size: 1.2em; color: #666; margin-bottom: 40px;" id="resultPercent"></p>
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
+      <button onclick="showWrongAnswers()" style="padding: 15px 35px; font-size: 1.1em; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: white;">틀린 단어 보기</button>
+      <button onclick="showAllAnswers()" style="padding: 15px 35px; font-size: 1.1em; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: white;">풀이 보기</button>
+      <button onclick="resetQuiz()" style="padding: 15px 35px; font-size: 1.1em; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: white;">다시 풀기</button>
+    </div>
+    </div>
+  </div>
+  <div id="wrongAnswersModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center;">
+    <div style="background-color: white; padding: 40px; border-radius: 15px; width: 85%; max-width: 900px; max-height: 80vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+      <h2 style="text-align: center; margin-bottom: 30px; color: #0ea5e9; font-weight: 700;">📝 틀린 단어 목록</h2>
+      <div id="wrongAnswersContent"></div>
+      <button onclick="closeWrongAnswers()" style="display: block; margin: 30px auto; padding: 12px 35px; font-size: 1em; background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: white; border: none; border-radius: 8px; cursor: pointer;">닫기</button>
+    </div>
+  </div>
+
+  <div id="previewModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center;">
+    <div style="background-color: white; padding: 40px; border-radius: 15px; width: 85%; max-width: 900px; max-height: 80vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.3); position: relative;">
+      <button class="close-btn" onclick="closePreview()">×</button>
+      <h2 style="text-align: center; margin-bottom: 30px; color: #0ea5e9; font-weight: 700;" id="previewTitle">📚 단어 목록</h2>
+      <div id="previewContent" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; margin-bottom: 30px;"></div>
+    </div>
+  </div>
+  <div id="meaningModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center;">
+    <div style="background-color: white; padding: 40px; border-radius: 15px; width: 85%; max-width: 700px; max-height: 80vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.3); position: relative;">
+      <button class="close-btn" onclick="closeMeaningModal()">X</button>
+      <h2 style="text-align: center; margin-bottom: 20px; color: #0ea5e9; font-weight: 700;" id="meaningModalTitle"></h2>
+      <div id="meaningModalContent" style="display: grid; gap: 12px;"></div>
+    </div>
+  </div>
+  <div id="controls" style="text-align: center; margin-top: 20px; display: none;">
+    <button onclick="resetQuiz()" style="padding: 10px 20px;">다시 선택</button>
+  </div>
+
+  <script src="literature-mock-bank.js"></script>
+  <script>
+    let solvedProblems = new Set();
+    let correctCount = 0;
+    let numProblems = 0;
+    let finalScore = 0;
+    let wrongQuestions = [];
+    let userAnswers = [];
+    let selectedItems = [];
+    let currentList = 1;
+    let lastQuizOptions = [];
+
+    const WQ_LS_KEY = "word-quiz-session-v1";
+    function clearWordQuizSave() {
+      try {
+        localStorage.removeItem(WQ_LS_KEY);
+      } catch (e) {}
+    }
+    function saveWordQuizSave() {
+      try {
+        const quizEl = document.getElementById("quiz");
+        if (quizEl.style.display === "none" || !selectedItems.length) return;
+        localStorage.setItem(
+          WQ_LS_KEY,
+          JSON.stringify({
+            v: 1,
+            currentList,
+            numProblems,
+            items: selectedItems,
+            lastQuizOptions,
+            solved: [...solvedProblems],
+            correctCount,
+            wrongQuestions,
+            userAnswers,
+          })
+        );
+      } catch (e) {}
+    }
+    function discardSavedWordQuiz() {
+      if (!confirm("이 기기에 저장된 퀴즈 풀이(진행 중인 세션)를 삭제할까요?")) return;
+      clearWordQuizSave();
+    }
+    function escapeQuizWord(o) {
+      return String(o).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+    }
+    function escapeHtmlText(s) {
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+    function buildQuestionHtml(i, correct, optionList) {
+      const meaningsHtml = (correct.meanings || [])
+        .map((m) => `<div style="padding:8px 10px;background:#f5f7fa;border-radius:8px;color:#333;line-height:1.55;font-size:0.92em;margin-bottom:6px">\u2022 ${escapeHtmlText(m)}</div>`)
+        .join("");
+      return `
+          <div class="question-box" style="position: relative;">
+            <p class="problem-title" data-title="${i}"><strong>문제 ${i + 1}:</strong> ${correct.sentence}</p>
+            <button onclick="showMeaningPopup(${i})" style="position: absolute; top: 16px; right: 16px; padding: 8px 14px; font-size: 0.9em; background: linear-gradient(135deg, #4facfe 0%, #00c6ff 100%); color: white; border: none; border-radius: 999px; cursor: pointer;">\uB73B \uBCF4\uAE30</button>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 15px; padding-top: 12px;">
+              ${optionList
+                .map(
+                  (o) => `
+              <button data-question="${i}" data-word="${o}" onclick="checkAnswer(${i}, '${escapeQuizWord(o)}', ${o === correct.word})" style="padding: 12px 15px; font-size: 0.95em; background: #f0f0f0; color: #333; border: 2px solid transparent; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#e8e8e8'; this.style.borderColor='#0ea5e9'" onmouseout="this.style.background='#f0f0f0'; this.style.borderColor='transparent'">${o}</button>`
+                )
+                .join("")}
+            </div>
+            <div id="wq-feedback-${i}" class="wq-wrong-learn" style="display:none;margin-top:14px;padding:10px 14px 14px;border-radius:12px;border:1px solid #ffcdd2;background:linear-gradient(135deg,#fff8f8 0%,#ffebee 100%);">
+                <div style="font-size:11px;font-weight:700;color:#b71c1c;margin-bottom:8px">오답일 때 참고</div>
+                <div style="padding-top:10px;border-top:1px solid rgba(183,28,28,0.15)">
+                  <div style="font-size:10px;font-weight:600;color:#888;margin-bottom:4px">사용 단어(개념)</div>
+                  <div style="font-size:16px;font-weight:700;color:#1b5e20;margin-bottom:12px">${escapeHtmlText(correct.word)}</div>
+                  <div style="font-size:10px;font-weight:600;color:#888;margin-bottom:6px">뜻풀이 · 단어 해설</div>
+                  ${meaningsHtml}
+                </div>
+            </div>
+          </div>
+        `;
+    }
+    function applyStoredAnswer(ua) {
+      const questionIndex = ua.questionIndex;
+      const selectedWord = ua.selectedWord;
+      const buttons = document.querySelectorAll('[data-question="' + questionIndex + '"]');
+      buttons.forEach((btn) => {
+        if (btn.dataset.word === selectedWord) {
+          btn.disabled = true;
+          btn.style.background = "#0ea5e9";
+          btn.style.color = "white";
+          btn.style.borderColor = "#0ea5e9";
+        } else {
+          btn.disabled = true;
+          btn.style.opacity = "0.3";
+          btn.style.cursor = "not-allowed";
+        }
+      });
+      const titleElement = document.querySelector('[data-title="' + questionIndex + '"]');
+      if (titleElement && !titleElement.innerHTML.includes("완료")) {
+        titleElement.innerHTML += ' <span style="color: #ff9800; font-weight: bold;">완료</span>';
+      }
+      if (ua.isCorrect === false) {
+        const fb = document.getElementById("wq-feedback-" + questionIndex);
+        if (fb) fb.style.display = "block";
+      }
+    }
+    function restoreWordQuizFromStorage() {
+      let raw;
+      try {
+        raw = localStorage.getItem(WQ_LS_KEY);
+      } catch (e) {
+        return;
+      }
+      if (!raw) return;
+      let d;
+      try {
+        d = JSON.parse(raw);
+      } catch (e) {
+        clearWordQuizSave();
+        return;
+      }
+      if (!d || d.v !== 1 || !d.items || !d.items.length) return;
+      currentList = d.currentList || 1;
+      numProblems = d.numProblems || d.items.length;
+      selectedItems = d.items;
+      lastQuizOptions = Array.isArray(d.lastQuizOptions) ? d.lastQuizOptions : [];
+      solvedProblems = new Set(d.solved || []);
+      correctCount = Number(d.correctCount) || 0;
+      wrongQuestions = d.wrongQuestions || [];
+      userAnswers = d.userAnswers || [];
+      if (lastQuizOptions.length !== selectedItems.length) {
+        clearWordQuizSave();
+        return;
+      }
+      document.body.style.background = BG_QUIZ_UI;
+      ["home", "wordSubHome", "litSubHome", "listSelection", "wordStudySelection", "wordStudy", "selection", "results", "litSection"].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = "none";
+      });
+      setLitMode(null);
+      document.getElementById("quiz").style.display = "block";
+      document.getElementById("controls").style.display = "block";
+      document.getElementById("score").style.display = "block";
+      document.getElementById("score").textContent = `푼 문제 수: ${solvedProblems.size} / ${numProblems}`;
+      const quizDiv = document.getElementById("quiz");
+      let html = "";
+      for (let i = 0; i < selectedItems.length; i++) {
+        html += buildQuestionHtml(i, selectedItems[i], lastQuizOptions[i]);
+      }
+      quizDiv.innerHTML = html;
+      userAnswers.forEach((ua) => applyStoredAnswer(ua));
+      updateScore();
+    }
+
+    const BG_HOME = "linear-gradient(165deg, #0284c7 0%, #0284c7 45%, #0ea5e9 100%)";
+    const BG_QUIZ_UI = "linear-gradient(155deg, #3730a3 0%, #0284c7 50%, #38bdf8 100%)";
+    const BG_STUDY = "linear-gradient(155deg, #0c4a6e 0%, #0369a1 45%, #0284c7 100%)";
+
+    function hideKoreanQuizPanels() {
+      ["listSelection", "wordStudySelection", "wordStudy", "selection", "quiz", "results"].forEach(function (id) {
+        var n = document.getElementById(id);
+        if (n) n.style.display = "none";
+      });
+      document.getElementById("controls").style.display = "none";
+      document.getElementById("score").style.display = "none";
+    }
+
+    function setLitSectionVisible(visible) {
+      var el = document.getElementById("litSection");
+      if (el) el.style.display = visible ? "block" : "none";
+    }
+
+    function setLitMode(mode) {
+      var p = document.getElementById("litPoetryWrap");
+      var n = document.getElementById("litNovelWrap");
+      if (!p || !n) return;
+      if (mode === "poetry") {
+        p.style.display = "block";
+        n.style.display = "none";
+      } else if (mode === "novel") {
+        p.style.display = "none";
+        n.style.display = "block";
+      } else {
+        p.style.display = "none";
+        n.style.display = "none";
+      }
+    }
+
+    function backToKoreanMain() {
+      hideKoreanQuizPanels();
+      document.getElementById("wordSubHome").style.display = "none";
+      document.getElementById("litSubHome").style.display = "none";
+      setLitSectionVisible(false);
+      setLitMode(null);
+      document.getElementById("home").style.display = "block";
+      document.body.style.background = BG_HOME;
+    }
+
+    function goToWordSubHome() {
+      hideKoreanQuizPanels();
+      document.getElementById("home").style.display = "none";
+      document.getElementById("litSubHome").style.display = "none";
+      document.getElementById("wordSubHome").style.display = "block";
+      setLitSectionVisible(false);
+      setLitMode(null);
+      document.body.style.background = BG_HOME;
+    }
+
+    function goToLitSubHome() {
+      hideKoreanQuizPanels();
+      document.getElementById("home").style.display = "none";
+      document.getElementById("wordSubHome").style.display = "none";
+      document.getElementById("litSubHome").style.display = "block";
+      setLitSectionVisible(false);
+      setLitMode(null);
+      document.body.style.background = BG_HOME;
+    }
+
+    function openLitPoetry() {
+      document.getElementById("litSubHome").style.display = "none";
+      document.getElementById("home").style.display = "none";
+      document.getElementById("wordSubHome").style.display = "none";
+      setLitSectionVisible(true);
+      setLitMode("poetry");
+      document.body.style.background = BG_HOME;
+    }
+
+    function openLitNovel() {
+      document.getElementById("litSubHome").style.display = "none";
+      document.getElementById("home").style.display = "none";
+      document.getElementById("wordSubHome").style.display = "none";
+      setLitSectionVisible(true);
+      setLitMode("novel");
+      document.body.style.background = BG_HOME;
+    }
+
+    function backToLitSubFromLit() {
+      setLitSectionVisible(false);
+      setLitMode(null);
+      document.getElementById("litSubHome").style.display = "block";
+      document.body.style.background = BG_HOME;
+    }
+
+    function goToWordStudyFromLit() {
+      setLitSectionVisible(false);
+      setLitMode(null);
+      goToWordStudy();
+    }
+
+    function goToListSelectionFromLit() {
+      setLitSectionVisible(false);
+      setLitMode(null);
+      goToListSelection();
+    }
+
+    var LIT_BRIDGE_POETRY = ["가쁘다", "애달프다"];
+    function checkLitBridgePoetry(idx, picked) {
+      var correctWord = LIT_BRIDGE_POETRY[idx];
+      var buttons = document.querySelectorAll('[data-litbp="' + idx + '"]');
+      if (!buttons.length || buttons[0].disabled) return;
+      buttons.forEach(function (btn) {
+        btn.disabled = true;
+        var w = btn.getAttribute("data-litw");
+        if (w === correctWord) {
+          btn.classList.add("correct");
+          btn.style.background = "#4CAF50";
+          btn.style.color = "#fff";
+        } else if (w === picked) {
+          btn.classList.add("incorrect");
+          btn.style.background = "#f44336";
+          btn.style.color = "#fff";
+        } else {
+          btn.style.opacity = "0.35";
+        }
+      });
+    }
+
+    var LIT_BRIDGE_NOVEL = ["피력", "매몰차다", "너스레", "굼뜨다"];
+    function checkLitBridgeNovel(idx, picked) {
+      var correctWord = LIT_BRIDGE_NOVEL[idx];
+      var buttons = document.querySelectorAll('[data-litbn="' + idx + '"]');
+      if (!buttons.length || buttons[0].disabled) return;
+      buttons.forEach(function (btn) {
+        btn.disabled = true;
+        var w = btn.getAttribute("data-litw");
+        if (w === correctWord) {
+          btn.classList.add("correct");
+          btn.style.background = "#4CAF50";
+          btn.style.color = "#fff";
+        } else if (w === picked) {
+          btn.classList.add("incorrect");
+          btn.style.background = "#f44336";
+          btn.style.color = "#fff";
+        } else {
+          btn.style.opacity = "0.35";
+        }
+      });
+    }
+
+    const items = [
+      { word: "가탈", sentence: "처음 하는 일이라 여기저기서 ____이 많이 생긴다.", meanings: ["1. 일이 순조롭게 나아가는 것을 방해하는 조건", "2. 이리저리 트집을 잡아 까다롭게 구는 일"] },
+      { word: "깜냥", sentence: "제 ____엔 친구들보다 일찍 성공한 자신이 자랑스러웠다.", meanings: ["스스로 일을 헤아림. 또는 헤아릴 수 있는 능력"] },
+      { word: "달포", sentence: "그 후 김 선생은 거의 ____나 학교에 나타나지 않았다.", meanings: ["한달이 약간 넘는 기간"] },
+      { word: "말미", sentence: "이사를 하기 위해 이틀의 ____를 얻었다.", meanings: ["일정한 직업이나 일 따위에 매인 사람이 다른 일로 말미암아 얻는 겨를"] },
+      { word: "선잠", sentence: "긴장을 한 탓인지 간밤에는 내내 ____만 잤다.", meanings: ["깊이 들지 못하거나 흡족하게 이루지 못한 잠"] },
+      { word: "섣달", sentence: "____ 그믐이 지나면 새해가 시작된다.", meanings: ["한 해의 마지막 달을 음력으로 이르는 말"] },
+      { word: "섬돌", sentence: "____에 어머니의 신이 나란히 놓여 있었다.", meanings: ["오르내릴 수 있도록 만들어 놓은 돌층계"] },
+      { word: "어림", sentence: "____으로 계산해 봐도 돈이 제법 모였다.", meanings: ["대강 짐작으로 헤아림. 또는 그런 셈이나 짐작"] },
+      { word: "오금", sentence: "앉아 있는 동안 ____이 저려 자세를 바꿨다.", meanings: ["무릎의 구부러지는 오목한 안쪽 부분"] },
+      { word: "헤살", sentence: "소년은 하는 일마다 짓궂게 ____을 부렸다.", meanings: ["짓궃게 남의 일을 방해함. 또는 그런 짓"] },
+      { word: "갈무리", sentence: "겨우내 ____했던 잎들을 꺼냈다.", meanings: ["1. 물건 따위를 잘 정리하고 간수함", "2. 일을 끝맺음"] },
+      { word: "개숫물", sentence: "물을 아끼기 위해 ____도 허투루 버리지 말아야 한다.", meanings: ["설거지할 때 쓰는 물"] },
+      { word: "고갱이", sentence: "한 민족의 문화와 정신을 이해하는 ____는 말이다.", meanings: ["1. 식물 줄기의 가운데 위치한 연한 부분", "2. 사물의 핵심이 되는 부분을 비유하는 말"] },
+      { word: "고명딸", sentence: "그녀는 ____로 태어나 귀여움을 독차지했다.", meanings: ["아들이 많은 집의 외동딸"] },
+      { word: "너스레", sentence: "그는 밉지 않은 ____를 떨었다.", meanings: ["수다스럽게 떠벌려 늘어놓는 말이나 행동"] },
+      { word: "넋두리", sentence: "누나는 한숨을 쉬며 ____ 같은 말을 했다.", meanings: ["불만스러운 내용을 길게 늘어놓으며 하소연으로 하는 말"] },
+      { word: "눈썰미", sentence: "동생은 ____가 좋아 금방 배운다.", meanings: ["한두 번 정도만 보고 바로 따라하거나 기억해 내는 재주"] },
+      { word: "도가니", sentence: "금메달 소식은 감격의 ____로 몰아넣었다.", meanings: ["1. 쇠붙이를 녹이는 그릇", "2. 흥분이나 감격 따위로 인해 들끓는 상태를 비유하는 말"] },
+      { word: "마파람", sentence: "____에 게 눈 감추듯 밥을 먹어 치웠다.", meanings: ["'남풍'을 일컫는 뱃사람들의 은어"] },
+      { word: "사재기", sentence: "라면은 주된 ____ 품목이다.", meanings: ["물건 값이 오를 것을 예상하고 큰 이익을 얻기 위하여 물건을 몰아서 사들이는 행동"] },
+      { word: "서릿발", sentence: "그의 음성에는 ____ 같은 위엄이 서려 있었다.", meanings: ["땅속의 물이 얼어 기둥 모양으로 솟아오른 것. 또는 그것이 뻗는 기운"] },
+      { word: "선머슴", sentence: "____ 같은 아이들이 뛰어다녔다.", meanings: ["차분하지 못하고 매우 거칠게 덜렁거리는 사내아이"] },
+      { word: "어깃장", sentence: "차츰 ____을 놓기 시작했다.", meanings: ["순순히 따르지 아니하고 못마땅하게 뻗대는 행동"] },
+      { word: "치사랑", sentence: "아무리 ____이라도 내리사랑엔 못 미친다.", meanings: ["아랫사람이 손윗사람을 사랑하는 일. 또는 그런 사랑"] },
+      { word: "화수분", sentence: "내가 무슨 ____인 줄 아니?", meanings: ["재물이 계속해서 쏟아져 나오는 보물단지"] },
+      { word: "구레나룻", sentence: "몇 년은 기른 ____이 인상적이었다.", meanings: ["양 귀밑에서 턱 부근까지 잇따라 난 수염"] },
+      { word: "길라잡이", sentence: "탐험대는 노련한 ____를 구했다.", meanings: ["1. 앞에서 길을 이끄는 사람이나 사물", "2. 앞으로의 방향과 지침을 비유하는 말"] },
+      { word: "눈엣가시", sentence: "그 상사는 ____ 같았다.", meanings: ["꼴도 보기 싫을 정도로 몹시 미워 눈에 거슬리는 사람"] },
+      { word: "더부살이", sentence: "친구 집에서 ____를 하며 지냈다.", meanings: ["1. 남에게 얹혀사는 것", "2. 남의 집에 묵으며 일을 해 주고 삯을 받는 일"] },
+      { word: "아름드리", sentence: "동네 어귀엔 ____ 느티나무가 있었다.", meanings: ["둘레가 한 아름이 넘는 것을 나타내는 말"] },
+      { word: "가쁘다", sentence: "그는 숨을 ____게 몰아쉬었다.", meanings: ["1. 숨이 몹시 차다", "2. 힘에 겹다"] },
+      { word: "미주알고주알", sentence: "언니는 ____ 캐물었다.", meanings: ["아주 소소한 일까지 속속들이"] },
+      { word: "살포시", sentence: "볼에 ____ 보조개가 패였다.", meanings: ["1. 포근하게 살며시", "2. 드러나지 않게 살며시"] },
+      { word: "시나브로", sentence: "낙엽이 ____ 쌓이고 있었다.", meanings: ["모르는 사이에 조금씩 조금씩"] },
+      { word: "엉겁결", sentence: "____에 약속을 해버렸다.", meanings: ["미처 생각하지 못하거나 뜻하지 아니한 순간"] },
+      { word: "게걸스럽다", sentence: "닥치는 대로 ____게 먹었다.", meanings: ["몹시 먹고 싶거나 하고 싶은 욕심에 사로잡힌 듯하다"] },
+      { word: "겸연쩍다", sentence: "그를 마주하기가 ____.", meanings: ["쑥스럽거나 미안하여 어색하다"] },
+      { word: "굼뜨다", sentence: "그렇게 ____서야 일이 되겠냐?", meanings: ["지켜보기 답답할 정도로 동작이나 일의 진행이 느리다"] },
+      { word: "껄끄럽다", sentence: "대화조차 ____게 느껴진다.", meanings: ["1. 꺼칠한 느낌이 있다", "2. 원만치 못하고 거북한 데가 있다"] },
+      { word: "매몰차다", sentence: "그는 ____게 퇴짜를 놓았다.", meanings: ["인정 없싱 몹시 차갑고 쌀쌀맞다"] },
+      { word: "상큼하다", sentence: "모시옷을 입으면 ____ 좋다.", meanings: ["1. 맛이나 냄새가 향기롭고 시원하다", "2. 보기에 시원스럽다"] },
+      { word: "새큼하다", sentence: "____ 사과 맛이 감돈다.", meanings: ["맛이나 냄새 따위가 맛깔스럽게 조금 시다"] },
+      { word: "서슴없다", sentence: "그의 태도는 항상 ____다.", meanings: ["말이나 해동에 주저함이나 망설임이 없다"] },
+      { word: "선선하다", sentence: "아침 공기가 ____해졌다.", meanings: ["1. 시원한 느낌이 들 정도로 서늘하다", "2. 태도에 주저함이 없다"] },
+      { word: "섣부르다", sentence: "____게 행동하지 마라.", meanings: ["솜씨가 서투르고 어설프다"] },
+      { word: "생때같다", sentence: "____ 사람을 잃었다.", meanings: ["1. 아무 탈 없이 멀쩡하다", "2. 공을 많이 들여 매우 소중하다"] },
+      { word: "생뚱맞다", sentence: "일부러 ____은 얘기를 했다.", meanings: ["말이나 행동이 상황에 맞지 않고 엉뚱한 데가 있다"] },
+      { word: "속절없다", sentence: "____는 날을 보낼 뿐이었다.", meanings: ["단념하는 것 외에는 마땅한 방법이 없다"] },
+      { word: "수더분하다", sentence: "그는 ____한 성격이다.", meanings: ["성질이 까다롭지 않고 순하고 무던하다"] },
+      { word: "스산하다", sentence: "비와 바람이 불어와 ____했다.", meanings: ["1. 몹시 어수선하고 쓸쓸하다", "2. 날이 흐리고 으스스하다"] },
+      { word: "애달프다", sentence: "____ 마음이야 오죽하랴.", meanings: ["1. 마음이 쓰리거나 몹시 안타깝다", "2. 애처롭고 쓸쓸하다"] },
+      { word: "어쭙잖다", sentence: "____게 노름은 하지 마라.", meanings: ["1. 비웃음을 살 만큼 분수에 넘치는 언행을 한다", "2. 어설프다 또는 보잘것없다"] },
+      { word: "올곧다", sentence: "한길만 ____게 걸어왔다.", meanings: ["1. 정신 상태나 마음이 올바르고 곧다", "2. 줄이 반듯하다"] },
+      { word: "옹골지다", sentence: "내겐 ____ 보이는 책이다.", meanings: ["속이 꽉 차 있어서 실속이 있다"] },
+      { word: "을씨년스럽다", sentence: "날씨가 ____다.", meanings: ["1. 날씨나 분위기가 쓸쓸한 듯하다", "2. 살림이 궁핌해 보이다"] },
+      { word: "주책없다", sentence: "그는 참 ____구나.", meanings: ["일관성없이 이랬다저랬다 하여 몹시 실없다"] },
+      { word: "쾨쾨하다", sentence: "방 안은 ____ 냄새가 났다.", meanings: ["상하고 찌들어 비위에 거슬릴 정도로 냄새가 고리다"] },
+      { word: "터무니없다", sentence: "그 말은 ____다.", meanings: ["허황하여 전혀 근거가 없다"] },
+      { word: "투박하다", sentence: "조금 전 ____한 사투리를 접었다.", meanings: ["1. 생김새가 볼품없고 세련되지 못하다", "2. 언행이 거칠다"] },
+      { word: "하릴없다", sentence: "그는 ____는 거지였다.", meanings: ["1. 달리 어쩔 도리가 없다", "2. 조금도 틀림이 없다"] }
+    ];
+
+    const items2 = [
+      { word: "곧추", sentence: "팔을 ____ 뻗어서 크게 돌려 봐라.", meanings: ["굽히거나 구부리지 않고 곧게"] },
+      { word: "내처", sentence: "해가 진 뒤에도 ____ 길을 걸어서 초경이 지난 뒤에 천왕동이의 처가에를 들어왔다.", meanings: ["1. 어떤 일 끝에 더 나아가", "2. 줄곧 한결같이"] },
+      { word: "늦추", sentence: "정한 때보다 ____ 오다.", meanings: ["1. 때가 좀 늦게", "2. 끈 따위를 맬 때 느슨하게"] },
+      { word: "일쑤", sentence: "고단한 새벽잠을 깨웠다가 나는 ____.", meanings: ["드물지 않게 흔히"] },
+      { word: "짜장", sentence: "미술이라는 일이 ____ 가난하게만 느껴지는 사무치는 울림이 있었다.", meanings: ["과연 정말로"] },
+      { word: "고대", sentence: "희미한 달빛 밑이지만 ____ 아내란 것을 알 수가 있었다.", meanings: ["1. 이제 막", "2. 바로 곧"] },
+      { word: "곰곰", sentence: "____ 생각해 보니, 그 말도 맞는 것 같다.", meanings: ["여러모로 깊이 생각하는 모양"] },
+      { word: "여북", sentence: "아, ____ 답답했으면 내가 이러겠어?", meanings: ["'얼마나', '오죽'의 뜻으로, 정도가 매우 심하거나 상황이 좋지 않을 때 쓰는 말"] },
+      { word: "적이", sentence: "____ 안심이 되는 한편 더욱 더 착잡해지기도 하는 듯한 두 개의 얼굴이 수시로 변덕을 부리며 있었다.", meanings: ["꽤 어지간한 정도로"] },
+      { word: "짐짓", sentence: "그것이 사랑에서 즐겨 찾는 국거리인 줄 번연히 알면서도 ____ 그렇게 묻는 거였다.", meanings: ["마음은 그렇지 않으면서 일부러"] },
+      { word: "되우", sentence: "누나는 이 말에 ____ 놀라며 눈을 말똥말똥 떴다.", meanings: ["매우, 몹시"] },
+      { word: "무릇", sentence: "부모가 물려주는 거만의 유산은 ____ 불행을 낳기 쉽다.", meanings: ["대체적으로 보아"] },
+      { word: "섬뻑", sentence: "혹시 내가 말을 너무 까다롭게 내기 때문에 ____ 대답이 안 나왔거나 그랬겠지요.", meanings: ["어떤 일이 행해진 뒤 곧바로"] },
+      { word: "얼추", sentence: "일이 ____ 끝나 가는 것 같군.", meanings: ["1. 어지간한 정도로 대충", "2. 어떤 기준에 거의 가깝게"] },
+      { word: "좀체", sentence: "그는 ____ 입을 열지 않는 성격이다.", meanings: ["여간해서, 쉽사리"] },
+      { word: "길래", sentence: "계양산에 가서 ____ 계실 터인가요?", meanings: ["오래도록 길게"] },
+      { word: "노상", sentence: "김 장자는 자나 깨나 ____ 그 아들로 하여 은근히 걱정 중이겠다.", meanings: ["늘 같은 모양으로"] },
+      { word: "사뭇", sentence: "그의 기분은 아까 오전과는 ____ 달라 보였다.", meanings: ["1. 거리낌 없이 마구", "2. 전혀 딴판으로", "3. 사무칠 정도로 몹시", "4. 줄곧"] },
+      { word: "자못", sentence: "마을 친척들도 명식의 경솔한 언동이 ____ 불쾌한 모양이었다.", meanings: ["생각보다 훨씬 더"] },
+      { word: "잼처", sentence: "어해가 어리둥절하고 미처 대답 못하는 것을 보고 그 여자는 ____ 묻는다.", meanings: ["어떤 일에 바로 뒤이어 거듭"] },
+      { word: "객쩍다", sentence: "몇 번 설명하였으나 그는 종시 ____ 소리로밖에 안 듣는 모양이었다.", meanings: ["언행이나 생각이 쓸데없고 싱겁다"] },
+      { word: "발자하다", sentence: "____ 날뛰면 될 일도 안 된다.", meanings: ["성미가 급하다. 또는 꺼리거나 주저함이 없다"] },
+      { word: "살핏하다", sentence: "모시는 면보다 ____.", meanings: ["짜거나 엮은 것이 다소 듬성듬성하다"] },
+      { word: "알싸하다", sentence: "먼지가 자꾸자꾸 새어 나왔다. 그만 콧구멍이 ____.", meanings: ["매운 기운 때문에 콧속이나 혀끝이 알알하다"] },
+      { word: "해사하다", sentence: "그 여자는 눈이 크고 얼굴이 ____ 것이 귀염성 있고 순진하게 생겼다.", meanings: ["1. 얼굴이 희고 곱다랗다", "2. 표정이나 웃음소리가 맑고 깨끗하다", "3. 옷차림이나 자태가 말끔하고 깨끗하다"] },
+      { word: "거나하다", sentence: "이 생원은 약주가 ____ 김에 횡설수설 되는대로 지껄이고 있을 뿐인지도 몰랐다.", meanings: ["정신이 조금 흐릿할 정도로 술에 취했다"] },
+      { word: "괄괄하다", sentence: "성미가 ____ 입심이 좋기 때문에 양반의 글방에를 다닐 때도 누구한테나 결코 만만하게는 보이지 않았다.", meanings: ["성격이 세고 급하다"] },
+      { word: "애잔하다", sentence: "대불이는 마음속으로 '형님도 벌써 늙었구나'하고 생각하면서 ____ 눈빛으로 마주 보았다.", meanings: ["1. 몹시 가냘프고 약하다", "2. 애틋하고 애처롭다"] },
+      { word: "얍삽하다", sentence: "____ 속임수로 사람을 농락하지 마라.", meanings: ["얕은 꾀를 쓰며 이익만 챙기다"] },
+      { word: "음전하다", sentence: "금개의 말하는 태도는 그대로 ____ 순박했다.", meanings: ["언행이 곱고 우아하다. 또는 얌전하고 점잖다"] },
+      { word: "데데하다", sentence: "그렇게 ____ 남자를 얻다 써먹어.", meanings: ["몹시 변변치 못하여 보잘것없다"] },
+      { word: "머쓱하다", sentence: "사내가 물러가자 나는 오히려 ____ 기분이 들었다.", meanings: ["1. 어울리지 않게 키가 크다", "2. 무안을 당해 어색하고 열없다"] },
+      { word: "솔깃하다", sentence: "아내의 제안에 귀가 ____.", meanings: ["그럴듯하게 들려 마음이 동하다"] },
+      { word: "추레하다", sentence: "달수의 그런 ____ 꼴을 본 사람들은 경멸에 앞서 동정을 보냈다.", meanings: ["1. 겉모양이 깨끗하지 못하고 생기가 없다", "2. 태도 따위가 하찮고 고상하지 못하다"] },
+      { word: "곱살스럽다", sentence: "그녀의 목소리는 ____.", meanings: ["얼굴 따위가 얌전하고 고와 보이다"] },
+      { word: "데퉁스럽다", sentence: "무엇이 불만인지 내 질문에 그는 계속 ____ 대답했다.", meanings: ["언행이 거칠고 엉뚱하며 미련스러운 데가 있다"] },
+      { word: "든적스럽다", sentence: "두 어른께서 날 홀대하고 수치스럽고 ____ 여기신다 한들 딴 도리가 없습니다.", meanings: ["행동에 치사하고 더러운 데가 있다"] },
+      { word: "새삼스럽다", sentence: "저물어가는 강산 속에 아득하게 뻗힌 이 두 줄의 길이 ____ 식이의 마음을 흔들었다.", meanings: ["1. 이미 알고 있는 일인데도 새로운 데가 있다", "2. 하지 않던 일을 이제 와서 하는 것이 보기에 두드러진 데가 있다"] },
+      { word: "영절스럽다", sentence: "그 화가는 도시의 전경을 ____ 묘사하였다.", meanings: ["보기에 아주 그럴듯하다"] },
+      { word: "갸웃하다", sentence: "그녀는 한패를 돌아다보면서 고개를 ____.", meanings: ["고개나 몸을 한쪽으로 비스듬히 기울이다"] },
+      { word: "도두보다", sentence: "제 것이면 ____ 남의 것은 깔보려 하는 것이 인간의 숙명적인 성격인가 보다.", meanings: ["실제보다 좋게 보다"] },
+      { word: "바루다", sentence: "잘못된 것을 ____.", meanings: ["구부러지거나 비뚤어지지 않도록 바르게 하다"] },
+      { word: "안절부절못하다", sentence: "나의 죽음이 이렇게 구체적으로 다가올 때 나는 ____ 하면서......", meanings: ["마음이 초조하고 불안해 어찌할 줄 모르다"] },
+      { word: "조아리다", sentence: "낮은 테이블을 사이에 두고 등을 구부리고 머리를 ____ 한 무리의 사람들은......", meanings: ["이마가 바닥에 닿을 정도로 계속해서 숙이다"] },
+      { word: "가무리다", sentence: "은근히 도망갈 포서로 수비대에 도로 내맡겨야 할 암호를 돌려보내지 않고 그대로 ____ 버렸다.", meanings: ["1. 남몰래 혼자 차지하거나 흔적도 없이 먹어 버리다", "2. 남이 못 보게 숨기다"] },
+      { word: "곱씹다", sentence: "그는 딸의 편지 구절을 ____.", meanings: ["1. 계속해서 씹다", "2. 말이나 생각 따위를 곰곰이 되풀이하다"] },
+      { word: "능갈치다", sentence: "주인이 짐짓 놀라는 척하며 ____ 소리가 들려왔다.", meanings: ["1. 교모하게 거짓말로 잘 둘러대다", "2. 매우 능청스럽다"] },
+      { word: "무지르다", sentence: "바깥주인이 안주인의 말 나오는 것을 ____ 핀잔을 준다.", meanings: ["1. 한쪽 부분을 잘라 내다", "2. 말을 중간에서 끊다", "3. 가로질러 길을 가다"] },
+      { word: "욱대기다", sentence: "남을 ____ 빼앗아 먹을 줄도 모르는 것이 거지지요.", meanings: ["1. 무력으로 윽박질러 위협하다", "2. 억지를 부려 제 맘대로 하다"] },
+      { word: "갈마들다", sentence: "기쁨과 슬픔이 ____ 인생.", meanings: ["1. 둘이서 번갈아 나타나다"] },
+      { word: "겯고틀다", sentence: "우승을 놓고 둘이서 ____.", meanings: ["서로지지 않으려고 버티며 싸우다"] },
+      { word: "나부끼다", sentence: "눈발이 ____ 겨울철이면 꿩과 산비둘기가 유난히 자주 내리던 자리였다.", meanings: ["가벼운 물체가 바람을 받아 가볍게 흔들리다"] },
+      { word: "마무르다", sentence: "갈 데까지 가는 동안 ____ 두어야 할 마음의 매듭을 혼자서 소리 없이 풀자면......", meanings: ["상황이나 일을 끝맺다"] },
+      { word: "버르집다", sentence: "옛일을 ____ 마라.", meanings: ["1. 파헤쳐서 크게 벌려 놓다", "2. 감춘 것을 끄집어내다", "3. 작은 일을 크게 부풀려 떠벌리다"] },
+      { word: "감돌다", sentence: "팽팽한 전운이 ____.", meanings: ["1. 주위를 여러 번 빙빙 돌다", "2. 어떤 냄새나 기운이 가득 차다", "3. 생각 따위가 머릿속에서 아른거리다"] },
+      { word: "낫잡다", sentence: "하객들이 더 많이 올 수 있으니 음식을 좀 ____ 마련해라.", meanings: ["금액, 나이, 수효 따위를 계산할 때 조금 넉넉하게 치다"] },
+      { word: "내박치다", sentence: "명자는 밥 먹던 수저를 ____ 놓으면서, 한 무릎 어편으로 다가앉는다.", meanings: ["힘껏 집어 던지다"] },
+      { word: "되뇌다", sentence: "소년은 혼잣속으로, 소녀가 이사를 간다는 말을 수없이 ____ 보았다.", meanings: ["같은 말을 되풀이하여 말하다"] },
+      { word: "들쓰다", sentence: "그때까지도 남편은 이불을 ____ 앉아서 쿨룩쿨룩 어깨를 들먹거리며......", meanings: ["1. 이불이나 옷 따위를 온 몸에 덮어쓰다", "2. 물, 먼지 따위를 흠뻑 뒤집어 쓰다"] },
+      { word: "궁싯거리다", sentence: "모두가 잠이 들었는데 낮잠을 늘어지게 잔 탓인지 나만이 말똥한 정신으로 ____.", meanings: ["1. 잠이 쉽게 들지 않아 몸을 이리저리 뒤척이다", "2. 어찌할 바를 몰라 이리저리 머뭇거리다"] },
+      { word: "나부대다", sentence: "흰 나비 한 마리가 보리 위로 옮겨 가서 몹시 ____.", meanings: ["가만히 있지 못하고 정신없이 촐랑거리다"] },
+      { word: "니글거리다", sentence: "속이 ____.", meanings: ["소화가 잘 안되어 속이 자꾸 울렁거리다"] },
+      { word: "벋나다", sentence: "어른들은 청소년들이 ____ 않도록 잘 이끌어야 할 의무가 있다.", meanings: ["1. 못된 길로 나아가다", "2. 끝이 바깥쪽으로 나다"] },
+      { word: "벼르다", sentence: "오랫동안 마음속에서만 ____ 일을 오늘에서야말로 해치울 작정인 것이다.", meanings: ["무엇을 위해 단단히 준비를 하고 기회를 엿보다"] },
+      { word: "더치다", sentence: "비를 맞아서 감기가 ____.", meanings: ["다 낫거나 나아가던 병세가 악화되다"] },
+      { word: "사무치다", sentence: "전날의 그를 생각하고 오늘의 그를 보니 적이 감개가 ____어 밥숟가락을 멈추고 냉수만 거듭 마셨다.", meanings: ["속까지 깊이 스며들다"] },
+      { word: "앵돌아지다", sentence: "그러다가 그 넋두리가 끝날 겨를도 없이 급작스레 ____ 시늉을......", meanings: ["1. 화가 나서 토라지다", "2. 홱 틀려 돌아가다"] },
+      { word: "이울다", sentence: "그들은 보름을 지나 ____ 시작하는 창백한 달이 토함산 마루에 얼굴을 내밀 무렵에 집에 돌아왔다.", meanings: ["1. 꽃이나 잎이 시들다", "2. 점점 쇠약해지다", "3. 해나 달의 빛이 약해지거나 스러지다"] },
+      { word: "왜장치다", sentence: "그러면 결국 준비한다는 것이 되레 날 잡아가라고 ____ 꼴이 되지 않겠어요?", meanings: ["별 이유 없이 큰 소리로 마구 떠들다"] },
+      { word: "끄르다", sentence: "오빠는 혁대를 ____ 고양이의 목에 감고 그 끝을 나뭇가지에 매었다.", meanings: ["1. 묶은 것이나 맨 것을 풀다", "2. 잠긴 것을 풀어 열다"] },
+      { word: "뇌까리다", sentence: "그러니 어쩌란 말이냐, 명준은 속으로 ____ 울컥 화가 치민다.", meanings: ["1. 마구 지껄이다", "2. 불쾌하다는 듯이 혼자 거듭 말하다"] },
+      { word: "다잡다", sentence: "진영은 이유 없이 자기를 ____ 보았다.", meanings: ["1. 무엇을 단단히 잡다", "2. 엄격히 통제하다", "3. 마음을 바로잡다"] },
+      { word: "마름하다", sentence: "어머니는 저고리를 만들기 위해 조심스럽게 비단을 ____ 시작하셨다.", meanings: ["천, 목재 따위를 치수에 맞게끔 재거나 자르다"] },
+      { word: "삭이다", sentence: "시계가 각침을 ____ 소리와 주전자에서 물 끓는 소리만 요란히 들린다.", meanings: ["돈, 시간, 물건 따위를 소비하다"] },
+      { word: "굽실하다", sentence: "그녀는 절을 한 번 ____ 가던 길을 갔다.", meanings: ["1. 고개나 허리를 가볍게 구부렸다 펴다", "2. 비굴하게 행동하다"] },
+      { word: "시부렁거리다", sentence: "그는 연신 욕설을 ____.", meanings: ["쓸데없는 말을 자꾸 지껄이다"] },
+      { word: "알겨먹다", sentence: "먹을 걸 타 내게 한 다음 조카 녀석이 얻은 걸 다시 ____ 수법이었다.", meanings: ["남의 재물 따위를 좀스러운 꾀로 가로채다"] },
+      { word: "얼버무리다", sentence: "바른대로 말해. 그렇게 ____ 말고.", meanings: ["1. 언행을 불분명하게 대충 하다", "2. 여러 가지를 대충 뒤섞다"] },
+      { word: "재우치다", sentence: "회사에 늦을까 봐 걸음을 ____.", meanings: ["빨리 몰아치거나 재촉하다"] },
+      { word: "매몰차다", sentence: "____게 거절했다.", meanings: ["인정이나 싹싹한 태도가 없어서 매우 쌀쌀맞다"] }
+    ];
+
+    const items3 = [
+      { word: "강단", sentence: "깡패들에게 맞선 이야기는 그의 ____을 보여 주는 일화다.", meanings: ["굳세고 꿋꿋하게 버티어 내는 힘"] },
+      { word: "격의", sentence: "소탈한 성격이라 부하들과 ____없는 술자리를 자주 가졌다.", meanings: ["서로 터놓지 않는 속마음"] },
+      { word: "구가", sentence: "그 선수는 요즘 최고의 전성기를 ____하고 있다.", meanings: ["행복하고 기쁜 마음을 거리낌 없이 나타냄"] },
+      { word: "굴지", sentence: "국내 ____의 건설사들도 감히 엄두를 내지 못하는 규모였다.", meanings: ["수많은 가운데서 손가락을 꼽아 셀 만큼 아주 뛰어남"] },
+      { word: "기치", sentence: "세계 경영의 ____아래 전 세계로 사업을 확장해 나갔다.", meanings: ["어떤 목적을 위한, 분명한 태도나 입장"] },
+      { word: "기탄", sentence: "평소에 갖고 있던 불만을 지금부터 ____없이 말해 보아라.", meanings: ["어렵게 여겨 꺼림"] },
+      { word: "나태", sentence: "그 소식은 ____에 빠져 있는 나에게 경종을 울렸다.", meanings: ["행동이나 성격이 게으름"] },
+      { word: "눌변", sentence: "때로는 ____이 달변보다 더 효과적이기도 하다.", meanings: ["더듬거리는 서툰 말솜씨"] },
+      { word: "단장", sentence: "나의 어린 시절은 ____의 아픔으로 얼룩져 있었다.", meanings: ["몹시 슬퍼서 창자가 끊어지는 듯함"] },
+      { word: "도탄", sentence: "나라가 전쟁에 휩싸이면 백성은 또다시 ____에 빠질 것이다.", meanings: ["곤궁하여 고통스러운 지경"] },
+      { word: "무구", sentence: "소나기 속에서 사랑을 키워 나갔던 저 ____ 소년, 소녀.", meanings: ["때가 묻지 않고 맑고 깨끗함"] },
+      { word: "발호", sentence: "악의 무리들이 ____하지 않도록 늘 경계하자.", meanings: ["권력을 제멋대로 부리며 함부로 날뜀"] },
+      { word: "방만", sentence: "주먹구구식의 ____ 경영으로 자본금을 다 까먹었다.", meanings: ["제멋대로 풀어져 있음"] },
+      { word: "부심", sentence: "기업들은 훌륭한 인재 확보를 위해 늘 ____한다.", meanings: ["해결 방안을 생각해 내느라고 몹시 애씀"] },
+      { word: "비호", sentence: "정권의 ____ 아래 온갖 불법과 탈법을 저질렀다.", meanings: ["편을 들어 감싸 줌"] },
+      { word: "사숙", sentence: "참고할 만한 책도 거의 없었고, ____ 작가 역시 전무했다.", meanings: ["직접 가르침을 받지는 않았으나 혼자 본받음"] },
+      { word: "생경", sentence: "어린 시절을 시골에서 보낸 터라 서울 생활이 ____했다.", meanings: ["1. 익숙하지 않아 어색함", "2. 글의 표현이 어설픔"] },
+      { word: "신산", sentence: "작품 속의 유년은 행복했지만 실제 자신의 삶은 ____했다.", meanings: ["세상살이가 힘들고 고생스러움"] },
+      { word: "심회", sentence: "자식을 전쟁터로 보내야 했던 그의 ____는 어땠을까?", meanings: ["마음속으로 품고 있는 생각이나 느낌"] },
+      { word: "어눌", sentence: "아이는 몸집도 왜소했고 또래들에 비해 말도 ____했다.", meanings: ["말을 더듬거림"] },
+      { word: "야료", sentence: "나를 떨어뜨리기 위해 누가 ____을 부린 것이 틀림없다.", meanings: ["이유 없이 트집을 잡고 함부로 떠들어 댐"] },
+      { word: "울화", sentence: "하고 싶은 말을 참고 있자니 ____이 치밀었다.", meanings: ["마음속이 답답하여 일어나는 화"] },
+      { word: "전횡", sentence: "독재 정권은 무력을 앞세워 온갖 ____을 휘둘렀다.", meanings: ["권세를 혼자 쥐고 제 마음대로 함"] },
+      { word: "조예", sentence: "모조품을 찾아낼 정도로 골동품에 대한 ____이 깊다.", meanings: ["어떤 분야에 대한 지식이나 경험이 깊은 경지에 이른 정도"] },
+      { word: "중상", sentence: "조정에서는 차츰 그를 ____하는 사람이 생기기 시작했다.", meanings: ["근거 없는 말로 남을 헐뜯음"] },
+      { word: "편달", sentence: "신임 집행부가 잘할 수 있도록 많은 지도 ____을 부탁드립니다.", meanings: ["경계하고 격려함"] },
+      { word: "편벽", sentence: "____되지 않고 균형 잡힌 시선으로 세상을 바라보아라.", meanings: ["한쪽으로 치우쳐 있음"] },
+      { word: "험구", sentence: "믿었던 친구가 나를 동네방네 ____하고 다녔다니!", meanings: ["남의 흠을 들추어 헐뜯음"] },
+      { word: "협잡", sentence: "유권자를 돈으로 매수하는 ____으로 선거에서 승리했다.", meanings: ["옳지 않은 방법으로 남을 속임"] },
+      { word: "혜안", sentence: "미래를 내다볼 수 있는 ____과 식견을 갖추도록 해라.", meanings: ["사물을 꿰뚫어 보는 안목"] },
+      { word: "각광", sentence: "이제는 선글라스가 패션 제품으로 새롭게 ____받고 있다.", meanings: ["사람들의 관심과 주목"] },
+      { word: "개가", sentence: "입문한 지 1년 만에 우승을 따내는 ____을 올렸다.", meanings: ["이기거나 큰 성과가 있을 때의 환성"] },
+      { word: "갹출", sentence: "기금 1조 원가량을 10대 기업에서 ____ 예정이다.", meanings: ["같은 목적을 위해 여럿이 조금씩 돈을 냄"] },
+      { word: "고루", sentence: "____한 안목으로 낡은 질서를 답습하는 것은 옳지 못하다.", meanings: ["낡은 생각에 젖어 고집이 세고 생각이 좁음"] },
+      { word: "관철", sentence: "어떤 일이 있더라도 자신의 의지를 ____할 수 있도록 해라.", meanings: ["어려움을 뚫고 나아가 목적을 기어이 이룸"] },
+      { word: "규합", sentence: "뜻을 같이하는 동맹국들을 유엔이라는 이름으로 ____했다.", meanings: ["일정한 목적 아래 사람을 끌어 모음"] },
+      { word: "나포", sentence: "적함 33척 중, 19척을 격침시키거나 ____했다.", meanings: ["영해를 침범한 외국 선박을 붙잡음"] },
+      { word: "난맥", sentence: "고질적인 문제점이던 지휘 체계의 ____이 개선되었다.", meanings: ["이리저리 흩어져 질서가 없는 상태"] },
+      { word: "농성", sentence: "교수의 사퇴를 요구하며, 학생회는 무기한 ____에 들어갔다.", meanings: ["어떤 목적을 위하여 한자리를 떠나지 않고 시위함"] },
+      { word: "도취", sentence: "승리의 기쁨에 ____되어 경비를 허술하게 선 게 탈이었다.", meanings: ["무엇에 흘려 취하다시피 됨"] },
+      { word: "맹아", sentence: "그 무렵부터 자본주의의 ____이 서서히 싹트기 시작했다.", meanings: ["1. 새로 트는 싹", "2. 사물의 시초"] },
+      { word: "묘연", sentence: "피의자는 이미 잠적을 해서 행방이 ____ 상태다.", meanings: ["1. 행방을 알 수 없음", "2. 기억이 가물거림"] },
+      { word: "방불", sentence: "불기둥이 치솟는 등 전쟁을 ____ 케 하는 상황이 전개됐다.", meanings: ["1. 비슷비슷함", "2. 무엇과 같다고 느끼게 함"] },
+      { word: "비등", sentence: "그 정책은 부작용만 양산했다는 비난 여론이 ____했다.", meanings: ["물이 끓듯 떠들썩하게 일어남"] },
+      { word: "비화", sentence: "논란을 불러일으키며 사회 문제로까지 ____ 사건이었다.", meanings: ["1. 튀어 박히는 불똥", "2. 다른 일에까지 영향을 미침"] },
+      { word: "상쇄", sentence: "수출 둔화를 ____ 만큼 내수 회복이 빠르게 진행되고 있다.", meanings: ["서로 영향을 미쳐 효과가 없어짐"] },
+      { word: "서광", sentence: "괴롭던 내 삶에도 드디어 ____이 비치기 시작하는 듯하다.", meanings: ["1. 새벽에 비치는 빛", "2. 희망적인 조짐"] },
+      { word: "실기", sentence: "상황을 제대로 파악하지 못해 ____하는 어리석음을 범했다.", meanings: ["좋은 기회를 잃거나 놓침"] },
+      { word: "알력", sentence: "기존 세력과 신진 세력의 ____이 심화되고 있다.", meanings: ["수레가 삐걱거리는 것처럼 의견이 맞지 않음"] },
+      { word: "여망", sentence: "국민의 ____에 부응할 수 있는 정책을 세워라.", meanings: ["사람이나 일에 대한 많은 사람들의 기대"] },
+      { word: "영어", sentence: "실정법을 위반했다는 이유로 8년간 ____의 몸이 되었다.", meanings: ["죄수를 가두어 놓는 곳. 감옥"] },
+      { word: "외람", sentence: "____된 말씀이지만, 선생님께는 그럴 자격이 없습니다.", meanings: ["언행이 분수에 지나침"] },
+      { word: "일천", sentence: "____한 이력에도 불구하고 신집행부의 대표로 발탁되었다.", meanings: ["시작한 지 얼마 되지 않음"] },
+      { word: "잠식", sentence: "대기업들이 중소기업의 영역까지도 ____ 들어갔다.", meanings: ["누에가 뽕잎을 먹듯이 남의 것을 조금씩 먹어 들어감"] },
+      { word: "차치", sentence: "진상 규명은 ____하고, 사과만이라도 확실하게 받아야 한다.", meanings: ["내버려두고 문제 삼지 아니함"] },
+      { word: "창궐", sentence: "그 지역에 또다시 전염병이 ____하고 있다는 소문이다.", meanings: ["좋지 못한 것이 걷잡을 수 없이 퍼짐"] },
+      { word: "파경", sentence: "그들은 만난 지 한 달 만에 결혼했지만 곧 ____에 이르렀다.", meanings: ["부부 사이가 나빠져 헤어지게 됨"] },
+      { word: "피력", sentence: "앞으로 사태가 악화될 우려가 있다는 의견을 ____했다.", meanings: ["마음속의 생각을 솔직하게 털어 놓음"] },
+      { word: "현학", sentence: "자신의 법률 지식을 과시하려는 ____적 취미라고 비판했다.", meanings: ["학식이 높음을 자랑하며 뽐냄"] },
+      { word: "힐책", sentence: "그는 끝없이 쏟아지는 비난과 ____에도 끄떡하지 않았다.", meanings: ["잘못을 가려서 꾸짖음"] }
+    ];
+
+    function updateScore() {
+      document.getElementById('score').textContent = `푼 문제 수: ${solvedProblems.size} / ${numProblems}`;
+    }
+
+    function shuffleArray(array) {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }
+
+    function resetQuiz() {
+      setLitSectionVisible(false);
+      setLitMode(null);
+      var ws = document.getElementById("wordSubHome");
+      var ls = document.getElementById("litSubHome");
+      if (ws) ws.style.display = "none";
+      if (ls) ls.style.display = "none";
+      document.body.style.background = BG_HOME;
+      document.getElementById("home").style.display = "block";
+      document.getElementById("listSelection").style.display = "none";
+      document.getElementById("wordStudySelection").style.display = "none";
+      document.getElementById("wordStudy").style.display = "none";
+      document.getElementById("selection").style.display = "none";
+      document.getElementById("quiz").style.display = "none";
+      document.getElementById("results").style.display = "none";
+      document.getElementById("resultIntro").style.display = "block";
+      document.getElementById("resultFinal").style.display = "none";
+      document.getElementById("controls").style.display = "none";
+      document.getElementById("wrongAnswersModal").style.display = "none";
+      document.getElementById("previewModal").style.display = "none";
+      document.getElementById("meaningModal").style.display = "none";
+      document.getElementById("score").style.display = "none";
+      document.getElementById('score').textContent = `푼 문제 수: 0 / 60`;
+      wrongQuestions = [];
+      userAnswers = [];
+      selectedItems = [];
+      lastQuizOptions = [];
+      finalScore = 0;
+      currentList = 1;
+      currentWordIndex = 0;
+      clearWordQuizSave();
+    }
+
+    function goToListSelection() {
+      setLitSectionVisible(false);
+      setLitMode(null);
+      document.getElementById("wordSubHome").style.display = "none";
+      document.getElementById("litSubHome").style.display = "none";
+      document.getElementById("home").style.display = "none";
+      document.body.style.background = BG_QUIZ_UI;
+      document.getElementById("listSelection").style.display = "block";
+    }
+
+    function goToWordStudy() {
+      setLitSectionVisible(false);
+      setLitMode(null);
+      document.getElementById("wordSubHome").style.display = "none";
+      document.getElementById("litSubHome").style.display = "none";
+      document.getElementById("home").style.display = "none";
+      document.body.style.background = BG_STUDY;
+      document.getElementById("wordStudySelection").style.display = "block";
+    }
+
+    function backToHome() {
+      setLitSectionVisible(false);
+      setLitMode(null);
+      document.getElementById("wordStudySelection").style.display = "none";
+      document.getElementById("litSubHome").style.display = "none";
+      document.getElementById("home").style.display = "none";
+      document.getElementById("wordSubHome").style.display = "block";
+      document.body.style.background = BG_HOME;
+    }
+
+    function goToQuizFromWordStudy() {
+      setLitSectionVisible(false);
+      setLitMode(null);
+      document.body.style.background = BG_QUIZ_UI;
+      document.getElementById("wordStudySelection").style.display = "none";
+      document.getElementById("listSelection").style.display = "block";
+    }
+
+    function backToHomeFromQuizSelection() {
+      setLitSectionVisible(false);
+      setLitMode(null);
+      document.getElementById("listSelection").style.display = "none";
+      document.getElementById("litSubHome").style.display = "none";
+      document.getElementById("home").style.display = "none";
+      document.getElementById("wordSubHome").style.display = "block";
+      document.body.style.background = BG_HOME;
+    }
+
+    let currentStudyList = 1;
+    let currentWordIndex = 0;
+    let studyWords = [];
+
+    function handleKeyPress(event) {
+      if (event.key === 'Enter') {
+        const currentMeanings = document.getElementById("currentMeanings");
+        if (currentMeanings.style.display === "none") {
+          // 뜻이 숨겨진 상태: 뜻 표시
+          showMeaning();
+        } else {
+          // 뜻이 표시된 상태: 다음 동작
+          if (currentWordIndex === studyWords.length - 1) {
+            // 마지막 단어: 리스트 선택으로 돌아가기
+            backToWordStudySelection();
+          } else {
+            // 일반 단어: 다음 단어로 이동
+            nextWord();
+          }
+        }
+      }
+    }
+
+    function startWordStudy(listNum) {
+      currentStudyList = listNum;
+      currentWordIndex = 0;
+      
+      const selectedItemsArray = listNum === 1 ? items : (listNum === 2 ? items2 : items3);
+      studyWords = [...selectedItemsArray];
+      
+      document.getElementById("wordStudySelection").style.display = "none";
+      document.getElementById("wordStudy").style.display = "block";
+      setLitSectionVisible(false);
+      setLitMode(null);
+
+      document.getElementById("wordStudyTitle").textContent = `단어 암기 - 리스트 ${listNum}`;
+      updateWordDisplay();
+      
+      // 엔터키 이벤트 리스너 추가
+      document.addEventListener('keydown', handleKeyPress);
+    }
+
+    function updateWordDisplay() {
+      const currentWord = studyWords[currentWordIndex];
+      document.getElementById("currentWord").textContent = currentWord.word;
+      document.getElementById("currentSentence").textContent = currentWord.sentence;
+      
+      const meaningsHtml = currentWord.meanings.map(meaning => `<div style="margin: 8px 0; padding: 8px; background: white; border-radius: 6px;">• ${meaning}</div>`).join('');
+      document.getElementById("currentMeanings").innerHTML = meaningsHtml;
+      
+      document.getElementById("wordStudyProgress").textContent = `${currentWordIndex + 1} / ${studyWords.length}`;
+      
+      // 기본 상태: 뜻 숨기기
+      document.getElementById("meaningSection").style.display = "block";
+      document.getElementById("currentMeanings").style.display = "none";
+      document.getElementById("showMeaningBtn").style.display = "block";
+      document.getElementById("showMeaningBtn").textContent = "뜻 보기";
+      
+      // 버튼 상태 업데이트
+      const nextBtn = document.getElementById("nextBtn");
+      if (currentWordIndex === studyWords.length - 1) {
+        // 마지막 단어: 완료 버튼으로 변경
+        nextBtn.textContent = "완료";
+        nextBtn.onclick = backToWordStudySelection;
+        nextBtn.disabled = false;
+        nextBtn.style.opacity = "1";
+        nextBtn.style.background = "linear-gradient(135deg, #4CAF50 0%, #45a049 100%)";
+      } else {
+        // 일반 단어: 다음 버튼
+        nextBtn.textContent = "다음";
+        nextBtn.onclick = nextWord;
+        nextBtn.disabled = false;
+        nextBtn.style.opacity = "1";
+        nextBtn.style.background = "linear-gradient(135deg, #3498db 0%, #2980b9 100%)";
+      }
+      
+      document.getElementById("prevBtn").disabled = currentWordIndex === 0;
+      document.getElementById("prevBtn").style.opacity = currentWordIndex === 0 ? "0.5" : "1";
+    }
+
+    function showMeaning() {
+      // 토글 기능: 현재 표시 상태에 따라 숨기거나 표시
+      const meaningSection = document.getElementById("meaningSection");
+      const currentMeanings = document.getElementById("currentMeanings");
+      
+      if (currentMeanings.style.display === "none" || currentMeanings.style.display === "") {
+        currentMeanings.style.display = "block";
+        document.getElementById("showMeaningBtn").textContent = "뜻 숨기기";
+      } else {
+        currentMeanings.style.display = "none";
+        document.getElementById("showMeaningBtn").textContent = "뜻 보기";
+      }
+    }
+
+    function nextWord() {
+      if (currentWordIndex < studyWords.length - 1) {
+        currentWordIndex++;
+        updateWordDisplay();
+      }
+    }
+
+    function previousWord() {
+      if (currentWordIndex > 0) {
+        currentWordIndex--;
+        updateWordDisplay();
+      }
+    }
+
+    function backToWordStudySelection() {
+      setLitSectionVisible(false);
+      setLitMode(null);
+      document.body.style.background = BG_STUDY;
+      document.getElementById("wordStudy").style.display = "none";
+      document.getElementById("wordStudySelection").style.display = "block";
+      currentWordIndex = 0;
+      
+      // 엔터키 이벤트 리스너 제거
+      document.removeEventListener('keydown', handleKeyPress);
+    }
+
+    function selectList(listNum) {
+      setLitSectionVisible(false);
+      setLitMode(null);
+      currentList = listNum;
+      document.getElementById("listSelection").style.display = "none";
+      document.getElementById("selection").style.display = "block";
+      
+      if (listNum === 1) {
+        document.getElementById("selectionTitle").textContent = "리스트 1 - 풀 문제 수를 선택하세요";
+        document.getElementById("buttonMax").textContent = "60문제";
+        document.getElementById("buttonMax").onclick = () => generateQuiz(60);
+      } else if (listNum === 2) {
+        document.getElementById("selectionTitle").textContent = "리스트 2 - 풀 문제 수를 선택하세요";
+        document.getElementById("buttonMax").textContent = "80문제";
+        document.getElementById("buttonMax").onclick = () => generateQuiz(80);
+      } else if (listNum === 3) {
+        document.getElementById("selectionTitle").textContent = "리스트 3 - 풀 문제 수를 선택하세요";
+        document.getElementById("buttonMax").textContent = "60문제";
+        document.getElementById("buttonMax").onclick = () => generateQuiz(60);
+      }
+    }
+
+    function backToListSelection() {
+      setLitSectionVisible(false);
+      setLitMode(null);
+      clearWordQuizSave();
+      document.body.style.background = BG_QUIZ_UI;
+      document.getElementById("selection").style.display = "none";
+      document.getElementById("listSelection").style.display = "block";
+      document.getElementById("score").style.display = "none";
+      document.getElementById("previewModal").style.display = "none";
+    }
+
+    function showWrongAnswers() {
+      if (wrongQuestions.length === 0) {
+        alert("틀린 단어가 없습니다!");
+        return;
+      }
+
+      document.querySelector("#wrongAnswersModal h2").textContent = "📝 틀린 단어 목록";
+      let html = "";
+      wrongQuestions.forEach((item, index) => {
+        html += `
+          <div style="margin-bottom: 25px; padding: 25px; border: none; border-radius: 12px; background: linear-gradient(135deg, #fff5f5 0%, #ffe0e0 100%); box-shadow: 0 2px 8px rgba(244,67,54,0.15); border-left: 5px solid #f44336;">
+            <h3 style="color: #f44336; margin-bottom: 15px; font-size: 1.2em;">❌ ${index + 1}. ${item.word}</h3>
+            <div style="background: white; padding: 12px 15px; border-radius: 8px; margin-bottom: 12px;">
+              <p style="margin: 0; color: #666;"><strong>문장:</strong> ${item.sentence}</p>
+            </div>
+        `;
+        html += `<div style="display: flex; flex-direction: column; gap: 8px;">`;
+        item.meanings.forEach(meaning => {
+          html += `<p style="margin: 0; padding: 8px 12px; background: white; border-radius: 6px; color: #333; font-size: 0.95em;">• ${meaning}</p>`;
+        });
+        html += `</div></div>`;
+      });
+
+      document.getElementById("wrongAnswersContent").innerHTML = html;
+      document.getElementById("wrongAnswersModal").style.display = "flex";
+    }
+
+    function closeWrongAnswers() {
+      document.getElementById("wrongAnswersModal").style.display = "none";
+    }
+
+    function showAllAnswers() {
+      document.querySelector("#wrongAnswersModal h2").textContent = "📝 전체 풀이 보기";
+      let html = "";
+      userAnswers.forEach((answer, index) => {
+        const status = answer.isCorrect ? "✅ 맞음" : "❌ 틀림";
+        const statusColor = answer.isCorrect ? "#4CAF50" : "#f44336";
+        html += `
+          <div style="margin-bottom: 25px; padding: 25px; border: none; border-radius: 12px; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h3 style="color: ${statusColor}; margin-bottom: 15px; font-size: 1.2em;">${index + 1}. ${status}</h3>
+            <div style="background: white; padding: 12px 15px; border-radius: 8px; margin-bottom: 12px;">
+              <p style="margin: 0; color: #666;"><strong>문장:</strong> ${answer.sentence}</p>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px;">
+              <p style="margin: 0; padding: 8px 12px; background: #e8f5e8; border-radius: 6px; color: #333;"><strong>선택한 답:</strong> ${answer.selectedWord}</p>
+              <p style="margin: 0; padding: 8px 12px; background: #fff3e0; border-radius: 6px; color: #333;"><strong>정답:</strong> ${answer.correctWord}</p>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <p style="margin: 0; font-weight: bold; color: #0ea5e9;">의미:</p>
+              ${answer.meanings.map(meaning => `<p style="margin: 0; padding: 8px 12px; background: white; border-radius: 6px; color: #333; font-size: 0.95em;">• ${meaning}</p>`).join('')}
+            </div>
+          </div>
+        `;
+      });
+
+      document.getElementById("wrongAnswersContent").innerHTML = html;
+      document.getElementById("wrongAnswersModal").style.display = "flex";
+    }
+
+    function showPreview(listNum) {
+      const selectedItemsArray = listNum === 1 ? items : (listNum === 2 ? items2 : items3);
+      const listName = `리스트 ${listNum}`;
+      
+      document.getElementById("previewTitle").textContent = `${listName} - 전체 단어 목록`;
+      
+      let html = "";
+      selectedItemsArray.forEach((item, index) => {
+        html += `
+          <div style="padding: 18px; border: none; border-radius: 10px; text-align: center; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: all 0.3s ease;">
+            <p style="margin: 8px 0; font-weight: bold; color: #0ea5e9; font-size: 1.1em;">${index + 1}. ${item.word}</p>
+          </div>
+        `;
+      });
+      
+      document.getElementById("previewContent").innerHTML = html;
+      document.getElementById("previewModal").style.display = "flex";
+    }
+
+    function closePreview() {
+      document.getElementById("previewModal").style.display = "none";
+    }
+
+    function showMeaningPopup(questionIndex) {
+      const item = selectedItems[questionIndex];
+      if (!item) return;
+
+      document.getElementById("meaningModalTitle").textContent = `\uB73B \uBCF4\uAE30`;
+      document.getElementById("meaningModalContent").innerHTML = item.meanings
+        .map(meaning => `<div style="padding: 12px 14px; background: #f5f7fa; border-radius: 10px; color: #333; line-height: 1.6;">\u2022 ${meaning}</div>`)
+        .join('');
+      document.getElementById("meaningModal").style.display = "flex";
+    }
+
+    function closeMeaningModal() {
+      document.getElementById("meaningModal").style.display = "none";
+    }
+
+    function showResults() {
+      clearWordQuizSave();
+      document.getElementById("quiz").style.display = "none";
+      document.getElementById("controls").style.display = "none";
+      document.getElementById("results").style.display = "block";
+      document.getElementById("resultIntro").style.display = "block";
+      document.getElementById("resultFinal").style.display = "none";
+      document.getElementById("wrongAnswersModal").style.display = "none";
+      document.getElementById("previewModal").style.display = "none";
+      
+      finalScore = Math.round((correctCount / numProblems) * 100);
+    }
+
+    function showFinalResults() {
+      const isPerfectScore = finalScore === 100;
+
+      document.getElementById("resultIntro").style.display = "none";
+      document.getElementById("resultFinal").style.display = "block";
+      document.getElementById("resultTitle").textContent = isPerfectScore
+        ? `\uD83C\uDF89 \uC751\uC2DC \uC644\uB8CC! \uD83C\uDF89`
+        : `\uC751\uC2DC \uC644\uB8CC!`;
+      document.getElementById("resultScore").textContent = `${finalScore}\uC810`;
+      document.getElementById("resultMessage").textContent = isPerfectScore
+        ? `\uCD95\uD558\uD569\uB2C8\uB2E4!`
+        : `\uD55C\uAD6D\uC778\uC774 \uC544\uB2D9\uB2C8\uB2E4..`;
+      document.getElementById("resultPercent").textContent = `\uC815\uB2F5 \uC218: ${correctCount} / ${numProblems}`;
+    }
+
+    function checkAnswer(questionIndex, selectedWord, isCorrect) {
+      if (solvedProblems.has(questionIndex)) return;
+
+      solvedProblems.add(questionIndex);
+      
+      // 사용자 답변 저장
+      const correctWord = selectedItems[questionIndex].word;
+      userAnswers.push({
+        questionIndex,
+        selectedWord,
+        isCorrect,
+        correctWord,
+        sentence: selectedItems[questionIndex].sentence,
+        meanings: selectedItems[questionIndex].meanings
+      });
+      
+      if (isCorrect) {
+        correctCount++;
+      } else {
+        wrongQuestions.push(selectedItems[questionIndex]);
+        const fb = document.getElementById("wq-feedback-" + questionIndex);
+        if (fb) fb.style.display = "block";
+      }
+      
+      // 버튼 처리: 선택한 답은 그대로, 다른 답들은 흐리게
+      const buttons = document.querySelectorAll(`[data-question="${questionIndex}"]`);
+      buttons.forEach(btn => {
+        if (btn.dataset.word === selectedWord) {
+          // 선택한 답: disabled, 배경색 변경
+          btn.disabled = true;
+          btn.style.background = '#0ea5e9';
+          btn.style.color = 'white';
+          btn.style.borderColor = '#0ea5e9';
+        } else {
+          // 다른 답: disabled, 흐리게
+          btn.disabled = true;
+          btn.style.opacity = '0.3';
+          btn.style.cursor = 'not-allowed';
+        }
+      });
+      
+      const titleElement = document.querySelector(`[data-title="${questionIndex}"]`);
+      if (titleElement) {
+        // 문장 끝에 노란색 "완료" 추가
+        titleElement.innerHTML += ' <span style="color: #ff9800; font-weight: bold;">완료</span>';
+      }
+      
+      updateScore();
+      saveWordQuizSave();
+
+      // 모든 문제를 풀었으면 결과 페이지 표시
+      if (solvedProblems.size === numProblems) {
+        setTimeout(showResults, 500);
+      }
+    }
+
+    function generateQuiz(n) {
+      setLitSectionVisible(false);
+      setLitMode(null);
+      clearWordQuizSave();
+      numProblems = n;
+      const quizDiv = document.getElementById("quiz");
+      quizDiv.innerHTML = "";
+      solvedProblems.clear();
+      wrongQuestions = [];
+      userAnswers = [];
+      correctCount = 0;
+      updateScore();
+
+      // UI 변경
+      document.getElementById("selection").style.display = "none";
+      document.getElementById("quiz").style.display = "block";
+      document.getElementById("controls").style.display = "block";
+      document.getElementById("score").style.display = "block";
+      
+      // score 업데이트
+      document.getElementById('score').textContent = `푼 문제 수: 0 / ${numProblems}`;
+      document.getElementById("listSelection").style.display = "none";
+
+      let html = "";
+      const selectedItemsArray = currentList === 1 ? items : (currentList === 2 ? items2 : items3);
+      const shuffledItems = shuffleArray(selectedItemsArray);
+      selectedItems = shuffledItems.slice(0, numProblems);
+
+      lastQuizOptions = [];
+      for (let i = 0; i < selectedItems.length; i++) {
+        const correct = selectedItems[i];
+
+        const options = new Set([correct.word]);
+        while (options.size < 5) {
+          const w = selectedItemsArray[Math.floor(Math.random() * selectedItemsArray.length)].word;
+          if (w !== correct.word) options.add(w);
+        }
+
+        const optionList = [...options].sort(() => Math.random() - 0.5);
+        lastQuizOptions[i] = optionList;
+        html += buildQuestionHtml(i, correct, optionList);
+      }
+
+      quizDiv.innerHTML = html;
+      saveWordQuizSave();
+    }
+
+    if (typeof window.LIT_MCQ_attachExtraPapers === "function") {
+      window.LIT_MCQ_attachExtraPapers();
+    }
+    (function initLitMcq() {
+      var sec = document.getElementById("litSection");
+      if (!sec) return;
+      sec.addEventListener("click", function (e) {
+        var li = e.target.closest(".lit-q-block .lit-choices li");
+        if (!li || !sec.contains(li)) return;
+        var block = li.closest(".lit-q-block");
+        if (!block || !sec.contains(block)) return;
+        if (li.classList.contains("lit-correct") || li.classList.contains("lit-wrong")) return;
+        block.querySelectorAll(".lit-choices li").forEach(function (x) {
+          x.classList.remove("lit-correct", "lit-wrong");
+        });
+        var ok = block.getAttribute("data-lit-ans");
+        var n = li.getAttribute("data-i");
+        if (n === ok) li.classList.add("lit-correct");
+        else {
+          li.classList.add("lit-wrong");
+          var right = block.querySelector('.lit-choices li[data-i="' + ok + '"]');
+          if (right) right.classList.add("lit-correct");
+          var detW = block.querySelector("details");
+          if (detW) detW.setAttribute("open", "");
+        }
+      });
+    })();
+    (function litMockIntroStatsInit() {
+      function fill(prefix, key) {
+        var o = {};
+        try {
+          o = JSON.parse(localStorage.getItem(key) || "{}") || {};
+        } catch (e) {
+          o = {};
+        }
+        var papers = o.papers || {};
+        for (var p = 1; p <= 5; p++) {
+          var el = document.getElementById(prefix + p);
+          if (!el) continue;
+          var rec = papers[String(p)];
+          if (!rec || !rec.attempts) el.textContent = "기록 없음";
+          else el.textContent = "응시 " + rec.attempts + "회 · 최고 " + rec.best + "/20 · 직전 " + rec.last + "/20";
+        }
+      }
+      fill("litMcqPoetryStat", "litMockPoetry_v5");
+      fill("litMcqNovelStat", "litMockNovel_v5");
+    })();
+
+    /** 회차 시작마다 4지선다 순서·정답 번호를 무작위로 섞는다(HTML·동적 생성 공통). */
+    function shuffleLitMcqPaperChoices(paperEl) {
+      if (!paperEl) return;
+      paperEl.querySelectorAll(".lit-q-block").forEach(function (block) {
+        var ul = block.querySelector("ul.lit-choices");
+        if (!ul) return;
+        var lis = Array.prototype.filter.call(ul.children, function (n) {
+          return n.tagName && n.tagName.toLowerCase() === "li";
+        });
+        if (lis.length !== 4) return;
+        var ok = parseInt(block.getAttribute("data-lit-ans"), 10);
+        if (ok < 1 || ok > 4) return;
+        lis.forEach(function (li) {
+          delete li.dataset.litCorrectHold;
+        });
+        var correctLi = lis[ok - 1];
+        if (!correctLi) return;
+        correctLi.dataset.litCorrectHold = "1";
+        for (var i = lis.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var tmp = lis[i];
+          lis[i] = lis[j];
+          lis[j] = tmp;
+        }
+        lis.forEach(function (li) {
+          ul.appendChild(li);
+        });
+        var ordered = Array.prototype.filter.call(ul.children, function (n) {
+          return n.tagName && n.tagName.toLowerCase() === "li";
+        });
+        var newOk = 1;
+        ordered.forEach(function (li, idx) {
+          li.setAttribute("data-i", String(idx + 1));
+          if (li.dataset.litCorrectHold === "1") newOk = idx + 1;
+        });
+        ordered.forEach(function (li) {
+          delete li.dataset.litCorrectHold;
+        });
+        block.setAttribute("data-lit-ans", String(newOk));
+      });
+    }
+
+    (function litMcqPoetryMockTest() {
+      var intro = document.getElementById("lit-mcq-poetry-intro");
+      var runner = document.getElementById("lit-mcq-poetry-runner");
+      var only = document.getElementById("lit-mcq-poetry-only");
+      if (!intro || !runner || !only) return;
+
+      var LS_KEY = "litMockPoetry_v5";
+      var activePaper = 1;
+      var btnPrev = document.getElementById("litMcqPoetryPrev");
+      var btnNext = document.getElementById("litMcqPoetryNext");
+      var btnQuit = document.getElementById("litMcqPoetryQuit");
+      var elCur = document.getElementById("litMcqPoetryCur");
+      var elTot = document.getElementById("litMcqPoetryTot");
+      var elScore = document.getElementById("litMcqPoetryScore");
+      var elPaperLabel = document.getElementById("litMcqPoetryPaperLabel");
+      var resultPanel = document.getElementById("litMcqPoetryResult");
+      var elResultNum = document.getElementById("litMcqPoetryResultNum");
+      var elResultTot = document.getElementById("litMcqPoetryResultTot");
+      var btnRetry = document.getElementById("litMcqPoetryRetry");
+      var btnBackIntro = document.getElementById("litMcqPoetryBackIntro");
+      var btnReset = document.getElementById("litMcqPoetryResetProgress");
+      var hud = runner.querySelector(".lit-mcq-poetry-hud");
+      var nav = runner.querySelector(".lit-mcq-poetry-nav");
+
+      function getActivePaperEl() {
+        return only.querySelector(".lit-mcq-paper:not([hidden])");
+      }
+
+      function setActivePaper(n) {
+        activePaper = n;
+        only.querySelectorAll(".lit-mcq-paper").forEach(function (p) {
+          p.hidden = p.getAttribute("data-lit-paper") !== String(n);
+        });
+        if (elPaperLabel) elPaperLabel.textContent = "제" + n + "회";
+      }
+
+      function getBlocks() {
+        var paper = getActivePaperEl();
+        if (!paper) return [];
+        return Array.prototype.filter.call(paper.children, function (el) {
+          return el.classList && el.classList.contains("lit-q-block");
+        });
+      }
+
+      var idx = 0;
+      var score = 0;
+      var total = 20;
+
+      function refreshIntroStats() {
+        var o = {};
+        try {
+          o = JSON.parse(localStorage.getItem(LS_KEY) || "{}") || {};
+        } catch (e) {
+          o = {};
+        }
+        var papers = o.papers || {};
+        for (var p = 1; p <= 5; p++) {
+          var el = document.getElementById("litMcqPoetryStat" + p);
+          if (!el) continue;
+          var rec = papers[String(p)];
+          if (!rec || !rec.attempts) el.textContent = "기록 없음";
+          else el.textContent = "응시 " + rec.attempts + "회 · 최고 " + rec.best + "/20 · 직전 " + rec.last + "/20";
+        }
+      }
+
+      function saveProgress() {
+        try {
+          var o = JSON.parse(localStorage.getItem(LS_KEY) || "{}");
+          if (!o || typeof o !== "object") o = {};
+          if (!o.papers) o.papers = {};
+          var pid = String(activePaper);
+          var prev = o.papers[pid] || { attempts: 0, best: 0, last: 0 };
+          prev.attempts = (prev.attempts || 0) + 1;
+          prev.last = score;
+          prev.best = Math.max(prev.best || 0, score);
+          o.papers[pid] = prev;
+          localStorage.setItem(LS_KEY, JSON.stringify(o));
+        } catch (e) {}
+        refreshIntroStats();
+      }
+
+      function isCurrentAnswered() {
+        var blocks = getBlocks();
+        if (!blocks[idx]) return false;
+        var lis = blocks[idx].querySelectorAll(".lit-choices li");
+        for (var i = 0; i < lis.length; i++) {
+          if (lis[i].classList.contains("lit-correct") || lis[i].classList.contains("lit-wrong")) return true;
+        }
+        return false;
+      }
+
+      function syncNav() {
+        var blocks = getBlocks();
+        total = blocks.length || 20;
+        if (elCur) elCur.textContent = String(idx + 1);
+        if (elTot) elTot.textContent = String(total);
+        if (elScore) elScore.textContent = String(score);
+        if (btnPrev) btnPrev.disabled = idx === 0;
+        if (!btnNext) return;
+        if (idx >= total - 1) {
+          if (isCurrentAnswered()) {
+            btnNext.disabled = false;
+            btnNext.textContent = "결과 보기";
+          } else {
+            btnNext.disabled = true;
+            btnNext.textContent = "다음 문항";
+          }
+        } else {
+          btnNext.textContent = "다음 문항";
+          btnNext.disabled = !isCurrentAnswered();
+        }
+      }
+
+      function showQuestion(i) {
+        var blocks = getBlocks();
+        total = blocks.length;
+        idx = Math.max(0, Math.min(i, total - 1));
+        blocks.forEach(function (b, j) {
+          b.style.display = j === idx ? "block" : "none";
+        });
+        syncNav();
+      }
+
+      function resetAllBlocksVisual() {
+        only.querySelectorAll(".lit-q-block").forEach(function (block) {
+          delete block.dataset.litMcqScored;
+          block.querySelectorAll(".lit-choices li").forEach(function (li) {
+            li.classList.remove("lit-correct", "lit-wrong");
+          });
+          var det = block.querySelector("details");
+          if (det) det.removeAttribute("open");
+          block.style.display = "none";
+        });
+      }
+
+      function enterRunner() {
+        if (activePaper > 1 && !only.querySelector('.lit-mcq-paper[data-lit-paper="' + activePaper + '"]')) {
+          activePaper = 1;
+          if (typeof alert !== "undefined") {
+            alert("제2~5회 문항을 불러오지 못했습니다. literature-mock-bank.js가 word-quiz.html과 같은 폴더에 있는지 확인하세요.");
+          }
+        }
+        setActivePaper(activePaper);
+        shuffleLitMcqPaperChoices(getActivePaperEl());
+        intro.style.display = "none";
+        runner.style.display = "block";
+        if (resultPanel) resultPanel.style.display = "none";
+        if (hud) hud.style.display = "flex";
+        only.style.display = "block";
+        if (nav) nav.style.display = "flex";
+        score = 0;
+        idx = 0;
+        resetAllBlocksVisual();
+        showQuestion(0);
+      }
+
+      function showIntroScreen() {
+        runner.style.display = "none";
+        intro.style.display = "block";
+        if (resultPanel) resultPanel.style.display = "none";
+        if (hud) hud.style.display = "flex";
+        if (nav) nav.style.display = "flex";
+        resetAllBlocksVisual();
+        refreshIntroStats();
+      }
+
+      function showResult() {
+        if (elResultNum) elResultNum.textContent = String(score);
+        if (elResultTot) elResultTot.textContent = String(total);
+        saveProgress();
+        if (resultPanel) resultPanel.style.display = "block";
+        if (hud) hud.style.display = "none";
+        only.style.display = "none";
+        if (nav) nav.style.display = "none";
+      }
+
+      intro.querySelectorAll("[data-lit-poetry-start]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          activePaper = parseInt(btn.getAttribute("data-lit-poetry-start"), 10) || 1;
+          enterRunner();
+        });
+      });
+      if (btnReset) {
+        btnReset.addEventListener("click", function () {
+          if (!confirm("현대시 제1~5회 모의고사 응시·최고점 기록을 모두 지울까요?")) return;
+          localStorage.removeItem(LS_KEY);
+          refreshIntroStats();
+        });
+      }
+      if (btnQuit) btnQuit.addEventListener("click", showIntroScreen);
+      if (btnRetry) btnRetry.addEventListener("click", enterRunner);
+      if (btnBackIntro) btnBackIntro.addEventListener("click", showIntroScreen);
+
+      if (btnPrev) {
+        btnPrev.addEventListener("click", function () {
+          if (idx > 0) showQuestion(idx - 1);
+        });
+      }
+      if (btnNext) {
+        btnNext.addEventListener("click", function () {
+          if (btnNext.disabled) return;
+          if (idx >= total - 1 && isCurrentAnswered()) {
+            showResult();
+            return;
+          }
+          if (idx < total - 1) showQuestion(idx + 1);
+        });
+      }
+
+      only.addEventListener(
+        "click",
+        function (e) {
+          var li = e.target.closest(".lit-choices li");
+          if (!li || runner.style.display === "none") return;
+          if (!only.contains(li)) return;
+          var block = li.closest(".lit-q-block");
+          if (!block || !only.contains(block)) return;
+          if (block.dataset.litMcqScored) {
+            setTimeout(syncNav, 0);
+            return;
+          }
+          block.dataset.litMcqScored = "1";
+          var ok = block.getAttribute("data-lit-ans");
+          if (li.getAttribute("data-i") === ok) score += 1;
+          else {
+            var detP = block.querySelector("details");
+            if (detP) detP.setAttribute("open", "");
+          }
+          if (elScore) elScore.textContent = String(score);
+          setTimeout(syncNav, 0);
+        },
+        true
+      );
+
+      resetAllBlocksVisual();
+    })();
+
+    (function litMcqNovelMockTest() {
+      var intro = document.getElementById("lit-mcq-novel-intro");
+      var runner = document.getElementById("lit-mcq-novel-runner");
+      var only = document.getElementById("lit-mcq-novel-only");
+      if (!intro || !runner || !only) return;
+
+      var LS_KEY = "litMockNovel_v5";
+      var activePaper = 1;
+      var btnPrev = document.getElementById("litMcqNovelPrev");
+      var btnNext = document.getElementById("litMcqNovelNext");
+      var btnQuit = document.getElementById("litMcqNovelQuit");
+      var elCur = document.getElementById("litMcqNovelCur");
+      var elTot = document.getElementById("litMcqNovelTot");
+      var elScore = document.getElementById("litMcqNovelScore");
+      var elPaperLabel = document.getElementById("litMcqNovelPaperLabel");
+      var resultPanel = document.getElementById("litMcqNovelResult");
+      var elResultNum = document.getElementById("litMcqNovelResultNum");
+      var elResultTot = document.getElementById("litMcqNovelResultTot");
+      var btnRetry = document.getElementById("litMcqNovelRetry");
+      var btnBackIntro = document.getElementById("litMcqNovelBackIntro");
+      var btnReset = document.getElementById("litMcqNovelResetProgress");
+      var hud = runner.querySelector(".lit-mcq-poetry-hud");
+      var nav = runner.querySelector(".lit-mcq-poetry-nav");
+
+      function getActivePaperEl() {
+        return only.querySelector(".lit-mcq-paper:not([hidden])");
+      }
+
+      function setActivePaper(n) {
+        activePaper = n;
+        only.querySelectorAll(".lit-mcq-paper").forEach(function (p) {
+          p.hidden = p.getAttribute("data-lit-paper") !== String(n);
+        });
+        if (elPaperLabel) elPaperLabel.textContent = "제" + n + "회";
+      }
+
+      function getBlocks() {
+        var paper = getActivePaperEl();
+        if (!paper) return [];
+        return Array.prototype.filter.call(paper.children, function (el) {
+          return el.classList && el.classList.contains("lit-q-block");
+        });
+      }
+
+      var idx = 0;
+      var score = 0;
+      var total = 20;
+
+      function refreshIntroStats() {
+        var o = {};
+        try {
+          o = JSON.parse(localStorage.getItem(LS_KEY) || "{}") || {};
+        } catch (e) {
+          o = {};
+        }
+        var papers = o.papers || {};
+        for (var p = 1; p <= 5; p++) {
+          var el = document.getElementById("litMcqNovelStat" + p);
+          if (!el) continue;
+          var rec = papers[String(p)];
+          if (!rec || !rec.attempts) el.textContent = "기록 없음";
+          else el.textContent = "응시 " + rec.attempts + "회 · 최고 " + rec.best + "/20 · 직전 " + rec.last + "/20";
+        }
+      }
+
+      function saveProgress() {
+        try {
+          var o = JSON.parse(localStorage.getItem(LS_KEY) || "{}");
+          if (!o || typeof o !== "object") o = {};
+          if (!o.papers) o.papers = {};
+          var pid = String(activePaper);
+          var prev = o.papers[pid] || { attempts: 0, best: 0, last: 0 };
+          prev.attempts = (prev.attempts || 0) + 1;
+          prev.last = score;
+          prev.best = Math.max(prev.best || 0, score);
+          o.papers[pid] = prev;
+          localStorage.setItem(LS_KEY, JSON.stringify(o));
+        } catch (e) {}
+        refreshIntroStats();
+      }
+
+      function isCurrentAnswered() {
+        var blocks = getBlocks();
+        if (!blocks[idx]) return false;
+        var lis = blocks[idx].querySelectorAll(".lit-choices li");
+        for (var i = 0; i < lis.length; i++) {
+          if (lis[i].classList.contains("lit-correct") || lis[i].classList.contains("lit-wrong")) return true;
+        }
+        return false;
+      }
+
+      function syncNav() {
+        var blocks = getBlocks();
+        total = blocks.length || 20;
+        if (elCur) elCur.textContent = String(idx + 1);
+        if (elTot) elTot.textContent = String(total);
+        if (elScore) elScore.textContent = String(score);
+        if (btnPrev) btnPrev.disabled = idx === 0;
+        if (!btnNext) return;
+        if (idx >= total - 1) {
+          if (isCurrentAnswered()) {
+            btnNext.disabled = false;
+            btnNext.textContent = "결과 보기";
+          } else {
+            btnNext.disabled = true;
+            btnNext.textContent = "다음 문항";
+          }
+        } else {
+          btnNext.textContent = "다음 문항";
+          btnNext.disabled = !isCurrentAnswered();
+        }
+      }
+
+      function showQuestion(i) {
+        var blocks = getBlocks();
+        total = blocks.length;
+        idx = Math.max(0, Math.min(i, total - 1));
+        blocks.forEach(function (b, j) {
+          b.style.display = j === idx ? "block" : "none";
+        });
+        syncNav();
+      }
+
+      function resetAllBlocksVisual() {
+        only.querySelectorAll(".lit-q-block").forEach(function (block) {
+          delete block.dataset.litMcqScored;
+          block.querySelectorAll(".lit-choices li").forEach(function (li) {
+            li.classList.remove("lit-correct", "lit-wrong");
+          });
+          var det = block.querySelector("details");
+          if (det) det.removeAttribute("open");
+          block.style.display = "none";
+        });
+      }
+
+      function enterRunner() {
+        if (activePaper > 1 && !only.querySelector('.lit-mcq-paper[data-lit-paper="' + activePaper + '"]')) {
+          activePaper = 1;
+          if (typeof alert !== "undefined") {
+            alert("제2~5회 문항을 불러오지 못했습니다. literature-mock-bank.js가 word-quiz.html과 같은 폴더에 있는지 확인하세요.");
+          }
+        }
+        setActivePaper(activePaper);
+        shuffleLitMcqPaperChoices(getActivePaperEl());
+        intro.style.display = "none";
+        runner.style.display = "block";
+        if (resultPanel) resultPanel.style.display = "none";
+        if (hud) hud.style.display = "flex";
+        only.style.display = "block";
+        if (nav) nav.style.display = "flex";
+        score = 0;
+        idx = 0;
+        resetAllBlocksVisual();
+        showQuestion(0);
+      }
+
+      function showIntroScreen() {
+        runner.style.display = "none";
+        intro.style.display = "block";
+        if (resultPanel) resultPanel.style.display = "none";
+        if (hud) hud.style.display = "flex";
+        if (nav) nav.style.display = "flex";
+        resetAllBlocksVisual();
+        refreshIntroStats();
+      }
+
+      function showResult() {
+        if (elResultNum) elResultNum.textContent = String(score);
+        if (elResultTot) elResultTot.textContent = String(total);
+        saveProgress();
+        if (resultPanel) resultPanel.style.display = "block";
+        if (hud) hud.style.display = "none";
+        only.style.display = "none";
+        if (nav) nav.style.display = "none";
+      }
+
+      intro.querySelectorAll("[data-lit-novel-start]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          activePaper = parseInt(btn.getAttribute("data-lit-novel-start"), 10) || 1;
+          enterRunner();
+        });
+      });
+      if (btnReset) {
+        btnReset.addEventListener("click", function () {
+          if (!confirm("현대소설 제1~5회 모의고사 응시·최고점 기록을 모두 지울까요?")) return;
+          localStorage.removeItem(LS_KEY);
+          refreshIntroStats();
+        });
+      }
+      if (btnQuit) btnQuit.addEventListener("click", showIntroScreen);
+      if (btnRetry) btnRetry.addEventListener("click", enterRunner);
+      if (btnBackIntro) btnBackIntro.addEventListener("click", showIntroScreen);
+
+      if (btnPrev) {
+        btnPrev.addEventListener("click", function () {
+          if (idx > 0) showQuestion(idx - 1);
+        });
+      }
+      if (btnNext) {
+        btnNext.addEventListener("click", function () {
+          if (btnNext.disabled) return;
+          if (idx >= total - 1 && isCurrentAnswered()) {
+            showResult();
+            return;
+          }
+          if (idx < total - 1) showQuestion(idx + 1);
+        });
+      }
+
+      only.addEventListener(
+        "click",
+        function (e) {
+          var li = e.target.closest(".lit-choices li");
+          if (!li || runner.style.display === "none") return;
+          if (!only.contains(li)) return;
+          var block = li.closest(".lit-q-block");
+          if (!block || !only.contains(block)) return;
+          if (block.dataset.litMcqScored) {
+            setTimeout(syncNav, 0);
+            return;
+          }
+          block.dataset.litMcqScored = "1";
+          var ok = block.getAttribute("data-lit-ans");
+          if (li.getAttribute("data-i") === ok) score += 1;
+          else {
+            var detN = block.querySelector("details");
+            if (detN) detN.setAttribute("open", "");
+          }
+          if (elScore) elScore.textContent = String(score);
+          setTimeout(syncNav, 0);
+        },
+        true
+      );
+
+      resetAllBlocksVisual();
+    })();
+
+    (function initLitTabbers() {
+      document.querySelectorAll("[data-lit-tabber]").forEach(function (root) {
+        var tabs = root.querySelectorAll("[data-lit-tab]");
+        var panels = root.querySelectorAll("[data-lit-panel]");
+        if (!tabs.length || !panels.length) return;
+        function show(id) {
+          tabs.forEach(function (t) {
+            t.classList.toggle("lit-subtab--active", t.getAttribute("data-lit-tab") === id);
+          });
+          panels.forEach(function (p) {
+            p.classList.toggle("lit-subtab-panel--active", p.getAttribute("data-lit-panel") === id);
+          });
+        }
+        tabs.forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            show(btn.getAttribute("data-lit-tab"));
+          });
+        });
+        show(tabs[0].getAttribute("data-lit-tab"));
+      });
+    })();
+
+    restoreWordQuizFromStorage();
+  </script>
+  <div class="footer">제작자: 정해우</div>
+  <link rel="stylesheet" href="ai-quiz-ui.css" />
+  <script src="ai-quiz-config.js"></script>
+  <script src="ai-quiz-bridge.js"></script>
+  <script src="ai-quiz-runner.js"></script>
+  <script src="ai-quiz-subjects.js"></script>
+  <link rel="stylesheet" href="bgm-player.css" />
+  <script src="bgm-player.js" defer></script>
+</body>
+</html>

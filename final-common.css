@@ -1,0 +1,32 @@
+.shell { max-width: 520px; margin: 0 auto; }
+body { padding: clamp(32px, 6vw, 56px) 20px 80px; }
+.app-title {
+  margin-bottom: clamp(16px, 3vw, 24px);
+  font-size: clamp(1.35rem, 4vw, 1.75rem);
+  font-weight: 700;
+  text-align: center;
+}
+.page-card {
+  background: var(--bg);
+  border-radius: 16px;
+  padding: clamp(36px, 6vw, 48px) clamp(20px, 4vw, 32px);
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-card);
+}
+.coming-soon-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--sky-600);
+  background: var(--sky-50);
+  border: 1px solid var(--sky-100);
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  margin-bottom: 0.85rem;
+}
+.coming-soon-text {
+  font-size: 0.9375rem;
+  color: var(--text-muted);
+  line-height: 1.65;
+}

@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>경제 퀴즈 · 난이도 선택</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="site-theme.css" />
+  <style>
+    :root {
+      --font: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --card-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 24px 48px -12px rgba(14, 165, 233, 0.28);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: var(--font);
+      padding: clamp(24px, 5vw, 48px) 20px 120px;
+      min-height: 100vh;
+      color: var(--text);
+      }
+    .shell {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .page-eyebrow {
+      display: block;
+      text-align: center;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      width: fit-content;
+      margin: 0 auto 0.75rem;
+    }
+    
+    .app-title {
+      text-align: center;
+      
+      margin-bottom: clamp(18px, 4vw, 26px);
+      font-size: clamp(1.5rem, 4.5vw, 2.1rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      
+    }
+    .page-card {
+      background: rgba(255, 255, 255, 0.97);
+      border-radius: 24px;
+      padding: clamp(32px, 5vw, 48px) clamp(22px, 4vw, 40px);
+      max-width: 720px;
+      margin: 0 auto 72px;
+      box-shadow: var(--card-shadow);
+      border: 1px solid rgba(255, 255, 255, 0.65);
+    }
+    .wrap { max-width: 100%; margin: 0 auto; padding: 0; }
+
+    :root {
+      --color-text-primary: #333;
+      --color-text-secondary: #666;
+      --color-text-tertiary: #999;
+      --color-text-success: #4caf50;
+      --color-text-info: #0284c7;
+      --color-text-warning: #e65100;
+      --color-text-danger: #f44336;
+      --color-background-primary: #fff;
+      --color-background-secondary: #f5f7fa;
+      --color-border-tertiary: #e0e0e0;
+      --color-border-secondary: #d0d0d0;
+      --color-background-success: #e8f5e9;
+      --color-border-success: #81c784;
+      --color-background-danger: #ffebee;
+      --color-border-danger: #ef9a9a;
+      --color-background-warning: #fff8e1;
+      --color-border-warning: #ffe082;
+    }
+
+    .bar { height: 8px; background: var(--sky-100);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 8px;
+      transition: width 0.3s ease;
+      background: linear-gradient(90deg, #0ea5e9, #0284c7);
+    }
+    .bar-sm { height: 5px; margin-bottom: 18px; }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 10px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 0.95em;
+      color: #333;
+      text-align: left;
+      line-height: 1.5;
+      transition: all 0.3s ease;
+      position: relative;
+      font-family: inherit;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    .btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    }
+    .btn:active:not(:disabled) { transform: translateY(0); }
+    .btn:disabled {
+      cursor: default;
+      opacity: 0.65;
+      transform: none;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-main {
+      padding: 16px 18px;
+      font-size: 1.1em;
+      font-weight: 700;
+      margin-bottom: 16px;
+      text-align: center;
+      color: var(--sky-600);
+      background: var(--sky-100);
+      border: 1px solid var(--sky-200);
+      box-shadow: none;
+    }
+    .btn-main:hover:not(:disabled) {
+      background: var(--sky-200);
+      border-color: var(--sky-300);
+    }
+
+    .btn-next {
+      display: inline-block;
+      width: auto;
+      padding: 12px 32px;
+      font-size: 1.05em;
+      font-weight: 700;
+      text-align: center;
+      color: var(--sky-600);
+      background: var(--sky-100);
+      border: 1px solid var(--sky-200);
+      box-shadow: none;
+    }
+    .btn-next:hover:not(:disabled) {
+      background: var(--sky-200);
+      border-color: var(--sky-300);
+    }
+
+    .cat-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      font-size: 0.92em;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      color: #333;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .cat-bar {
+      width: 40px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.75);
+      border-radius: 4px;
+      display: inline-block;
+      position: relative;
+      vertical-align: middle;
+    }
+    .cat-bar-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, #0ea5e9, #0284c7);
+    }
+
+    .opt-num {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8em;
+      font-weight: 800;
+      background: rgba(14, 165, 233, 0.14);
+      color: #0284c7;
+      flex-shrink: 0;
+    }
+    .btn.bg-ok .opt-num { background: rgba(76, 175, 80, 0.2); color: var(--color-text-success); }
+    .btn.bg-err .opt-num { background: rgba(244, 67, 54, 0.15); color: var(--color-text-danger); }
+
+    .opt-label {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.75em;
+      font-weight: 700;
+    }
+
+    .weak-box {
+      background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+      border: 1px solid #ffe082;
+      border-radius: 15px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(230, 81, 0, 0.1);
+    }
+
+    .review-btn {
+      margin-bottom: 8px;
+      text-align: center;
+      color: #c2410c;
+      font-weight: 700;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      box-shadow: none;
+    }
+
+    .card {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf4 100%);
+      border-radius: 15px;
+      padding: 24px;
+      cursor: pointer;
+      min-height: 140px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border: none;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .ex-box {
+      background: #fff;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
+      border: 1px solid #e0e0e0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .wrong-ref-wrap { margin-top: 10px; }
+    .wrong-ref-intro {
+      font-size: 11px;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+    .wrong-ref-tab {
+      margin-bottom: 8px;
+      border: 1px solid var(--color-border-tertiary);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .wrong-ref-tab > summary {
+      cursor: pointer;
+      list-style: none;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 10px 12px;
+      background: linear-gradient(135deg, #f0f9ff 0%, #f1f5f9 100%);
+      color: #0369a1;
+      user-select: none;
+    }
+    .wrong-ref-tab > summary::-webkit-details-marker { display: none; }
+    .wrong-ref-tab > summary::marker { content: ""; }
+    .wrong-ref-tab[open] > summary { border-bottom: 1px solid var(--color-border-tertiary); }
+    .wrong-ref-tab-body { padding: 10px 12px 12px; font-size: 0.86rem; line-height: 1.55; color: var(--color-text-primary); }
+
+    .link-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.95em;
+      color: #0284c7;
+      font-weight: 600;
+      padding: 4px 0;
+      font-family: inherit;
+      transition: color 0.2s ease;
+    }
+    .link-btn:hover { text-decoration: underline; color: #0284c7; }
+
+    .progress-box {
+      background: #f5f7fa;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82em;
+      color: #999;
+      margin-bottom: 6px;
+    }
+
+    .c-ok { color: #4caf50; }
+    .c-info { color: #0284c7; }
+    .c-warn { color: #e65100; }
+    .c-err { color: #f44336; }
+
+    .bg-ok {
+      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%) !important;
+      border: 2px solid #4caf50 !important;
+      color: #1b5e20 !important;
+      box-shadow: 0 2px 12px rgba(76, 175, 80, 0.25) !important;
+    }
+    .bg-err {
+      background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%) !important;
+      border: 2px solid #f44336 !important;
+      color: #b71c1c !important;
+      box-shadow: 0 2px 12px rgba(244, 67, 54, 0.2) !important;
+    }
+
+    .diff-pick {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .diff-pick .btn {
+      flex: 1;
+      text-align: center;
+      margin-bottom: 0;
+      padding: 14px 12px;
+      font-size: 0.95em;
+      line-height: 1.35;
+    }
+    .diff-pick .btn small {
+      display: block;
+      font-size: 0.72em;
+      font-weight: 600;
+      opacity: 0.88;
+      margin-top: 4px;
+    }
+    .diff-pick .btn--on {
+      background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.45);
+    }
+
+    .econ-topnav {
+      display: flex;
+      gap: 8px;
+      margin: -8px 0 20px;
+      padding: 6px;
+      background: linear-gradient(135deg, #f1f5f9 0%, #e8e0f7 100%);
+      border-radius: 14px;
+      border: 1px solid rgba(2, 132, 199, 0.12);
+    }
+    .econ-topnav__btn {
+      flex: 1;
+      padding: 12px 14px;
+      border: none;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: #0284c7;
+      background: transparent;
+      transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .econ-topnav__btn:hover {
+      background: rgba(255, 255, 255, 0.65);
+    }
+    .econ-topnav__btn.is-on {
+      color: #fff;
+      background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+      box-shadow: 0 4px 14px rgba(102, 126, 234, 0.4);
+    }
+
+    .concept-wrap {
+      color: var(--color-text-primary);
+      font-size: 0.9rem;
+      line-height: 1.65;
+    }
+    .concept-wrap h2 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #0284c7;
+      margin: 1.25rem 0 0.5rem;
+      letter-spacing: -0.02em;
+    }
+    .concept-wrap h2:first-child { margin-top: 0; }
+    .concept-wrap h3 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #0284c7;
+      margin: 1rem 0 0.35rem;
+    }
+    .concept-wrap ul {
+      margin: 0.25rem 0 0.75rem 1.1rem;
+      padding: 0;
+    }
+    .concept-wrap li { margin-bottom: 0.35rem; }
+    .concept-wrap .concept-note {
+      font-size: 0.82rem;
+      color: var(--color-text-secondary);
+      background: #f8fafc;
+      border-left: 3px solid #bae6fd;
+      padding: 10px 12px;
+      border-radius: 0 8px 8px 0;
+      margin: 0.5rem 0;
+    }
+    .concept-wrap details {
+      margin-bottom: 10px;
+      border: 1px solid var(--color-border-tertiary);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .concept-wrap summary {
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 12px 14px;
+      background: linear-gradient(135deg, #f0f9ff 0%, #f1f5f9 100%);
+      color: #0369a1;
+      list-style: none;
+    }
+    .concept-wrap summary::-webkit-details-marker { display: none; }
+    .concept-wrap details[open] summary {
+      border-bottom: 1px solid var(--color-border-tertiary);
+    }
+    .concept-wrap .concept-details-body {
+      padding: 12px 14px 14px;
+    }
+    .concept-wrap table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      margin: 0.5rem 0;
+    }
+    .concept-wrap th,
+    .concept-wrap td {
+      border: 1px solid var(--color-border-tertiary);
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .concept-wrap th {
+      background: #f1f5f9;
+      font-weight: 700;
+      color: #334155;
+    }
+    .concept-wrap details.concept-chapter {
+      margin-bottom: 12px;
+      border-width: 2px;
+      border-color: rgba(2, 132, 199, 0.2);
+    }
+    .concept-wrap details.concept-chapter > summary {
+      font-size: 0.95rem;
+      padding: 14px 16px;
+    }
+    .concept-wrap details.concept-nested {
+      margin: 0 0 8px 4px;
+      border: 1px solid #e9d5ff;
+      border-radius: 10px;
+      background: #fdfcff;
+    }
+    .concept-wrap details.concept-nested > summary {
+      font-size: 0.84rem;
+      font-weight: 700;
+      padding: 10px 12px;
+      background: linear-gradient(135deg, #f0f9ff 0%, #f8fafc 100%);
+      color: #0284c7;
+    }
+    .concept-wrap details.concept-nested[open] > summary {
+      border-bottom: 1px solid #e0f2fe;
+    }
+    .concept-wrap details.concept-nested .concept-details-body {
+      padding: 10px 12px 12px;
+      font-size: 0.86rem;
+    }
+    .concept-wrap details.concept-chapter > .concept-details-body > .concept-chapter-hint {
+      font-size: 0.8rem;
+      color: var(--color-text-secondary);
+      margin: 0 0 10px;
+      padding: 0 2px;
+    }
+  </style>
+</head>
+<body>
+<template id="econ-ref-snippets">
+<div data-econ-ref="경제개요"><h3>경제학 개요</h3><ul><li>희소성·선택, 생산·분배·소비, 사회과학으로서 경제학.</li><li>가계·기업·정부·해외 네 주체와 목표.</li></ul></div>
+<div data-econ-ref="가계"><h3>가계</h3><ul><li>효용 극대화, 생산물 시장에서는 수요, 요소 시장에서는 공급(노동 등).</li><li>합리적 소비: 한계효용·기회비용·시간 제약.</li></ul></div>
+<div data-econ-ref="기업"><h3>기업</h3><ul><li>이윤 극대화, 재화·서비스 공급, 생산요소 수요, 납세.</li><li>기업가 정신, 슘페터의 창조적 파괴(혁신), 사회적 책임.</li></ul></div>
+<div data-econ-ref="정부"><h3>정부</h3><ul><li>사회후생·형평·효율, 세입·세출·예산(편성→국회→집행→결산).</li><li>시장 실패 보완, 재분배, 성장·안정(확대·긴축 재정), 조세의 기능·역기능.</li></ul></div>
+<div data-econ-ref="해외"><h3>해외(외국)</h3><ul><li>무역·투자 등 대외 관계, 교과서적 네 번째 경제 주체.</li></ul></div>
+<div data-econ-ref="재화서비스"><h3>재화·서비스</h3><ul><li>자유재 vs 경제재, 소비재·생산재, 용역(서비스)의 대가.</li></ul></div>
+<div data-econ-ref="희소성3대"><h3>희소성·3대 문제·효율·형평</h3><ul><li>What·How·For whom, 효율 vs 형평 논의.</li></ul></div>
+<div data-econ-ref="기회비용"><h3>기회비용·매몰비용</h3><ul><li>포기한 차선 대안 중 최대가치, 명시적+암묵적 비용.</li><li>매몰비용은 회수 불가·새 결정에서 보통 제외.</li></ul></div>
+<div data-econ-ref="PPF"><h3>생산가능곡선(PPF)</h3><ul><li>트레이드오프, 오목=기회비용 체증, 바깥 이동=기술·자원.</li></ul></div>
+<div data-econ-ref="유인"><h3>합리적 선택·효율·유인</h3><ul><li>최대효과·최소비용, 긍정·부정 유인(장학금·과태료 등).</li></ul></div>
+<div data-econ-ref="경제체제"><h3>경제 체제·스미스·분업·무역</h3><ul><li>전통·계획·시장·혼합, 보이지 않는 손·가격기구.</li><li>분업·절대·비교우위, 자본주의 단계·대공황·케인즈·스태그플레이션.</li></ul></div>
+<div data-econ-ref="분업무역"><h3>분업·무역</h3><ul><li>사회적·기술적 분업, 비교우위·교환비율, 분업의 부작용.</li></ul></div>
+<div data-econ-ref="가격기구"><h3>시장·가격기구</h3><ul><li>신호·유인·정보, 스미스의 보이지 않는 손.</li></ul></div>
+<div data-econ-ref="수요공급"><h3>수요·공급</h3><ul><li>법칙, 수요(량)의 변동 vs 변화, 정상·열등·대체·보완.</li></ul></div>
+<div data-econ-ref="시장균형"><h3>시장 균형</h3><ul><li>초과수요→가격 상승, 초과공급→하락, 동시 이동 시 불분명 가능.</li></ul></div>
+<div data-econ-ref="탄력성"><h3>탄력성</h3><ul><li>가격·소득·교차·공급 탄력, 총매출과 Ed, 농산물·기간.</li></ul></div>
+<div data-econ-ref="잉여"><h3>잉여·효율·독점</h3><ul><li>소비자·생산자 잉여, 완전경쟁 총잉여, 독점 시 데드웨이트.</li></ul></div>
+<div data-econ-ref="가격통제"><h3>가격 통제</h3><ul><li>상한·초과수요·품질·암시장, 하한·초과공급·실업, 농업 파동.</li></ul></div>
+<div data-econ-ref="시장실패"><h3>시장 실패</h3><ul><li>독과점·외부성·공공재·정보 비대칭, 정부 개입 수단.</li></ul></div>
+<div data-econ-ref="정부재정"><h3>정부·재정·조세</h3><ul><li>세입·세출, 직접·간접·누진·비례·역진, 확대·긴축 재정, 재정 건전성·민주주의.</li></ul></div>
+<div data-econ-ref="조세분류"><h3>조세 분류</h3><ul><li>직접세·간접세, 부가세·소득세·주세·상속세 예시.</li></ul></div>
+<div data-econ-ref="거시"><h3>거시·사상사</h3><ul><li>케인즈·유효수요·뉴딜, 스태그플레이션, 구성의 오류·절약의 역설, 신자유주의·레이건.</li></ul></div>
+<div data-econ-ref="요소시장"><h3>노동·금융 시장</h3><ul><li>임금=노동 수요·공급, 금리=자금 수요·공급(저축·투자), 침체 시 금리 하락 압력.</li></ul></div>
+<div data-econ-ref="인구"><h3>인구·고령화</h3><ul><li>고령화 7%, 고령 14%, 초고령 20%, 부양·의료·연금.</li></ul></div>
+<div data-econ-ref="소비이론"><h3>소비 이론</h3><ul><li>절대·항상·생애주기·상대소득, 비가역성·톱니 효과.</li></ul></div>
+<div data-econ-ref="소비심리"><h3>비합리적 소비</h3><ul><li>편승·백워·베블렌·의존·가수요.</li></ul></div>
+<div data-econ-ref="혼합경제"><h3>혼합경제</h3><ul><li>시장+정부, 정부 비대화·복지병 등 한계.</li></ul></div>
+<div data-econ-ref="경제사"><h3>자본주의의 흐름</h3><ul><li>상업→산업→독점→수정·복지→신자유주의, 자유방임·대공황.</li></ul></div>
+<div data-econ-ref="자본주의사"><h3>자본주의사(상업·산업)</h3><ul><li>중상주의·유통·금융, 산업혁명·기계·화석연료.</li></ul></div>
+<div data-econ-ref="유량저량"><h3>유량·저량</h3><ul><li>GDP·소득은 유량, 재산은 저량.</li></ul></div>
+<div data-econ-ref="분배소득"><h3>분배·소득</h3><ul><li>요소소득, 가처분소득, 절약의 역설·구성의 오류.</li></ul></div>
+<div data-econ-ref="농업가격"><h3>농업·가격 정책</h3><ul><li>비탄력→파동, 지지·이중가격제·재정 부담.</li></ul></div>
+<div data-econ-ref="OPEC"><h3>OPEC·에너지</h3><ul><li>단기·장기 탄력, 장기 고유가 유지의 어려움.</li></ul></div>
+</template>
+  <div class="shell">
+    <nav class="site-nav">
+      <a class="site-nav__link" href="index.html#midterm">&larr; 중간 대비 메인</a>
+    </nav>
+    <span class="page-eyebrow">경제</span>
+    <h1 class="app-title">경제 퀴즈 · 시장·기초</h1>
+    <div class="page-card">
+      <div class="econ-topnav" id="econTopnav" role="tablist" aria-label="경제 페이지 구분">
+        <button type="button" class="econ-topnav__btn is-on" data-econ-view="quiz" role="tab" aria-selected="true">퀴즈</button>
+        <button type="button" class="econ-topnav__btn" data-econ-view="concepts" role="tab" aria-selected="false">경제 개념</button>
+      </div>
+      <div class="wrap" id="app"></div>
+    </div>
+  </div>
+  <div class="footer">제작자: 정해우</div>
+<script>
+/** 어려운 난이도: 5지선다(4보기 + 교란 1). 교란은 흔한 오개념·용어 혼동 위주 */
+const HARD_TRAP_FALLBACK=[
+  "‘다른 조건 불변’ 없이도 가격만 보고 인과를 단정해도 된다",
+  "개인에게 타당한 선택을 모두에게 동시 적용하면 사회적으로도 항상 최선이다",
+  "회계비용만 파악하면 기회비용까지 모두 반영했다고 본다",
+  "단기 시장 결과를 전제 없이 장기에도 그대로 옮겨 적용한다"
+];
+const HARD_TRAPS={
+  "경제학의 기초":["경제학은 가치판단만 다루고 사실진술은 다루지 않는다","경제 문제는 화폐가 없으면 성립하지 않는다","한계분석은 평균만 보고 결정하는 방법이다","모형은 현실과 같아야만 쓸모가 있다"],
+  "경제 주체·활동":["가계는 생산물 시장에서 공급자 역할만 한다","정부는 항상 이윤 극대화를 목표로 한다","해외 주체는 무역 외 활동은 경제에 영향을 주지 않는다","기업은 요소시장에서 노동을 공급하는 전형적 주체이다"],
+  "재화·서비스":["서비스는 반드시 경합재이다","소비재와 생산재는 물리적 성질로만 영원히 고정된다","자유재는 가격이 붙으면 즉시 공공재가 된다","경제재는 희소성이 없어도 된다"],
+  "희소성·3대 문제":["3대 문제는 정부만의 문제이고 시장과 무관하다","How 문제는 오직 소비자 잉여만으로 결정된다","희소성은 인구가 적으면 사라진다","What 문제는 분배 형평성만을 의미한다"],
+  "효율성·형평성":["효율과 형평은 항상 동시에 최대화된다","형평성은 시장가격만으로 항상 완벽히 측정된다","비효율이면 형평성은 자동으로 개선된다","효율은 소득분배 결과와 무관한 개념이다"],
+  "기회비용·선택":["기회비용은 이미 지출한 매몰비용에 포함해 계산한다","차선 대안이 여럿이면 기회비용은 모두 합산한다","명시적 비용만 있으면 암묵적 비용은 0이다","기회비용은 과거에 이미 확정된 지출이다"],
+  "생산가능곡선":["PPF가 직선이면 기회비용은 항상 체증한다","PPF 안쪽은 기술 진보를 의미한다","PPF 바깥은 단기에도 달성 가능한 목표이다","한 재화만 생산할 때 다른 재화 기회비용은 0이다"],
+  "합리적 선택·효율":["최소비용 원칙은 수익을 전혀 고려하지 않는다","합리적 선택은 감정·정보 제약을 항상 무시한다","대안 평가 없이도 합리적 결정이 가능하다","기준을 바꿔도 최선의 대안은 항상 같다"],
+  "경제적 유인":["벌금은 긍정적 유인으로 분류한다","보조금은 행동을 억제하려는 부정적 유인이다","유인은 가격기구와 무관한 개념이다","과태료는 탄력성을 높이는 장치이다"],
+  "경제 체제":["혼합경제는 시장이 완전히 사라진 체제이다","계획경제는 가격이 항상 모든 정보를 완벽히 반영한다","시장경제는 정부가 모든 가격을 정한다","전통경제는 법·질서만으로 운영된다"],
+  "분업·무역":["비교우위는 반드시 절대우위보다 생산량이 많을 때만 성립한다","무역은 한쪽만 이득이고 다른 쪽은 항상 손해다","절대우위가 없으면 무역 이익은 불가능하다","교환비율은 한쪽 기회비용 밖이어도 무조건 이득이다"],
+  "시장·가격기구":["가격은 정보를 삭제해 시장을 단순화한다","가격이 높다는 것은 항상 품질이 낮다는 뜻이다","가격기구는 독점에서만 작동한다","신호 기능은 공공재에서만 나타난다"],
+  "수요·공급":["수요의 변동과 수요량의 변동은 용어상 차이가 없다","보완재는 대체재의 특수한 경우이다","정상재는 가격이 오를수록 수요가 늘어난다","공급법칙은 수요법칙과 항상 모순된다"],
+  "시장균형":["초과수요일 때 가격은 하락 압력을 받는다","균형은 항상 정부가 정한 가격에서만 성립한다","수요·공급이 동시에 늘면 거래량은 반드시 줄어든다","균형가격에서 잉여는 항상 0이다"],
+  "탄력성":["가격탄력성은 수요곡선 기울기와 항상 수치적으로 같다","Ed>1이면 가격 인상 시 총매출은 항상 증가한다","비탄력 수요에서 가격 인하가 총매출을 늘리기 쉽다","교차탄력성이 음이면 두 재화는 대체재이다"],
+  "잉여·효율":["생산자잉여는 지불의사와 실제 지불의 차이다","독점에서도 총잉여는 완전경쟁과 항상 같다","한계구매자의 소비자잉여는 항상 최대이다","소비자잉여는 공급곡선 아래 면적으로 그린다"],
+  "가격통제":["최고가격제 아래에서는 항상 초과공급만 생긴다","최저가격제는 항상 고용을 늘린다","가격상한은 생산자잉여만 무한히 키운다","배급은 초과공급을 해소하는 전형적 방법이다"],
+  "시장실패":["외부 불경제는 과소 생산을 낳는다","순수 공공재는 배제가 쉬워 시장이 과다 공급한다","정보 비대칭은 항상 가격을 더 정확히 만든다","독점은 P=MC에서 거래한다"],
+  "정부·재정":["확대 재정은 세금 인상만을 의미한다","간접세는 납세자와 담세자가 항상 일치한다","직접세는 전가가 불가능하다는 뜻이다","긴축 재정은 지출 확대로 총수요를 키운다"],
+  "거시·사상사":["케인즈는 공급이 수요를 자동으로 맞춘다고 보았다","스태그플레이션은 고성장·저물가를 뜻한다","구성의 오류는 전체가 개별의 합이 아니라는 오류이다","신자유주의는 모든 산업 국유화를 목표로 했다"],
+  "금융·노동시장":["금리는 환율만으로 결정된다","임금 상승은 여가의 기회비용을 줄인다","침체 시 투자 증가는 이자율 상승 압력이 된다","노동 공급은 물가와 무관하다"],
+  "인구·복지":["고령화는 노동력을 항상 무한히 늘린다","초고령 사회는 노인 비율 7% 미만을 뜻한다","UN 기준에서 고령·초고령 구분은 없다","부양비 감소가 고령화의 전형적 결과이다"],
+  "소비이론":["절대소득가설은 일생 소득만 본다","항상소득가설은 일시소득에 소비가 크게 반응한다","생애주기가설은 당월 소득만으로 소비를 정한다","상대소득가설은 물가만이 소비를 결정한다"],
+  "소비심리":["편승효과는 남이 안 살수록 사고 싶어지는 현상이다","베블렌효과는 저가 선호를 설명한다","백워효과는 모방 소비이다","가수요는 취향 변화와 무관하다"],
+  "기업·정부":["창조적 파괴는 가격을 영구 동결한다는 뜻이다","세입과 세출은 같은 개념이다","기업가 정신은 불확실성을 완전히 제거하는 것이다","국회는 예산안 편성을 전담한다"],
+  "유량·저량":["GDP는 특정 시점 재고이다","저량은 일정 기간 흐름이다","소득은 저량·재산은 유량이다","유통속도는 저량이다"],
+  "경제사":["산업혁명은 수공업만 지속한 시기이다","상업 자본주의에서 이윤은 오직 공장 생산에서만 발생했다","자유방임은 20세기 복지국가와 동의어이다","독점 자본주의는 완전경쟁만을 특징으로 한다"],
+  "분배·소득":["요소소득은 부가세·주세를 가리킨다","가처분소득은 GDP와 항상 같다","절약의 역설은 저축이 항상 국민소득을 키운다는 주장이다","순편익이 0이면 반드시 선택 불가이다"],
+  "농업·가격":["농산물은 수요·공급이 모두 가격에 탄력적이라 출렁임이 작다","이중 가격제는 재정 부담 없이 운영된다","가격 지지는 소비자 가격을 낮추는 데만 쓰인다","잉여 처리에 정부 매입은 쓰이지 않는다"],
+  "OPEC·에너지":["장기 수요·공급은 단기보다 항상 비탄력이다","OPEC 사례는 유가가 절대 변하지 않는다는 뜻이다","1973년 위기와 무관한 일상 정책이다","증산만이 장기 고유가 유지의 핵심이다"],
+  "혼합경제":["혼합경제는 시장 실패를 보완할 여지가 없다","복지 국가는 세금이 항상 0인 모형이다","정부 비대화는 시장이 사라졌다는 뜻과 같다","시장+정부 조합은 이론상 존재하지 않는다"],
+  "조세·분류":["부가가치세는 전형적 직접세이다","소득세는 간접세이다","초과 누진은 구간 없이 세율만 올리는 방식이다","법인세는 소비세로 분류된다"],
+  "가계·소비":["합리적 소비는 시간 제약을 고려하지 않는다","비합리적 소비는 예산 제약을 항상 무시한다","한계효용이 한계비용보다 작을 때 더 사는 것이 합리적이다","바람직한 소비는 효용만 보면 된다"],
+  "자본주의사":["중상주의는 공장 대량생산만을 뜻한다","산업혁명에 화석연료·기계화는 무관하다","수정 자본주의는 대공황과 무관하게 등장했다","상업 자본주의 시기 이윤은 유통·금융과 무관했다"],
+};
+function hardFifthDistractor(q){
+  const pool=HARD_TRAPS[q.cat]||HARD_TRAP_FALLBACK;
+  const arr=Array.isArray(pool)?pool:HARD_TRAP_FALLBACK;
+  let i=(q.id*17+q.cat.length)%arr.length;let s=arr[i];let guard=0;
+  while((s===q.a||q.opts.includes(s))&&guard<16){i=(i+1)%arr.length;s=arr[i];guard++}
+  if(guard>=16)return "문항과 무관하게 ‘항상·절대’로 단정하는 설명";
+  return s;
+}
+
+const Q=[
+{id:1,cat:"경제학의 기초",q:"경제학이 다루는 핵심 문제로 가장 적절한 것은?",a:"희소한 자원을 놓고 한계 내에서 어떤 선택을 할 것인가",opts:["희소한 자원을 놓고 한계 내에서 어떤 선택을 할 것인가","모든 욕구를 무한히 충족시키는 방법","자유재의 무상 배분","회계 장부의 정확한 기록"],ex:"제한된 자원과 무한한 욕구의 갭에서 선택 문제가 생긴다."},
+{id:2,cat:"경제학의 기초",q:"경제학이 속하는 학문 분류는?",a:"사회과학",opts:["사회과학","자연과학","인문학만","공학"],ex:"인간의 선택과 제도·시장을 연구하는 사회과학의 한 분야이다."},
+{id:3,cat:"경제 주체·활동",q:"경제 주체를 네 가지로 나눌 때 포함되지 않는 것은?",a:"지방자치단체만 단독으로 제시된 범주",opts:["지방자치단체만 단독으로 제시된 범주","가계","기업","정부"],ex:"통례적으로 가계·기업·정부·해외(외국) 네 주체로 구분한다."},
+{id:4,cat:"경제 주체·활동",q:"가계가 추구하는 목표로 일반적으로 설명되는 것은?",a:"효용 극대화",opts:["효용 극대화","이윤 극대화","사회후생 극대화","세수 극대화"],ex:"소비와 여가 등에서 만족을 최대화하려는 경제 주체이다."},
+{id:5,cat:"경제 주체·활동",q:"기업이 추구하는 목표로 일반적으로 설명되는 것은?",a:"이윤 극대화",opts:["이윤 극대화","효용 극대화","투표수 극대화","공공재 무상 공급"],ex:"생산 요소를 결합해 재화·서비스를 공급하며 이윤을 목표로 한다."},
+{id:6,cat:"경제 주체·활동",q:"정부의 경제적 역할을 목표 측면에서 넓게 볼 때 강조되는 것은?",a:"사회후생·형평성과 효율성의 조화",opts:["사회후생·형평성과 효율성의 조화","오직 이윤 극대화","오직 효용 극대화","재화 가격의 독점 결정"],ex:"시장 실패 보완·소득 재분배·안정 정책 등이 대표적이다."},
+{id:7,cat:"경제 주체·활동",q:"경제 활동의 세 단계로 묶을 때 옳은 조합은?",a:"생산·분배·소비",opts:["생산·분배·소비","생산·저장·폐기","분배·세금·투표만","소비·휴식·수면"],ex:"가치 창출·소득 배분·재화 구매로 순환이 이어진다."},
+{id:8,cat:"재화·서비스",q:"자유재(무상재)에 대한 설명으로 맞는 것은?",a:"부존이 풍부해 대가 없이 쓸 수 있어 희소성 문제에서 보통 제외된다",opts:["부존이 풍부해 대가 없이 쓸 수 있어 희소성 문제에서 보통 제외된다","항상 경제재이다","가격이 높을수록 수요가 늘어난다","정부가 독점 공급한다"],ex:"공기 등은 전형적 예이나, 오염 등으로 희소해지면 경제재로 바뀔 수 있다."},
+{id:9,cat:"재화·서비스",q:"같은 보리라도 용도에 따라 소비재이기도 하고 생산재이기도 하다는 설명이 시사하는 바는?",a:"재화의 경제적 성격은 용도에 따라 달라질 수 있다",opts:["재화의 경제적 성격은 용도에 따라 달라질 수 있다","소비재와 생산재는 절대 바뀌지 않는다","모든 재화는 서비스이다","자유재만 해당한다"],ex:"예: 가정에서 보리차용(소비재), 음료 회사 원료(생산재)."},
+{id:10,cat:"희소성·3대 문제",q:"희소성의 법칙이 의미하는 것은?",a:"욕구는 상대적으로 무한한데 경제적 자원은 제한되어 있다",opts:["욕구는 상대적으로 무한한데 경제적 자원은 제한되어 있다","자원은 항상 무한하다","가격은 항상 하락한다","정부는 자원을 만들지 않는다"],ex:"선택의 문제·경제 문제의 근본 원인으로 연결된다."},
+{id:11,cat:"희소성·3대 문제",q:"경제의 3대 문제에 해당하지 않는 것은?",a:"중앙은행 총재의 연임 횟수",opts:["중앙은행 총재의 연임 횟수","무엇을 얼마나 생산할 것인가","어떻게 생산할 것인가","누구에게 어떻게 분배할 것인가"],ex:"What(생산물)·How(생산 방법)·For whom(분배)이 전형적 구분이다."},
+{id:12,cat:"희소성·3대 문제",q:"‘인력을 더 쓸 것인가, 설비를 늘릴 것인가’에 답하는 문제는?",a:"생산 방법의 결정(How)",opts:["생산 방법의 결정(How)","생산물의 결정(What)","분배 방식의 결정(For whom)","소비자 잉여의 결정"],ex:"생산 요소의 결합·기술 선택과 직결된다."},
+{id:13,cat:"효율성·형평성",q:"시장 경제가 잘 해주는 편인 목표와, 논쟁이 큰 목표의 대비로 적절한 것은?",a:"효율성은 상대적으로, 형평성(공정 분배)은 기준에 따라 논쟁이 크다",opts:["효율성은 상대적으로, 형평성(공정 분배)은 기준에 따라 논쟁이 크다","형평성만 중요하고 효율성은 무의미하다","둘 다 시장이 항상 동시에 완벽히 달성한다","효율성은 정부만, 형평성은 기업만 담당한다"],ex:"시장 실패·불평등은 형평성·안정 논의로 이어진다."},
+{id:14,cat:"기회비용·선택",q:"기회비용의 정의로 맞는 것은?",a:"선택으로 인해 포기한 차선 대안 중 가치가 가장 큰 것",opts:["선택으로 인해 포기한 차선 대안 중 가치가 가장 큰 것","이미 지출했고 회수 불가능한 비용","세금으로 납부한 금액만","명시적 비용만"],ex:"경제적 비용은 회계 비용뿐 아니라 암묵적 비용까지 포괄하는 경우가 많다."},
+{id:15,cat:"기회비용·선택",q:"주식 기대수익 15만 원·예금 이자 10만 원일 때, 주식을 선택하면 기회비용은?",a:"10만 원(예금 이자)",opts:["10만 원(예금 이자)","15만 원","25만 원","5만 원"],ex:"포기한 대안 중 최선의 가치가 기회비용이다."},
+{id:16,cat:"기회비용·선택",q:"미래의 합리적 선택에서 매몰비용을 어떻게 다루는 것이 일반적 설명에 가까운가?",a:"회수 불가능한 과거 지출은 새로운 결정의 주요 기준에서 제외한다",opts:["회수 불가능한 과거 지출은 새로운 결정의 주요 기준에서 제외한다","반드시 기회비용과 합산해 최대화한다","미래 이익보다 항상 우선한다","세금과 동일하게 취급한다"],ex:"이미 낸 돈에 집착하면 비합리적 결정이 될 수 있다."},
+{id:17,cat:"기회비용·선택",q:"매몰비용(sunk cost)에 대한 설명으로 맞는 것은?",a:"회수 불가능한 과거 지출이며 앞으로의 선택에서는 보통 무시해야 한다",opts:["회수 불가능한 과거 지출이며 앞으로의 선택에서는 보통 무시해야 한다","기회비용과 완전히 동일하다","미래 이익의 현재가치이다","반드시 명시적 비용만 해당한다"],ex:"이미 쓴 돈에 집착하면 비합리적 결정이 될 수 있다."},
+{id:18,cat:"생산가능곡선",q:"생산가능곡선(PPF)이 우하향하는 이유는?",a:"주어진 자원으로 한 재화를 더 많이 생산하면 다른 재화는 덜 생산해야 하기 때문",opts:["주어진 자원으로 한 재화를 더 많이 생산하면 다른 재화는 덜 생산해야 하기 때문","수요 법칙 때문만이다","정부가 가격을 고정해서이다","두 재화가 완전 대체재이어서이다"],ex:"한계 내에서 자원을 이동시키는 트레이드오프를 보여준다."},
+{id:19,cat:"생산가능곡선",q:"PPF가 원점에 대해 오목한 일반적 형태가 의미하는 것은?",a:"기회비용이 체증한다",opts:["기회비용이 체증한다","기회비용이 일정하다","기회비용이 체감한다","한 재화만 생산 가능하다"],ex:"어느 재화 생산을 늘릴수록 그만큼 다른 재화를 더 많이 포기해야 한다."},
+{id:20,cat:"생산가능곡선",q:"PPF가 바깥쪽으로 이동하는 원인으로 적절하지 않은 것은?",a:"동일 자원으로 같은 기술일 때 한 재화만 과소소비했다는 사실",opts:["동일 자원으로 같은 기술일 때 한 재화만 과소소비했다는 사실","기술 진보","노동력·자본 등 가용 자원의 증가","새로운 천연자원의 발견"],ex:"소비 수준은 PPF 이동이 아니라 균형점 이동 문제에 가깝다."},
+{id:21,cat:"합리적 선택·효율",q:"경제적 효율성을 두 원칙으로 묶어 설명할 때 쓰는 쌍은?",a:"최대효과의 원칙과 최소비용의 원칙",opts:["최대효과의 원칙과 최소비용의 원칙","최고가격과 최저가격","세율 극대와 세액 극소","수출 극대와 수입 극소"],ex:"같은 비용에서 효과 최대, 같은 효과에서 비용 최소로도 읽힌다."},
+{id:22,cat:"경제적 유인",q:"과태료·벌금이 행동에 미치는 작용으로 맞는 것은?",a:"부정적 유인(비용)으로 해당 행동을 약화",opts:["부정적 유인(비용)으로 해당 행동을 약화","긍정적 유인으로 행동 강화","탄력성을 0으로 만든다","공공재를 순수 사유재로 바꾼다"],ex:"장학금 등은 긍정적 유인의 예이다."},
+{id:23,cat:"경제 체제",q:"현실 세계 대부분 국가의 경제 체제로 가장 가까운 것은?",a:"시장경제 틀에 정부 개입이 섞인 혼합경제",opts:["시장경제 틀에 정부 개입이 섞인 혼합경제","순수 계획경제만","순수 자급자족 전통경제만","생산수단을 전부 국유화한 고전적 사회주의만"],ex:"1930년대 대공황 이후 정부 역할이 확대된 흐름과 연결된다."},
+{id:24,cat:"경제 체제",q:"시장경제에서 가격·경쟁을 통해 자원 배분이 이뤄진다는 주장과 가장 연관된 인물은?",a:"아담 스미스",opts:["아담 스미스","칼 마르크스만","케인즈만","베블런만"],ex:"보이지 않는 손(invisible hand) 비유가 유명하다."},
+{id:25,cat:"경제 체제",q:"계획경제의 한계로 자주 지적되는 것은?",a:"유인 부족으로 비효율·저성장, 관료의 오판 위험",opts:["유인 부족으로 비효율·저성장, 관료의 오판 위험","항상 완전경쟁이 실현된다","가격이 즉시 모든 정보를 완벽히 반영한다","사유재산만으로 운영된다"],ex:"명령·계획에 의한 배분은 창의성·정보 문제에 취약할 수 있다."},
+{id:26,cat:"분업·무역",q:"비교우위의 정의로 맞는 것은?",a:"다른 생산자보다 기회비용이 더 작게 생산할 수 있는 능력",opts:["다른 생산자보다 기회비용이 더 작게 생산할 수 있는 능력","모든 재화에서 더 많이 생산하는 능력만","가격이 가장 싼 나라","수입만 하는 나라"],ex:"한쪽이 모두 절대우위여도 서로 다른 재화에서 비교우위가 나뉠 수 있다."},
+{id:27,cat:"분업·무역",q:"절대우위에 가까운 설명은?",a:"같은 자원으로 더 많은 산출을 내는 생산 능력의 우위",opts:["같은 자원으로 더 많은 산출을 내는 생산 능력의 우위","기회비용이 더 작은 경우만","반드시 무역이익이 없는 경우","정부 보조금의 크기"],ex:"스미스의 분업·절대우위 논의와 연결된다."},
+{id:28,cat:"시장·가격기구",q:"가격기구가 수행하는 역할로 보기 어려운 것은?",a:"모든 소비자의 효용 함수를 직접 계산해 대입",opts:["모든 소비자의 효용 함수를 직접 계산해 대입","희소성에 관한 신호 전달","생산·소비 유인","정보 전달"],ex:"가격은 분산된 정보를 요약해 보여주는 역할을 한다."},
+{id:29,cat:"수요·공급",q:"수요법칙의 전제에 가장 가까운 것은?",a:"다른 조건이 일정할 때 가격과 수요량의 관계를 본다",opts:["다른 조건이 일정할 때 가격과 수요량의 관계를 본다","소득이 항상 0이다","모든 재화가 공공재이다","공급이 완전히 고정이다"],ex:"ceteris paribus(다른 조건 불변) 전제가 핵심이다."},
+{id:30,cat:"수요·공급",q:"정상재에 대한 설명으로 맞는 것은?",a:"소득이 증가하면 수요가 늘어난다",opts:["소득이 증가하면 수요가 늘어난다","소득이 증가하면 수요가 줄어든다","가격이 오르면 수요곡선이 사라진다","대체재가 존재하지 않는다"],ex:"열등재는 소득 증가에 수요가 감소하는 방향으로 설명된다."},
+{id:31,cat:"수요·공급",q:"버스 요금이 오를 때 지하철 수요가 늘어난다면 두 재화의 관계는?",a:"대체재",opts:["대체재","보완재","독립재","열등재"],ex:"용도가 비슷해 서로 바꿔 탈 수 있을 때 대체 관계가 된다."},
+{id:32,cat:"수요·공급",q:"‘가격 외 요인’ 변화로 같은 가격에서 수요량이 달라져 수요곡선 전체가 움직이는 것은?",a:"수요의 변동",opts:["수요의 변동","수요량의 변동","공급량의 변동","탄력성의 변동"],ex:"가격 변화에 따른 같은 곡선 위 이동은 수요량의 변동이다."},
+{id:33,cat:"시장균형",q:"시장균형가격에서 수요량과 공급량이 일치하지 않을 때, 수요량이 공급량보다 크면 나타나는 압력은?",a:"가격 상승 압력(초과수요)",opts:["가격 상승 압력(초과수요)","가격 하락 압력(초과공급)","가격이 영원히 고정","정부가 즉시 매입"],ex:"구매 경쟁이 가격을 끌어올린다."},
+{id:34,cat:"시장균형",q:"수요 증가·공급 불변일 때 균형가격과 균형거래량의 변화는?",a:"가격 상승, 거래량 증가",opts:["가격 상승, 거래량 증가","가격 하락, 거래량 증가","가격 상승, 거래량 감소","둘 다 불분명"],ex:"수요곡선이 오른쪽으로 이동한 전형적 결과이다."},
+{id:35,cat:"탄력성",q:"수요의 가격탄력성이 1보다 큰(탄력적) 재화에서 가격을 올리면 총매출(가격×수량)은?",a:"감소하는 경향이 크다",opts:["감소하는 경향이 크다","증가하는 경향이 크다","항상 불변이다","탄력성과 무관하다"],ex:"수량이 가격보다 더 크게 줄어드는 쪽이 우세한다."},
+{id:36,cat:"탄력성",q:"필수재·생활필수에 가까운 재화의 수요는 일반적으로?",a:"가격에 비탄력적(0<Ed<1)",opts:["가격에 비탄력적(0<Ed<1)","완전탄력적(수평)","Ed가 항상 음수가 아니다","소득탄력성이 항상 0이다"],ex:"대체재가 적거나 지출 비중이 작을 때 비탄력적이 되기 쉽다."},
+{id:37,cat:"잉여·효율",q:"소비자잉여의 의미는?",a:"지불 의사(최대 지불가능액)와 실제 지불액의 차이",opts:["지불 의사(최대 지불가능액)와 실제 지불액의 차이","한계비용과 가격의 차이","세금으로 낸 금액","기회비용만"],ex:"수요곡선과 가격선 사이의 면적으로 표현되기도 한다."},
+{id:38,cat:"잉여·효율",q:"완전경쟁 시장의 균형에서 총잉여(소비자잉여+생산자잉여)에 가까운 설명은?",a:"균형에서 사회적 후생이 최대가 되는 효율적 배분",opts:["균형에서 사회적 후생이 최대가 되는 효율적 배분","항상 독점과 동일하다","총잉여는 항상 0이다","정부가 가격을 정해야만 최대"],ex:"외부성 등이 없다는 전제에서의 결론이다."},
+{id:39,cat:"가격통제",q:"최고가격제(가격상한)가 균형가격보다 낮을 때 흔히 생기는 현상은?",a:"초과수요와 품질저하·암시장 가능성",opts:["초과수요와 품질저하·암시장 가능성","초과공급만","균형거래량이 항상 증가만 한다","생산자잉여가 무한대"],ex:"임대료 규제·분양가 상한 등이 사례로 거론된다."},
+{id:40,cat:"가격통제",q:"최저가격제(가격하한)가 균형임금보다 높을 때 노동시장에서 흔히 지적되는 것은?",a:"초과공급(구직자 초과·실업 가능성)",opts:["초과공급(구직자 초과·실업 가능성)","초과수요","모든 노동자의 소득이 항상 감소","수요곡선이 수직이 된다"],ex:"최저임금·농산물 가격지지 등이 예이다."},
+{id:41,cat:"시장실패",q:"시장실패의 유형으로 묶기 어려운 것은?",a:"완전정보·완전경쟁이 항상 성립하는 경우",opts:["완전정보·완전경쟁이 항상 성립하는 경우","외부효과","공공재","독과점"],ex:"정보 비대칭·독과점·외부성·공공재가 대표적 논의이다."},
+{id:42,cat:"정부·재정",q:"조세의 기능으로 가장 거리가 먼 것은?",a:"개별 기업의 사내 이윤 극대화",opts:["개별 기업의 사내 이윤 극대화","재원 조달","자원배분 조정","소득재분배"],ex:"효율·형평 목표와 연결되나 역기능(근로의욕 저하 등)도 논의된다."},
+{id:43,cat:"정부·재정",q:"소득세가 누진세로 설계될 때 기대되는 효과에 가까운 것은?",a:"소득재분배(형평성)",opts:["소득재분배(형평성)","역진적 부담 강화","간접세와 동일한 납세자-담세자 관계","조세 전가가 항상 불가능"],ex:"과세표준이 클수록 높은 세율이 적용되는 구조가 전형적이다."},
+{id:44,cat:"거시·사상사",q:"케인즈가 대공황 극복과 연결해 강조한 핵심은?",a:"유효수요 부족과 재정·통화정책으로의 대응",opts:["유효수요 부족과 재정·통화정책으로의 대응","공급이 수요를 자동으로 항상 맞춘다는 가정","정부 지출은 항상 해로우므로 금지","저축의 역설은 존재하지 않는다"],ex:"절약만 강조하면 수요 위축 우려와 연결해 ‘역설’로도 설명된다."},
+{id:45,cat:"거시·사상사",q:"스태그플레이션이란?",a:"실업(침체)과 물가상승(인플레)이 함께 나타나는 현상",opts:["실업(침체)과 물가상승(인플레)이 함께 나타나는 현상","실업만 있고 물가는 하락","고성장·저물가","성장 없이 물가만 하락"],ex:"1970년대 석유파동 이후 논의가 두드러진다."},
+{id:46,cat:"금융·노동시장",q:"금융시장에서 이자율(금리) 결정에 가장 흔히 대응시키는 틀은?",a:"자금의 수요와 공급",opts:["자금의 수요와 공급","오직 정부 고시만","환율만","실업률만"],ex:"저축이 공급, 투자 등이 수요로 그려진다."},
+{id:47,cat:"인구·복지",q:"UN 기준으로 초고령사회에 해당하는 노인인구 비율(65세 이상)은?",a:"20% 이상",opts:["20% 이상","7% 이상","14% 이상","30% 미만이면 모두 해당"],ex:"7% 고령화, 14% 고령, 20% 초고령으로 구분한다."},
+{id:48,cat:"소비이론",q:"절대소득가설에서 소비가 특히 의존한다고 보는 것은?",a:"현재의 가처분소득",opts:["현재의 가처분소득","일생 평균소득만","타인 소득만","과거 최고소비만"],ex:"단기 재정정책 효과 논의와 연결되기도 한다."},
+{id:49,cat:"경제 주체·활동",q:"외국(해외)이 경제 주체로서 하는 활동의 예로 가장 가까운 것은?",a:"수출·수입 등 무역",opts:["수출·수입 등 무역","세금 징수만","화폐 발행 독점","법원 재판"],ex:"교과서적으로 가계·기업·정부·외국 네 주체로 묶는다."},
+{id:50,cat:"재화·서비스",q:"서비스(용역)의 예로 적절한 것은?",a:"의사 진료·음악 연주",opts:["의사 진료·음악 연주","책과 의복만","도로만","공기"],ex:"구체적 물건이 아닌 유용한 행위·활동이다."},
+{id:51,cat:"희소성·3대 문제",q:"‘누구에게 얼마나 분배할 것인가’는 경제의 몇 번째 기본 문제에 가깝나?",a:"분배(For whom)",opts:["분배(For whom)","생산물만(What)","생산 방법만(How)","환율 결정"],ex:"형평성 논의와도 맞닿는다."},
+{id:52,cat:"기회비용·선택",q:"명시적 비용에 해당하는 것은?",a:"실제 지출된 현금·대금 지급",opts:["실제 지출된 현금·대금 지급","포기한 임금 수입만","기대 만족도","세금 환급액"],ex:"암묵적 비용은 실제 지출이 아닌 포기 이익이다."},
+{id:53,cat:"기회비용·선택",q:"암묵적 비용의 예로 가장 가까운 것은?",a:"자가 경영 시 놓친 타직장 임금",opts:["자가 경영 시 놓친 타직장 임금","영수증에 찍힌 재료비","부가세 납부","현금 매출"],ex:"회계장부에 없어도 경제비용에 포함될 수 있다."},
+{id:54,cat:"생산가능곡선",q:"PPF 안쪽의 점이 의미할 수 있는 것은?",a:"자원이 비효율적으로 사용되거나 일부 유휴",opts:["자원이 비효율적으로 사용되거나 일부 유휴","불가능한 조합","항상 최적","기술이 퇴보한 경우만"],ex:"곡선 위는 효율적, 바깥은 불가능."},
+{id:55,cat:"경제 체제",q:"전통 경제 체제의 특징으로 가까운 것은?",a:"관습·전통·종교에 따른 생산·분배",opts:["관습·전통·종교에 따른 생산·분배","시장가격만으로 모든 결정","정부 명령만","사유재산 부정만"],ex:"현대적 시장과 대비되는 유형이다."},
+{id:56,cat:"경제 체제",q:"시장 경제에서 정부 역할을 좁게 본 고전적 관점에 가까운 것은?",a:"법·질서·재산권 등 제도적 틀 마련",opts:["법·질서·재산권 등 제도적 틀 마련","모든 가격 고정","모든 기업 국유화","수입 금지"],ex:"수정 자본주의·혼합경제로 확대되기도 한다."},
+{id:57,cat:"분업·무역",q:"사회적 분업의 예로 적절한 것은?",a:"직업 분화·부품사와 완성차 관계",opts:["직업 분화·부품사와 완성차 관계","한 공정만 반복","가계 내 자급자족","정부 계획 한 줄"],ex:"기술적 분업과 구분된다."},
+{id:58,cat:"분업·무역",q:"분업의 부정적 효과로 자주 드는 것은?",a:"단순 반복으로 피로·스트레스, 공정 지연 시 전체 차질",opts:["단순 반복으로 피로·스트레스, 공정 지연 시 전체 차질","생산성이 항상 감소","교역이 사라짐","가격이 사라짐"],ex:"긍정적 효과와 대비해 암기한다."},
+{id:59,cat:"시장·가격기구",q:"가격기구의 ‘유인 제공’에 가까운 설명은?",a:"가격 상승이 더 생산·공급하려는 동기를 준다",opts:["가격 상승이 더 생산·공급하려는 동기를 준다","가격이 정보를 삭제한다","가격이 세율을 정한다","가격이 재판을 대신한다"],ex:"높은 임금은 해당 기능 습득 유인이 되기도 한다."},
+{id:60,cat:"수요·공급",q:"보완재의 예로 묶기 좋은 것은?",a:"프린터와 잉크",opts:["프린터와 잉크","콜라와 펩시","버스와 전철","쌀과 고기"],ex:"함께 쓸 때 만족이 커지는 연관재."},
+{id:61,cat:"수요·공급",q:"공급량의 변동에 해당하는 것은?",a:"가격 변화에 따른 공급 곡선 위의 이동",opts:["가격 변화에 따른 공급 곡선 위의 이동","기술 변화로 곡선 자체 이동","세금 제도 변경","기대 변화"],ex:"가격 외 요인이면 공급의 변동이다."},
+{id:62,cat:"수요·공급",q:"공급 곡선이 오른쪽으로 이동하면 같은 가격에서 공급량은?",a:"증가한다",opts:["증가한다","감소한다","불변이다","수요와 같아진다"],ex:"생산비 절감·기술 개선 등이 원인이 될 수 있다."},
+{id:63,cat:"시장균형",q:"공급 증가·수요 불변일 때 균형가격과 거래량은?",a:"가격 하락, 거래량 증가",opts:["가격 하락, 거래량 증가","가격 상승, 거래량 증가","가격 하락, 거래량 감소","둘 다 불변"],ex:"공급곡선 우측 이동의 전형적 결과."},
+{id:64,cat:"시장균형",q:"수요 감소·공급 증가일 때 균형가격은?",a:"하락한다",opts:["하락한다","상승한다","반드시 불변","반드시 불분명"],ex:"거래량은 불분명할 수 있다."},
+{id:65,cat:"탄력성",q:"Ed=0(완전 비탄력)일 때 수요곡선의 모양은?",a:"수직선에 가깝다",opts:["수직선에 가깝다","수평선에 가깝다","원점만 지난다","공급곡선과 일치"],ex:"가격이 변해도 수요량이 거의 안 변한다."},
+{id:66,cat:"탄력성",q:"Ed가 무한대(완전 탄력)에 가깝다는 것은?",a:"아주 작은 가격 변화에 수요량이 크게 반응",opts:["아주 작은 가격 변화에 수요량이 크게 반응","가격이 변해도 수요량 불변","수요가 항상 0","탄력성과 무관"],ex:"수요곡선이 수평에 가깝게 그려진다."},
+{id:67,cat:"탄력성",q:"수요의 가격탄력성이 1(단위 탄력)일 때 가격 변화에 총매출은?",a:"대체로 변하지 않는다",opts:["대체로 변하지 않는다","항상 증가","항상 감소","0이 된다"],ex:"가격변동률과 수요량변동률의 절대값이 같을 때."},
+{id:68,cat:"탄력성",q:"대체재가 많을수록 수요의 가격탄력성은 일반적으로?",a:"커진다(탄력적)",opts:["커진다(탄력적)","작아진다","0이 된다","음수가 아니게 된다"],ex:"갈아탈 선택지가 많다."},
+{id:69,cat:"탄력성",q:"측정 기간이 길수록 수요의 가격탄력성은?",a:"커지는 경향",opts:["커지는 경향","작아지는 경향","항상 1","0으로 수렴"],ex:"대체·습관 조정 시간이 생긴다."},
+{id:70,cat:"탄력성",q:"소득탄력성이 1보다 큰 정상재는?",a:"사치재에 가깝게 분류되기도 한다",opts:["사치재에 가깝게 분류되기도 한다","열등재이다","필수재이다","Giffen재이다"],ex:"0<Em<1이면 필수재 성격에 가깝다는 식의 대비."},
+{id:71,cat:"탄력성",q:"대체재인 Z의 가격 상승이 X 수요를 늘린다면 X에 대한 교차탄력성 부호는?",a:"양(+)의 값",opts:["양(+)의 값","음(-)의 값","항상 0","정의 불가"],ex:"보완재는 반대 부호가 된다."},
+{id:72,cat:"탄력성",q:"공급의 가격탄력성이 작은 상품으로 자주 드는 것은?",a:"농산물",opts:["농산물","공산품 일반","디지털 복제 무한 상품","항공 좌석 단기"],ex:"생산·저장 조절이 어렵다."},
+{id:73,cat:"잉여·효율",q:"생산자잉여는 무엇과 실제 수취가의 차이로 보나?",a:"최소한 받고 싶은 금액(공급 의사)",opts:["최소한 받고 싶은 금액(공급 의사)","최대 지불 의사","세금","한계효용"],ex:"공급곡선과 가격선 사이로 그린다."},
+{id:74,cat:"가격통제",q:"최고가격제로 인한 후생손실은 무엇과 연관되나?",a:"거래량 축소와 무효과 구간의 잉여 소멸",opts:["거래량 축소와 무효과 구간의 잉여 소멸","거래량이 항상 균형 이상","생산자만 이득","수요곡선 소멸"],ex:"교과서적 데드웨이트 로스 설명."},
+{id:75,cat:"시장실패",q:"외부 불경제의 문제는?",a:"사회적 한계비용이 개인의 한계비용보다 커 과다 생산·소비",opts:["사회적 한계비용이 개인의 한계비용보다 커 과다 생산·소비","과소 생산","가격이 너무 높아 수요 0","공공재 과다"],ex:"오염 등이 대표적이다."},
+{id:76,cat:"시장실패",q:"순수 공공재에 가까운 성질은?",a:"비배제성·비경합성",opts:["비배제성·비경합성","배제성만","경합성만","독점 공급"],ex:"시장만으로는 과소공급 논의와 연결된다."},
+{id:77,cat:"정부·재정",q:"직접세의 특징으로 자주 언급되는 것은?",a:"납세자와 담세자가 일치하기 쉽다",opts:["납세자와 담세자가 일치하기 쉽다","항상 역진적이다","전가가 필수이다","징수가 항상 쉽다"],ex:"소득세·법인세 등이 예이다."},
+{id:78,cat:"정부·재정",q:"간접세의 특징으로 가까운 것은?",a:"납세자와 담세자가 어긋날 수 있고 전가 가능",opts:["납세자와 담세자가 어긋날 수 있고 전가 가능","항상 누진이다","납세자=담세자만","재산 가액만 과세"],ex:"부가세·주세 등."},
+{id:79,cat:"정부·재정",q:"비례세의 의미는?",a:"과세표준에 관계없이 동일 세율",opts:["과세표준에 관계없이 동일 세율","표준이 클수록 세율이 높아짐","표준이 클수록 세율이 낮아짐","세액이 항상 0"],ex:"간접세에 많이 적용된다."},
+{id:80,cat:"정부·재정",q:"역진세에서 조세부담의 비중은?",a:"저소득층이 상대적으로 더 무겁다",opts:["저소득층이 상대적으로 더 무겁다","고소득층이 더 무겁다","모두 동일","세금이 없다"],ex:"현실적으로 드문 세율 구조로도 설명된다."},
+{id:81,cat:"가계·소비",q:"합리적 소비의 원리로 가까운 것은?",a:"한계효용이 한계비용(기회비용) 이상이 되도록 배분",opts:["한계효용이 한계비용(기회비용) 이상이 되도록 배분","가격이 싸면 무한 구매","저축은 항상 0","광고만 따른다"],ex:"동일 비용에서 효용 최대."},
+{id:82,cat:"가계·소비",q:"바람직한 소비에 가깝게 설명되는 것은?",a:"타인·사회·환경·미래를 고려한 소비",opts:["타인·사회·환경·미래를 고려한 소비","효용만 최대","가격만 최저","세금 회피"],ex:"합리적 소비와 구분되는 가치적 개념."},
+{id:83,cat:"소비이론",q:"항상소득가설에서 일시소득 변화에 소비 반응이 작은 이유는?",a:"소비는 항상소득 중심으로 움직이려 하기 때문",opts:["소비는 항상소득 중심으로 움직이려 하기 때문","일시소득이 소비에만 영향","소득이 없어서","이자율이 0이라서"],ex:"한계소비성향이 일시소득에 작다고 본다."},
+{id:84,cat:"소비이론",q:"생애주기가설의 핵심은?",a:"현재소득이 아니라 일생 소득을 고려해 소비를 정한다",opts:["현재소득이 아니라 일생 소득을 고려해 소비를 정한다","오직 현재 한 달 소득만","타인 소비만","물가만"],ex:"연금·저축과 연결된다."},
+{id:85,cat:"소비이론",q:"상대소득가설과 연결되기 쉬운 것은?",a:"주변 사람의 소득·소비가 본인 소비에 영향",opts:["주변 사람의 소득·소비가 본인 소비에 영향","물가만 본다","세율만 본다","환율만 본다"],ex:"전시효과 등과 맞닿는다."},
+{id:86,cat:"소비심리",q:"남들이 사서 따라 사는 소비는?",a:"편승효과(밴드웨건)",opts:["편승효과(밴드웨건)","백워효과","베블렌효과","가수요"],ex:"모방 소비."},
+{id:87,cat:"소비심리",q:"남들이 많이 쓰는 상품을 피해 줄이는 경향은?",a:"백워효과",opts:["백워효과","편승효과","베블렌효과","의존효과"],ex:"스노브와 구분해 암기."},
+{id:88,cat:"소비심리",q:"과시를 위해 비싼 것을 선호하는 소비는?",a:"베블렌효과",opts:["베블렌효과","편승효과","백워효과","필수재"],ex:"가격이 신호가 되기도 한다."},
+{id:89,cat:"기업·정부",q:"기업가 정신의 핵심으로 가까운 것은?",a:"불확실성을 감수하며 생산·투자를 추진",opts:["불확실성을 감수하며 생산·투자를 추진","세금 최소화만","가격 고정","공무원 임금 결정"],ex:"혁신과도 연결된다."},
+{id:90,cat:"기업·정부",q:"슘페터가 말한 혁신의 성격으로 가까운 것은?",a:"창조적 파괴",opts:["창조적 파괴","가격 동결","재분배 소멸","공급곡선 수직"],ex:"새 결합·새 시장·새 제품 등."},
+{id:91,cat:"기업·정부",q:"정부 재정에서 세입의 예가 아닌 것은?",a:"교육·복지 예산 지출",opts:["교육·복지 예산 지출","조세","수수료","조세 외 수입"],ex:"세입은 들어오는 재원, 세출은 지출이다."},
+{id:92,cat:"기업·정부",q:"예산안을 심의·확정하는 우리나라 입법기관은?",a:"국회",opts:["국회","정부 단독","감사원","한국은행"],ex:"편성은 정부, 심의는 국회 흐름."},
+{id:93,cat:"금융·노동시장",q:"노동시장에서 임금은 주로 무엇의 균형으로 설명되나?",a:"노동 수요와 공급",opts:["노동 수요와 공급","물가만","환율만","국채만"],ex:"최저임금은 하한으로 개입 예."},
+{id:94,cat:"거시·사상사",q:"대공황의 발단으로 자주 언급되는 사건은?",a:"1929년 뉴욕 주가 대폭락",opts:["1929년 뉴욕 주가 대폭락","1973 유가인상만","1997 외환위기","2008 리먼만"],ex:"금융 패닉과 실물 경기 악화."},
+{id:95,cat:"거시·사상사",q:"신자유주의 정책 방향으로 가까운 것은?",a:"규제 완화·시장경쟁 강화·작은 정부 지향",opts:["규제 완화·시장경쟁 강화·작은 정부 지향","모든 산업 국유화","계획배분만","봉쇄만"],ex:"레이건·대처 시기와 연결된다."},
+{id:96,cat:"거시·사상사",q:"석유파동과 맞물려 논의된 현상은?",a:"스태그플레이션",opts:["스태그플레이션","초저물가 성장","무역수지 흑자만","인구 폭발만"],ex:"유가충격+침체."},
+{id:97,cat:"거시·사상사",q:"구성의 오류(합성의 오류)의 의미는?",a:"개별에 타당한 것이 전체에도 타당하다고 보는 오류",opts:["개별에 타당한 것이 전체에도 타당하다고 보는 오류","전체가 항상 개별의 합","통계 오타","세율 계산 오류"],ex:"저축의 역설과 연결해 설명되기도 한다."},
+{id:98,cat:"인구·복지",q:"UN 기준 고령화 사회의 노인인구 비율은?",a:"7% 이상",opts:["7% 이상","14% 이상","20% 이상","3% 이상"],ex:"14% 이상은 고령 사회."},
+{id:99,cat:"인구·복지",q:"고령 사회 진입 기준(노인비율)은?",a:"14% 이상",opts:["14% 이상","7% 이상","20% 이상","10% 이상"],ex:"2018년 우리나라 예시가 교재에 있다."},
+{id:100,cat:"유량·저량",q:"GDP는 유량과 저량 중 어느 쪽 개념에 가깝나?",a:"유량",opts:["유량","저량","둘 다 아님","가격만"],ex:"일정 기간 흐름으로 잰다."},
+{id:101,cat:"유량·저량",q:"특정 시점의 부의 재고는?",a:"저량",opts:["저량","유량","유통속도만","세율"],ex:"소득은 유량, 재산은 저량."},
+{id:102,cat:"수요·공급",q:"공급 법칙의 일반적 내용은?",a:"가격이 오르면 공급량이 늘어난다",opts:["가격이 오르면 공급량이 늘어난다","가격이 오르면 공급량이 줄어든다","가격과 무관","수요량과 항상 같다"],ex:"예외로 노동·매석 등이 언급된다."},
+{id:103,cat:"수요·공급",q:"수요 법칙의 일반적 내용은?",a:"가격이 오르면 수요량이 줄어든다",opts:["가격이 오르면 수요량이 줄어든다","가격이 오르면 수요량이 늘어난다","가격과 무관","공급량과 항상 같다"],ex:"Veblen재 등 예외 논의."},
+{id:104,cat:"경제사",q:"산업혁명 이후 자본주의의 중심이 된 이윤 추구 활동은?",a:"상품 생산 과정의 부가가치",opts:["상품 생산 과정의 부가가치","고리대금업만","관세만","농업 자급자족만"],ex:"산업 자본주의."},
+{id:105,cat:"경제사",q:"독점 자본주의의 특징으로 가까운 것은?",a:"소수 대기업의 시장 지배력",opts:["소수 대기업의 시장 지배력","완전 경쟁만","정부 계획만","자급자족"],ex:"대량생산·기술·연료 독점 등."},
+{id:106,cat:"경제사",q:"수정 자본주의(혼합경제)로의 보완이 두드진 계기는?",a:"1929년대 대공황",opts:["1929년대 대공황","15세기 상업혁명만","1차대전만","인터넷 보급"],ex:"정부 개입 확대."},
+{id:107,cat:"분배·소득",q:"요소소득의 예로 묶기 좋은 것은?",a:"임금·이자·지대·이윤",opts:["임금·이자·지대·이윤","부가세만","여권 발급료만","상속세만"],ex:"생산요소 제공의 대가."},
+{id:108,cat:"분배·소득",q:"가처분소득의 뜻에 가장 가까운 것은?",a:"세금 등을 제하고 소비·저축에 쓸 수 있는 소득",opts:["세금 등을 제하고 소비·저축에 쓸 수 있는 소득","GDP와 항상 동일","저축만 해당","정부지출과 동일"],ex:"조세·필수비용 차감 후 처분 가능한 소득으로 본다."},
+{id:109,cat:"분배·소득",q:"절약의 역설이 강조하는 위험은?",a:"모두가 동시에 소비를 줄이면 국민소득이 위축될 수 있다",opts:["모두가 동시에 소비를 줄이면 국민소득이 위축될 수 있다","저축이 항상 나쁘다","투자가 무한히 늘어난다","물가가 항상 하락"],ex:"구성의 오류와 연결."},
+{id:110,cat:"농업·가격",q:"농산물 가격이 크게 출렁이기 쉬운 이유로 가까운 것은?",a:"수요·공급이 가격에 비탄력",opts:["수요·공급이 가격에 비탄력","둘 다 완전탄력","정부가 가격을 안 둔다","저장이 항상 쉽다"],ex:"작은 수급 변화에도 가격 변동이 크다."},
+{id:111,cat:"농업·가격",q:"이중 가격제가 낳을 수 있는 문제는?",a:"정부 재정 부담·적자 누적",opts:["정부 재정 부담·적자 누적","소비자 가격 상승만","수출 금지","환율 고정"],ex:"높은 가격 매입 후 낮은 가격 판매."},
+{id:112,cat:"OPEC·에너지",q:"OPEC이 장기적으로 고유가를 유지하기 어렵다는 설명에 가까운 것은?",a:"장기 수요·공급이 더 탄력적이어 실익이 줄 수 있다",opts:["장기 수요·공급이 더 탄력적이어 실익이 줄 수 있다","단기만 탄력적이다","유가는 절대 안 변한다","수요가 항상 0"],ex:"교과서 OPEC 사례."},
+{id:113,cat:"시장균형",q:"수요와 공급이 모두 증가하면 균형거래량은?",a:"늘어난다",opts:["늘어난다","줄어든다","반드시 불변","0이 된다"],ex:"균형가격은 불분명할 수 있다."},
+{id:114,cat:"시장균형",q:"수요와 공급이 모두 감소하면 균형거래량은?",a:"줄어든다",opts:["줄어든다","늘어난다","반드시 불변","무한대"],ex:"가격 방향은 불분명."},
+{id:115,cat:"탄력성",q:"비탄력적 수요에서 가격을 올리면 총매출은?",a:"늘어나는 경향",opts:["늘어나는 경향","줄어드는 경향","항상 0","변하지 않는다"],ex:"가격 상승률이 수량 감소보다 크다."},
+{id:116,cat:"탄력성",q:"단위 탄력적일 때 가격 인하의 총매출은?",a:"거의 변하지 않는다",opts:["거의 변하지 않는다","반드시 증가","반드시 감소","무한 증가"],ex:"Ed=1."},
+{id:117,cat:"정부·재정",q:"확대 재정의 방향은?",a:"지출 늘리거나 세금 줄여 총수요를 키운다",opts:["지출 늘리거나 세금 줄여 총수요를 키운다","지출 줄이고 세금 늘린다","통화를 없앤다","환율 고정"],ex:"침체 대응 논의와 연결."},
+{id:118,cat:"정부·재정",q:"긴축 재정의 방향은?",a:"지출 줄이거나 세금 늘려 과열·물가를 완화",opts:["지출 줄이거나 세금 늘려 과열·물가를 완화","지출만 무한 확대","세금 없음","복지만 확대"],ex:"경기 과열 시나 물가 안정."},
+{id:119,cat:"정부·재정",q:"재정 건전성이 악화되면 나타날 수 있는 것은?",a:"국가 신용도 하락·조세부담 증가 압력",opts:["국가 신용도 하락·조세부담 증가 압력","물가가 항상 0","실업이 사라짐","환율이 고정됨"],ex:"지속가능한 재정 수지."},
+{id:120,cat:"정부·재정",q:"재정 민주주의가 요구하는 것은?",a:"예산 편성·집행에 국민의 실질적 참여 보장",opts:["예산 편성·집행에 국민의 실질적 참여 보장","정부만 결정","국회 폐지","조세 폐지"],ex:"투명성·감시와 맞닿는다."},
+{id:121,cat:"시장실패",q:"정보 비대칭이 심한 시장의 문제는?",a:"역선택·도덕적 해이 등",opts:["역선택·도덕적 해이 등","항상 효율적","가격만으로 완벽 정보","외부효과 소멸"],ex:"used car lemons 등."},
+{id:122,cat:"시장실패",q:"독과점의 균형은 완전경쟁 대비 일반적으로?",a:"가격은 높고 생산량은 적다",opts:["가격은 높고 생산량은 적다","가격은 낮고 양은 많다","완전경쟁과 동일","수요가 0"],ex:"시장지배력."},
+{id:123,cat:"잉여·효율",q:"독점으로 인한 비효율은 무엇과 연관되나?",a:"가격이 한계비용 위에서 거래량이 줄어 데드웨이트 손실",opts:["가격이 한계비용 위에서 거래량이 줄어 데드웨이트 손실","총잉여가 항상 최대","P=MC","소비자잉여만 무한"],ex:"완전경쟁 대비."},
+{id:124,cat:"수요·공급",q:"X의 수요곡선이 오른쪽으로 이동한 원인이 될 수 있는 것은?",a:"소비자 취향 개선·인구 증가",opts:["소비자 취향 개선·인구 증가","X의 가격 상승","대체재 가격 하락","생산 기술 퇴보"],ex:"가격 외 요인은 수요 이동."},
+{id:125,cat:"수요·공급",q:"원재료 가격 상승은 공급곡선을 어떻게 밀까?",a:"왼쪽(위쪽)으로 이동",opts:["왼쪽(위쪽)으로 이동","오른쪽으로 이동","변하지 않음","수직이 됨"],ex:"같은 가격에서 공급량 감소."},
+{id:126,cat:"경제학의 기초",q:"넓은 의미의 경제적 자원이란?",a:"아껴 써야 할 쓸모 있는 모든 것",opts:["아껴 써야 할 쓸모 있는 모든 것","현금만","노동만","정부만"],ex:"좁은 의미는 생산요소에 가깝다."},
+{id:127,cat:"경제학의 기초",q:"좁은 의미의 생산요소가 아닌 것은?",a:"기업의 브랜드 이미지(전통적 4요소 외)",opts:["기업의 브랜드 이미지(전통적 4요소 외)","노동","자본","토지"],ex:"노동·토지·자본·기업가정신(기능) 등으로 배운다."},
+{id:128,cat:"경제 주체·활동",q:"가계가 생산요소 시장에서 하는 일은?",a:"노동 등을 공급하고 소득을 받는다",opts:["노동 등을 공급하고 소득을 받는다","재화만 공급","세금만 부과","화폐만 발행"],ex:"생산물 시장에서는 수요자."},
+{id:129,cat:"경제 주체·활동",q:"기업이 생산물 시장에서 하는 일은?",a:"재화·서비스를 공급한다",opts:["재화·서비스를 공급한다","노동만 산다","세금만 낸다","투표만 한다"],ex:"요소 시장에서는 수요자."},
+{id:130,cat:"효율성·형평성",q:"효율성에 가까운 정의는?",a:"주어진 자원으로 후생을 최대로",opts:["주어진 자원으로 후생을 최대로","모두 동일한 소득","가격을 0으로","성장을 0으로"],ex:"형평성과 트레이드오프 논의."},
+{id:131,cat:"경제적 유인",q:"장학금은 어떤 유인에 해당하나?",a:"긍정적 유인",opts:["긍정적 유인","부정적 유인","세금","벌점"],ex:"행동 강화."},
+{id:132,cat:"경제적 유인",q:"종량제 봉투 요금은?",a:"쓰레기 배출을 줄이려는 부정적 유인",opts:["쓰레기 배출을 줄이려는 부정적 유인","긍정적 유인만","보조금","이자 보조"],ex:"비용으로 행동 억제."},
+{id:133,cat:"합리적 선택·효율",q:"합리적 의사결정 순서로 가까운 것은?",a:"문제 인식→대안→기준→평가→선택",opts:["문제 인식→대안→기준→평가→선택","선택만 하고 끝","비용 무시","대안 없이 결정"],ex:"교과서 단계."},
+{id:134,cat:"시장·가격기구",q:"스미스가 말한 보이지 않는 손은?",a:"이기적 선택이 시장을 통해 사회에 이롭게 작용할 수 있다는 은유",opts:["이기적 선택이 시장을 통해 사회에 이롭게 작용할 수 있다는 은유","정부 계획","세금","독점 가격"],ex:"가격기구와 연결."},
+{id:135,cat:"혼합경제",q:"혼합경제의 한계로 지적될 수 있는 것은?",a:"정부 비대화·민간 자율 저해·복지병",opts:["정부 비대화·민간 자율 저해·복지병","시장이 사라짐","세금이 항상 0","가격이 사라짐"],ex:"시장+정부의 부작용."},
+{id:136,cat:"자본주의사",q:"상업 자본주의 시기 이윤의 상당 부분은?",a:"유통·금융 등 비생산적 활동에서도 추구",opts:["유통·금융 등 비생산적 활동에서도 추구","공장 대량생산만","계획경제","농업 자급만"],ex:"중상주의와 연계."},
+{id:137,cat:"자본주의사",q:"산업혁명의 특징으로 거리가 먼 것은?",a:"화석연료 없이 수공업만 지속",opts:["화석연료 없이 수공업만 지속","기계 광범위 사용","무생물 동력원","공업 규모 확대"],ex:"에너지·기계화가 핵심."},
+{id:138,cat:"소비이론",q:"소비의 비가역성이 말하는 것은?",a:"소득이 줄어도 한번 오른 소비를 줄이기 어렵다",opts:["소득이 줄어도 한번 오른 소비를 줄이기 어렵다","소비가 항상 0","소득과 무관","물가와 무관"],ex:"습관·라쳇."},
+{id:139,cat:"소비이론",q:"톱니 효과와 연결되는 설명은?",a:"과거 최고 소비 수준이 현재 소비에 영향",opts:["과거 최고 소비 수준이 현재 소비에 영향","이웃 소비만","세율만","환율만"],ex:"상대소득 가설 계열."},
+{id:140,cat:"기업·정부",q:"기업의 사회적 책임 예로 적절한 것은?",a:"환경·윤리·투명 경영",opts:["환경·윤리·투명 경영","이윤 포기만","탈세","독점 유지만"],ex:"이해관계자 대응."},
+{id:141,cat:"조세·분류",q:"부가가치세는 직접세·간접세 중?",a:"간접세",opts:["간접세","직접세","둘 다 아님","재산세"],ex:"소비 지출 기준 부과."},
+{id:142,cat:"조세·분류",q:"소득세는 직접세·간접세 중?",a:"직접세",opts:["직접세","간접세","관세만","교육세만"],ex:"납세자=담세자에 가깝다."},
+{id:143,cat:"조세·분류",q:"간접세를 비례세로 걸면 나타날 수 있는 것은?",a:"조세부담의 역진성",opts:["조세부담의 역진성","누진성 강화","소득재분배 극대","세금 소멸"],ex:"저소득층 부담 비중이 커질 수 있다."},
+{id:144,cat:"경제 체제",q:"사회주의 경제 체제의 특징으로 가까운 것은?",a:"생산수단의 국·공유",opts:["생산수단의 국·공유","생산수단의 완전 사유화만","시장만","종교법만"],ex:"자본주의와 대비."},
+{id:145,cat:"경제 체제",q:"자본주의 경제 체제의 특징으로 가까운 것은?",a:"생산수단의 사유화",opts:["생산수단의 사유화","모든 재 국유","가격 금지","시장 폐지"],ex:"이윤 추구와 결합."},
+{id:146,cat:"수요·공급",q:"기대 가격 상승으로 당장 사재기하는 것은?",a:"가수요",opts:["가수요","편승효과","백워효과","베블렌"],ex:"미래 가격에 반응."},
+{id:147,cat:"수요·공급",q:"광고에 따라 비판 없이 구매하는 것은?",a:"의존 효과",opts:["의존 효과","백워효과","가수요","역진세"],ex:"정보·선전 영향."},
+{id:148,cat:"탄력성",q:"공급의 가격탄력성이 큰 경우는?",a:"대응 기간이 길고 저장·생산이 유연할 때",opts:["대응 기간이 길고 저장·생산이 유연할 때","항상 농산물","기간이 짧을수록 항상 큼","Es=0만"],ex:"공산품이 농산물보다 탄력적이라는 식."},
+{id:149,cat:"수요·공급",q:"한 재화의 가격이 오르면 수요량이 줄어든다는 법칙은?",a:"수요 법칙",opts:["수요 법칙","공급 법칙","비교 우위","저축의 역설"],ex:"다른 조건 불변 전제."},
+{id:150,cat:"수요·공급",q:"한 재화의 가격이 오르면 공급량이 늘어난다는 법칙은?",a:"공급 법칙",opts:["공급 법칙","수요 법칙","한계비용 체증","규모의 경제"],ex:"가격과 공급량의 정(+) 관계."},
+{id:151,cat:"시장균형",q:"초과 공급이 있을 때 가격에는 어떤 압력이 생기나?",a:"하락 압력",opts:["하락 압력","상승 압력","압력 없음","고정"],ex:"판매 경쟁이 가격을 내린다."},
+{id:152,cat:"시장균형",q:"균형에서 수요곡선과 공급곡선의 교점은?",a:"균형 가격과 균형 거래량",opts:["균형 가격과 균형 거래량","최대 이윤점만","세율","한계비용만"],ex:"수요량=공급량."},
+{id:153,cat:"탄력성",q:"소득탄력성이 음수이면?",a:"열등재",opts:["열등재","사치재","정상재","공공재"],ex:"소득 증가에 수요 감소."},
+{id:154,cat:"탄력성",q:"소득탄력성이 0과 1 사이의 정상재는?",a:"필수재에 가깝다",opts:["필수재에 가깝다","사치재","열등재","중립재"],ex:"소득 증가에 수요는 느나 비율은 작다."},
+{id:155,cat:"탄력성",q:"교차탄력성이 음이면 두 재화는?",a:"보완재 관계",opts:["보완재 관계","대체재","독립재","공공재"],ex:"Z 가격↑ → X 수요↓."},
+{id:156,cat:"잉여·효율",q:"한계비용이 한계효용과 같아지는 소비는?",a:"소비자 균형(직관적 설명)",opts:["소비자 균형(직관적 설명)","항상 생산 0","가격 통제","독점"],ex:"교과서적 한계분석과 연결."},
+{id:157,cat:"가격통제",q:"임대료 상한으로 집주인이 유지보수를 줄이는 현상은?",a:"품질 저하 가능성",opts:["품질 저하 가능성","거래량 증가만","초과공급 소멸","PPF 이동"],ex:"최고가격제 부작용."},
+{id:158,cat:"가격통제",q:"최저임금이 균형임금보다 높으면 노동 공급은?",a:"늘어나는 경향",opts:["늘어나는 경향","줄어드는 경향","불변","0"],ex:"더 일하고 싶어짐."},
+{id:159,cat:"시장실패",q:"외부 경제가 있으면 사적 균형은 사회 최적 대비?",a:"과소 생산·소비",opts:["과소 생산·소비","과다 생산","완전경쟁과 동일","가격 0"],ex:"긍정적 외부효과."},
+{id:160,cat:"정부·재정",q:"조세의 역기능으로 드는 것은?",a:"근로·투자 의욕 저하, 수요 위축 가능",opts:["근로·투자 의욕 저하, 수요 위축 가능","항상 효율 증가","소득 무한 증가","물가 고정"],ex:"과세의 비용."},
+{id:161,cat:"조세·분류",q:"상속세는 통상?",a:"직접세",opts:["직접세","간접세","부가세","관세만"],ex:"소득·재산에 직접 부과."},
+{id:162,cat:"조세·분류",q:"주세는 통상?",a:"간접세",opts:["간접세","직접세","재산세","취득세"],ex:"소비를 과세."},
+{id:163,cat:"기회비용·선택",q:"예금을 선택했을 때 주식 15만 원 기대수익이 있다면 기회비용은?",a:"15만 원",opts:["15만 원","10만 원","0원","25만 원"],ex:"포기한 최선의 대안."},
+{id:164,cat:"생산가능곡선",q:"PPF가 직선이면 기회비용은?",a:"일정(불변)",opts:["일정(불변)","체증","체감","0"],ex:"노동만·기회비용 일정 가정 모형."},
+{id:165,cat:"분업·무역",q:"무역 이익이 생기려면 교환 비율은?",a:"양국의 기회비용 사이",opts:["양국의 기회비용 사이","한쪽 기회비용보다 낮게만","무조건 1대1","무역 전 가격"],ex:"비교우위 모형."},
+{id:166,cat:"경제 체제",q:"혼합경제가 확대된 시기로 자주 드는 것은?",a:"1930년대 대공황 이후",opts:["1930년대 대공황 이후","산업혁명 직전","15세기만","정보혁명 이전만"],ex:"정부 개입 확대."},
+{id:167,cat:"거시·사상사",q:"레이건 정부가 강조한 방향은?",a:"세금 감면·규제 완화 등 시장 친화",opts:["세금 감면·규제 완화 등 시장 친화","국유화 확대만","계획배분만","관세 폐지만"],ex:"신자유주의."},
+{id:168,cat:"거시·사상사",q:"대공황 때 미국의 대응으로 유명한 것은?",a:"뉴딜 정책",opts:["뉴딜 정책","신자유주의 패키지","과전법","금본위 고수·균형재정을 우선한 초기 대응만"],ex:"공공일자리·규제 등."},
+{id:169,cat:"금융·노동시장",q:"경기 침체로 투자가 줄면 금융시장에서?",a:"자금 수요 감소로 이자율 하락 압력",opts:["자금 수요 감소로 이자율 하락 압력","이자율이 반드시 상승","저축이 0","통화 소멸"],ex:"교과서 예시 흐름."},
+{id:170,cat:"경제 주체·활동",q:"정부가 조세로 재원을 마련하는 활동은?",a:"재정의 세입",opts:["재정의 세입","세출","결산만","예산안 폐기"],ex:"들어오는 돈."},
+{id:171,cat:"경제 주체·활동",q:"정부가 복지에 지출하는 활동은?",a:"재정의 세출",opts:["재정의 세출","세입","통화발행만","환율 결정"],ex:"나가는 돈."},
+{id:172,cat:"재화·서비스",q:"경제재의 특징은?",a:"대가를 지불해야 얻을 수 있다",opts:["대가를 지불해야 얻을 수 있다","항상 무상","희소성 없음","정부만 공급"],ex:"희소성."},
+{id:173,cat:"희소성·3대 문제",q:"생산물의 결정(What)이 중시하는 가치로 가까운 것은?",a:"효율성",opts:["효율성","형평성만","전통만","종교"],ex:"무엇을 얼마나 생산할지."},
+{id:174,cat:"희소성·3대 문제",q:"분배 문제가 중시하는 가치로 함께 거론되는 것은?",a:"효율성과 형평성",opts:["효율성과 형평성","효율성만","형평성만","전통만"],ex:"누구에게 어떻게."},
+{id:175,cat:"경제학의 기초",q:"경제학 연구 범위가 넓어진 예로 교과서에 나오기 쉬운 것은?",a:"범죄·가족·스포츠 등도 분석",opts:["범죄·가족·스포츠 등도 분석","오직 화폐만","오직 농업만","오직 정부만"],ex:"경제적 인센티브 관점."},
+{id:176,cat:"시장·가격기구",q:"가격이 높다는 신호가 생산자에게 주는 의미는?",a:"그 재화가 상대적으로 희소하거나 원가가 높다는 정보",opts:["그 재화가 상대적으로 희소하거나 원가가 높다는 정보","정부 명령","세율","실업률"],ex:"신호 기능."},
+{id:177,cat:"수요·공급",q:"소비자의 취향 악화는 수요곡선을?",a:"왼쪽으로 이동",opts:["왼쪽으로 이동","오른쪽으로 이동","수직이 됨","공급곡선과 합침"],ex:"같은 가격에 수요량 감소."},
+{id:178,cat:"수요·공급",q:"생산자 수가 늘면 시장 공급곡선은?",a:"오른쪽으로 이동",opts:["오른쪽으로 이동","왼쪽으로 이동","불변","수직"],ex:"개별 공급의 가로합."},
+{id:179,cat:"탄력성",q:"지출 비중이 큰 재화일수록 수요의 가격탄력성은?",a:"커지기 쉽다",opts:["커지기 쉽다","작아지기 쉽다","0","무한대 고정"],ex:"가격 변화 체감."},
+{id:180,cat:"탄력성",q:"용도가 다양한 재화의 수요는?",a:"탄력적이 되기 쉽다",opts:["탄력적이 되기 쉽다","비탄력적만","0","공급과 같다"],ex:"다른 용도로 대체."},
+{id:181,cat:"잉여·효율",q:"독점가가 단일가로 팔 때 사회적 후생은 완전경쟁 대비?",a:"총잉여가 줄어든다",opts:["총잉여가 줄어든다","항상 최대","변하지 않는다","소비자만 무한 이득"],ex:"데드웨이트."},
+{id:182,cat:"정부·재정",q:"누진세로 고소득에 높은 세율을 적용하면 기대되는 것은?",a:"소득 재분배",opts:["소득 재분배","역진 부담","세금 소멸","간접세화"],ex:"형평성 목표."},
+{id:183,cat:"기업·정부",q:"기업이 납세의무를 지는 이유는?",a:"국가 재정에 기여",opts:["국가 재정에 기여","가계만 납세","조세 없음","환율 유지"],ex:"법인세 등."},
+{id:184,cat:"가계·소비",q:"가계가 납세자인 이유는?",a:"조세로 정부 재원에 참여",opts:["조세로 정부 재원에 참여","생산만 함","수입만 함","이자만 받음"],ex:"소득세 등."},
+{id:185,cat:"소비이론",q:"절대소득가설에서 한계소비성향은 0과 1 사이라고 본다면?",a:"소득 증가분의 일부만 소비",opts:["소득 증가분의 일부만 소비","전부 소비","전부 저축","소비 0"],ex:"0<MPC<1."},
+{id:186,cat:"소비심리",q:"베블렌 효과가 설명하기 어려운 것은?",a:"가격 하락에 따른 수요 증가만으로 설명되는 필수재",opts:["가격 하락에 따른 수요 증가만으로 설명되는 필수재","과시 소비","명품 선호","지위 과시"],ex:"가격이 지위 신호."},
+{id:187,cat:"경제사",q:"자유방임주의가 강했던 시기의 이념과 가깝게 짝지어지는 것은?",a:"19세기 자유경쟁 자본주의",opts:["19세기 자유경쟁 자본주의","신자유주의만","계획경제","중상주의만"],ex:"정부 개입 최소 논의."},
+{id:188,cat:"경제사",q:"복지 자본주의·수정 자본주의로의 변화에 가까운 것은?",a:"정부 규제·복지 확대",opts:["정부 규제·복지 확대","정부 폐지","시장 폐지","사유재산 폐지"],ex:"대공황 이후."},
+{id:189,cat:"분배·소득",q:"분배 단계에서 가계가 받는 소득의 원천은?",a:"생산요소 제공의 대가",opts:["생산요소 제공의 대가","정부 인쇄","복권만","세금"],ex:"임금·이자·지대·이윤."},
+{id:190,cat:"분배·소득",q:"소득에서 세금을 빼고 처분 가능한 소득을 가리키는 말은?",a:"가처분소득(개념에 가깝게)",opts:["가처분소득(개념에 가깝게)","국민총생산","총저축","정부지출"],ex:"소비+저축의 근거."},
+{id:191,cat:"농업·가격",q:"농산물 가격 지지의 목적으로 가까운 것은?",a:"농가 소득·가격 안정",opts:["농가 소득·가격 안정","소비자 가격 인상만","수입 금지","환율 고정"],ex:"최저가격제에 가깝다."},
+{id:192,cat:"혼합경제",q:"혼합경제에서 시장이 맡고 정부가 보완하는 영역으로 가까운 것은?",a:"시장 실패·불평등 완화",opts:["시장 실패·불평등 완화","모든 가격 결정","생산 전량 명령","화폐 폐지"],ex:"효율+형평."},
+{id:193,cat:"시장실패",q:"공공재의 비배제성이란?",a:"비납부자도 배제하기 어렵다",opts:["비납부자도 배제하기 어렵다","한 사람이 쓰면 다른 사람은 못 쓴다","가격이 0","수요가 0"],ex:"무임승차 문제."},
+{id:194,cat:"시장실패",q:"독점이 아닌 불완전경쟁의 예는?",a:"과점·독점적 경쟁",opts:["과점·독점적 경쟁","완전경쟁만","계획경제만","자급자족만"],ex:"가격 결정력."},
+{id:195,cat:"탄력성",q:"공급의 가격탄력성 0에 가깝다는 것은?",a:"단기 농산물처럼 공급 조절이 어렵다",opts:["단기 농산물처럼 공급 조절이 어렵다","디지털 복제","항상 공산품","Es 무한"],ex:"수직에 가까운 공급."},
+{id:196,cat:"탄력성",q:"수요의 소득탄력성이 1이면?",a:"소득 변화율과 수요량 변화율이 같다",opts:["소득 변화율과 수요량 변화율이 같다","열등재","수요 0","가격 0"],ex:"단위 소득탄력."},
+{id:197,cat:"수요·공급",q:"보완재 Z 가격이 오르면 X의 수요는?",a:"감소",opts:["감소","증가","불변","무한"],ex:"교차탄력 음."},
+{id:198,cat:"수요·공급",q:"대체재 Z 가격이 오르면 X의 수요는?",a:"증가",opts:["증가","감소","불변","0"],ex:"상대적으로 X이 저렴."},
+{id:199,cat:"시장균형",q:"공급 감소·수요 불변일 때 균형가격은?",a:"상승",opts:["상승","하락","불변","0"],ex:"왼쪽 이동."},
+{id:200,cat:"시장균형",q:"수요 감소·공급 불변일 때 균형가격은?",a:"하락",opts:["하락","상승","불변","무한"],ex:"왼쪽 이동."},
+{id:201,cat:"기회비용·선택",q:"경제적 비용은 회계비용과 비교할 때 보통?",a:"기회비용 개념이 더 넓다",opts:["기회비용 개념이 더 넓다","회계만이 전부","둘은 항상 같다","비용 없음"],ex:"암묵비용 포함."},
+{id:202,cat:"합리적 선택·효율",q:"자원 배분이 효율적이라는 말은?",a:"총잉여가 최대화되는 상태에 가깝다",opts:["총잉여가 최대화되는 상태에 가깝다","모두 동일 소득","가격 0","정부만 생산"],ex:"경쟁 균형과 연결."},
+{id:203,cat:"경제적 유인",q:"보조금은?",a:"긍정적 유인",opts:["긍정적 유인","부정적 유인","세금","벌금"],ex:"행동 강화."},
+{id:204,cat:"경제적 유인",q:"특허권은 기업에 어떤 유인을?",a:"긍정적(혁신 보상)",opts:["긍정적(혁신 보상)","부정적","세금","벌점"],ex:"독점적 이익 기대."},
+{id:205,cat:"생산가능곡선",q:"PPF 위의 점은?",a:"효율적(자원 완전·최적 활용)",opts:["효율적(자원 완전·최적 활용)","비효율","불가능","무시"],ex:"곡선 위."},
+{id:206,cat:"생산가능곡선",q:"PPF 바깥 점은?",a:"현재 자원·기술로는 불가능",opts:["현재 자원·기술로는 불가능","비효율","항상 균형","최저"],ex:"성장으로 접근."},
+{id:207,cat:"분업·무역",q:"특화가 가져오는 이득으로 가까운 것은?",a:"생산성 향상과 교환 이익",opts:["생산성 향상과 교환 이익","자급자족만","세금 증가","실업 증가"],ex:"비교우위와 연결."},
+{id:208,cat:"경제 체제",q:"시장경제의 한계로 자주 드는 것은?",a:"빈부 격차·경기 변동",opts:["빈부 격차·경기 변동","정보 완전","가격 소멸","경쟁 과다 소멸"],ex:"정부 개입 논의."},
+{id:209,cat:"정부·재정",q:"시장 실패 보완을 위한 정부 개입 예는?",a:"독점 규제·외부효과 대응·공공재",opts:["독점 규제·외부효과 대응·공공재","모든 가격 고시","기업 국유화만","세금 폐지"],ex:"효율적 배분."},
+{id:210,cat:"정부·재정",q:"소득 재분배를 세출 측면에서 하는 방법은?",a:"기초생활보장·각종 보조",opts:["기초생활보장·각종 보조","누진세만","관세만","법인세 폐지"],ex:"저소득층 지원."},
+{id:211,cat:"인구·복지",q:"고령화가 노동시장에 줄 수 있는 문제는?",a:"노동력 감소·부양 부담",opts:["노동력 감소·부양 부담","실업만 증가","인구 무한 증가","세율 0"],ex:"복지·연금 논의."},
+{id:212,cat:"거시·사상사",q:"케인즈가 강조한 총수요 정책의 예는?",a:"재정지출 확대·세금 감면",opts:["재정지출 확대·세금 감면","긴축만","통화 소멸","수입만 늘리기"],ex:"유효수요."},
+{id:213,cat:"거시·사상사",q:"스미스가 본 개인의 이익 추구 결과는?",a:"의도치 않게 사회 이익에 기여할 수 있다",opts:["의도치 않게 사회 이익에 기여할 수 있다","항해 사회 해악만","정부 대체","독점만"],ex:"보이지 않는 손."},
+{id:214,cat:"유량·저량",q:"한 해 소비 지출은?",a:"유량",opts:["유량","저량","재고","자산"],ex:"기간 흐름."},
+{id:215,cat:"조세·분류",q:"초과 누진세율이란?",a:"구간을 넘는 금액에만 더 높은 세율을 순차 적용",opts:["구간을 넘는 금액에만 더 높은 세율을 순차 적용","세율이 소득에 반비례","세액 0","간접세만"],ex:"우리 소득세 구조 설명."},
+{id:216,cat:"조세·분류",q:"단순 누진과 초과 누진의 차이는?",a:"초과 누진은 구간별로 나누어 적용하는 방식",opts:["초과 누진은 구간별로 나누어 적용하는 방식","둘은 완전 동일","역진만","비례만"],ex:"교과서 표."},
+{id:217,cat:"잉여·효율",q:"가격이 균형보다 낮게 거래되면 생산자잉여는?",a:"줄어든다",opts:["줄어든다","항상 증가","불변","무한"],ex:"받는 가격 하락."},
+{id:218,cat:"잉여·효율",q:"가격이 균형보다 높게 거래되면 소비자잉여는?",a:"줄어든다",opts:["줄어든다","늘어난다","불변","0"],ex:"지불액 증가."},
+{id:219,cat:"OPEC·에너지",q:"1973년 석유 위기와 연관된 정책으로 가까운 것은?",a:"생산 감축·가격 인상·금수",opts:["생산 감축·가격 인상·금수","무한 증산","가격 동결","환율 폐지"],ex:"유 무기화."},
+{id:220,cat:"가계·소비",q:"가계의 합리적 소비에서 고려할 자원은?",a:"소득뿐 아니라 시간 등도 포함",opts:["소득뿐 아니라 시간 등도 포함","현금만","정부 지출만","이자만"],ex:"여가와 트레이드오프."},
+{id:221,cat:"기업·정부",q:"기업의 사회적 책임 대상이 아닌 것으로 가장 거리가 먼 것은?",a:"경쟁사의 영업 비밀 탈취",opts:["경쟁사의 영업 비밀 탈취","소비자","근로자","지역사회"],ex:"윤리 경영과 배치."},
+{id:222,cat:"경제학의 기초",q:"경제 문제의 근본 원인으로 가장 근본에 가까운 것은?",a:"희소성",opts:["희소성","세금","은행","광고"],ex:"선택의 필요."},
+{id:223,cat:"효율성·형평성",q:"시장 실패란?",a:"시장이 작동해도 효율적 배분이 깨지는 경우",opts:["시장이 작동해도 효율적 배분이 깨지는 경우","가격이 없는 경우만","정부가 없는 경우만","국제무역"],ex:"독점·외부성 등."},
+{id:224,cat:"수요·공급",q:"기대 가격 하락이면 현재 수요는?",a:"줄어드는 경향",opts:["줄어드는 경향","늘어나는 경향","불변","무한"],ex:"나중에 사려는 심리."},
+{id:225,cat:"수요·공급",q:"입주민 증가로 서울 월세 수요가 늘면 임대료는?",a:"상승 압력",opts:["상승 압력","하락 압력","0으로 고정","균형과 무관"],ex:"수요 이동."},
+{id:226,cat:"탄력성",q:"장기 공급곡선이 단기보다 탄력적인 이유는?",a:"생산능력 조정·진입퇴출 시간",opts:["생산능력 조정·진입퇴출 시간","시간이 길수록 비탄력","가격 무시","수요 0"],ex:"장기 Es↑."},
+{id:227,cat:"시장균형",q:"세금이 소비자에게 부과되면 수요곡선은?",a:"수요자가 보는 가격 기준으로 이동(일반적으로 위쪽)",opts:["수요자가 보는 가격 기준으로 이동(일반적으로 위쪽)","불변","공급과 합쳐짐","수직"],ex:"부담 전가와 함께 배운다."},
+{id:228,cat:"정부·재정",q:"결산 실사를 하는 기관으로 교과서에 나오기 쉬운 것은?",a:"감사원·국회 등 제도적 감시",opts:["감사원·국회 등 제도적 감시","기업 총회만","은행만","지방의회만"],ex:"재정 민주주의."},
+{id:229,cat:"금융·노동시장",q:"임금이 상승하면 여가의 기회비용은?",a:"커진다",opts:["커진다","작아진다","0","불변"],ex:"쉬는 대신 잃는 임금."},
+{id:230,cat:"소비이론",q:"상대소득 가설과 전시 효과의 공통점은?",a:"타인의 소비·소득이 본인에 영향",opts:["타인의 소비·소득이 본인에 영향","물가만","세율만","환율만"],ex:"비교."},
+{id:231,cat:"경제 주체·활동",q:"해외 주체가 우리나라에 투자하면 보는 관점에서?",a:"자본 이동·금융·직접투자 등 대외 관계",opts:["자본 이동·금융·직접투자 등 대외 관계","국내 가계만","정부만","시장 소멸"],ex:"외국 주체."},
+{id:232,cat:"분배·소득",q:"순편익이 양수라는 것은?",a:"편익이 비용보다 크다",opts:["편익이 비용보다 크다","비용이 더 크다","둘 같다","선택 불가"],ex:"합리적 선택의 조건."},
+{id:233,cat:"기회비용·선택",q:"A와 B 중 A를 고르면 B에서 얻을 수 있었던 최선의 이익은?",a:"A 선택의 기회비용 구성요소",opts:["A 선택의 기회비용 구성요소","매몰비용","세금","명시비용만"],ex:"암묵비용 예."},
+{id:234,cat:"시장실패",q:"외부 불경제에 대한 정부 대응으로 가까운 것은?",a:"규제·세금·배출권 등",opts:["규제·세금·배출권 등","보조금 확대만","가격 0 고정","독점 허가"],ex:"과다 억제."},
+{id:235,cat:"시장실패",q:"외부 경제에 대한 정부 대응으로 가까운 것은?",a:"보조금·공공생산",opts:["보조금·공공생산","세금으로 억제만","독점 장려","정보 은폐"],ex:"과소 보완."},
+{id:236,cat:"탄력성",q:"완전경쟁 기업이 직면하는 수요곡선은?",a:"수평(완전 탄력)",opts:["수평(완전 탄력)","수직","우하향","우상향"],ex:"가격수용자."},
+{id:237,cat:"탄력성",q:"시장 전체 수요곡선은 일반적으로?",a:"우하향",opts:["우하향","수평","수직","우상향"],ex:"수요법칙."},
+{id:238,cat:"잉여·효율",q:"한계 구매자의 지불의사가 가격과 같다면 그 단위의 소비자잉여는?",a:"0",opts:["0","최대","음수","무한"],ex:"한계단위."},
+{id:239,cat:"가격통제",q:"최고가격제 아래 배분 방식 예는?",a:"선착순·배급",opts:["선착순·배급","시장가격만","경매만","무작위"],ex:"비가격 배분."},
+{id:240,cat:"농업·가격",q:"잉여 농산물 처리로 드는 방법이 아닌 것은?",a:"시장가격을 무한정 올려만 판다",opts:["시장가격을 무한정 올려만 판다","정부 매입","식량권","직접지불"],ex:"비현실적 단일 수단."},
+{id:241,cat:"경제사",q:"신자유주의가 대두된 배경으로 가까운 것은?",a:"스태그플레이션·정부실패 논의",opts:["스태그플레이션·정부실패 논의","대공황만","계획경제 성공","냉전 종식만"],ex:"1970년대."},
+{id:242,cat:"혼합경제",q:"복지 국가 요소가 강한 혼합경제의 특징은?",a:"재분배·사회보장이 상대적으로 큼",opts:["재분배·사회보장이 상대적으로 큼","세금 0","시장 폐지","국유화만"],ex:"국가별 차이."},
+{id:243,cat:"조세·분류",q:"법인세는 통상?",a:"직접세",opts:["직접세","간접세","관세만","교육세만"],ex:"소득에 부과."},
+{id:244,cat:"조세·분류",q:"재산세·취득세는 통상?",a:"직접세",opts:["직접세","간접세","부가세","주세"],ex:"재산·취득."},
+{id:245,cat:"거시·사상사",q:"대공황 당시 미국 실업률이 매우 높았던 것은 사실로서 교과서가 말하는 바는?",a:"유효수요 부족과 실업의 연관",opts:["유효수요 부족과 실업의 연관","완전 고용 달성","인플레만","성장만"],ex:"약 4명 중 1명 실업 등."},
+{id:246,cat:"인구·복지",q:"초고령 사회의 사회적 영향으로 거리가 먼 것은?",a:"노동력이 무한 증가한다",opts:["노동력이 무한 증가한다","부양비 증가","연금 부담","의료비 증가"],ex:"구조적 부담."},
+{id:247,cat:"소비이론",q:"생애주기 가설에서 노년층 소비의 재원으로 거론되는 것은?",a:"젊은 시기 저축·연금 등",opts:["젊은 시기 저축·연금 등","오직 당일 임금만","세금 없음","정부만"],ex:"평생 소비 스무딩."},
+{id:248,cat:"수요·공급",q:"정부가 소비자에게 현금을 나눠 주면 정상재 수요는?",a:"늘어날 가능성이 크다",opts:["늘어날 가능성이 크다","반드시 감소","불변","수요곡선 소멸"],ex:"소득 효과."},
+{id:249,cat:"수요·공급",q:"정부가 소비세를 매기면 소비자가 보는 가격은?",a:"세전 가격보다 높아질 수 있다",opts:["세전 가격보다 높아질 수 있다","반드시 0","변하지 않는다","생산자만 부담"],ex:"전가."},
+{id:250,cat:"시장균형",q:"수요 증가·공급 증가에서 균형가격은?",a:"불분명할 수 있다",opts:["불분명할 수 있다","반드시 상승","반드시 하락","0"],ex:"어느 쪽 이동이 큰지에 따름."},
+{id:251,cat:"경제학의 기초",q:"경제학이 다루는 선택은 주로?",a:"한계적(제약 하에서의) 선택",opts:["한계적(제약 하에서의) 선택","무한 자원 선택","선택 없음","전통만"],ex:"trade-off."},
+{id:252,cat:"희소성·3대 문제",q:"‘누구를 위해 생산할 것인가’는 주로 무엇과 연결되나?",a:"분배와 형평성",opts:["분배와 형평성","생산 기술만","환율만","이자만"],ex:"For whom."},
+{id:253,cat:"정부·재정",q:"경기 침체 때 확대 재정이 지향하는 것은?",a:"총수요 보강·고용 완화",opts:["총수요 보강·고용 완화","물가 자극만","수출 금지","환율 고정"],ex:"케인즈적 대응."},
+{id:254,cat:"정부·재정",q:"경기 과열 때 긴축 재정이 지향하는 것은?",a:"총수요 진정·물가 안정",opts:["총수요 진정·물가 안정","실업 확대","수요 무한 증가","세금 폐지"],ex:"과열 억제."},
+{id:255,cat:"잉여·효율",q:"생산자 잉여는 공급곡선과 무엇 사이로 그리나?",a:"시장 가격",opts:["시장 가격","수요곡선","PPF","세율"],ex:"한계비용(공급 의사)과 가격."},
+{id:256,cat:"기업·정부",q:"혁신이 경제에 주는 이점으로 가까운 것은?",a:"생산성·소비자 후생 향상",opts:["생산성·소비자 후생 향상","가격 고정","실업만 증가","무역 중단"],ex:"창조적 파괴의 긍정."},
+{id:257,cat:"분업·무역",q:"두 나라 모두 한 재화에서 비교우위를 가질 수 있나?",a:"불가능",opts:["불가능","가능","조건부 항상","무역 없을 때만"],ex:"기회비용이 다르게 배분."},
+{id:258,cat:"분업·무역",q:"한 나라가 두 재화 모두 절대우위일 수 있나?",a:"가능",opts:["가능","불가능","조건부 불가","무역 시 불가"],ex:"비교우위는 별개."},
+{id:259,cat:"탄력성",q:"수요의 가격탄력성 정의식에 해당하는 것은?",a:"수요량 변동률 ÷ 가격 변동률(절대값)",opts:["수요량 변동률 ÷ 가격 변동률(절대값)","가격÷수요","소득÷세금","공급÷수요"],ex:"탄력성 측정."},
+{id:260,cat:"탄력성",q:"공급의 가격탄력성 정의식에 해당하는 것은?",a:"공급량 변동률 ÷ 가격 변동률",opts:["공급량 변동률 ÷ 가격 변동률","가격÷공급","세율","환율"],ex:"Es."},
+{id:261,cat:"시장실패",q:"도로·국방 같은 순수 공공재에 가까운 성격은?",a:"비경합·비배제",opts:["비경합·비배제","배제·경합","독점 공급","가격만"],ex:"시장 과소공급."},
+{id:262,cat:"가계·소비",q:"비합리적 소비로 보기 쉬운 것은?",a:"광고 의존·모방·과시 등",opts:["광고 의존·모방·과시 등","예산 내 효용 최대","미래 저축 고려","가격 비교"],ex:"행동경제 맥락."},
+{id:263,cat:"금융·노동시장",q:"이자율이 오르면 차입 비용은?",a:"증가",opts:["증가","감소","불변","0"],ex:"투자·소비 억제 압력."},
+{id:264,cat:"금융·노동시장",q:"이자율이 오르면 저축의 대가는?",a:"증가",opts:["증가","감소","불변","음수"],ex:"저축 유인."},
+{id:265,cat:"거시·사상사",q:"인플레이션과 실업이 동시에 나쁜 상태를 줄인 말은?",a:"스태그플레이션",opts:["스태그플레이션","디플레이션","골든타임","풀고용"],ex:"stagflation."},
+{id:266,cat:"경제 체제",q:"계획경제에서 자원 배분의 주체는?",a:"정부·관료",opts:["정부·관료","개인만","시장만","외국만"],ex:"명령·계획."},
+{id:267,cat:"경제 체제",q:"시장경제에서 가격 결정의 핵심은?",a:"수요와 공급의 작용",opts:["수요와 공급의 작용","정부 일방 고시만","관습만","무작위"],ex:"가격기구."},
+{id:268,cat:"생산가능곡선",q:"자원이 줄면 PPF는?",a:"안쪽으로 이동",opts:["안쪽으로 이동","바깥으로 이동","불변","수직선만"],ex:"생산 가능량 감소."},
+];
+const CATS=[...new Set(Q.map(q=>q.cat))];
+const ECON_CAT_TO_REF_KEYS={
+  "경제학의 기초":["경제개요"],"경제 주체·활동":["가계","기업","정부","해외"],"재화·서비스":["재화서비스"],"희소성·3대 문제":["희소성3대"],"효율성·형평성":["희소성3대"],
+  "기회비용·선택":["기회비용"],"생산가능곡선":["PPF"],"합리적 선택·효율":["유인"],"경제적 유인":["유인"],"경제 체제":["경제체제"],"분업·무역":["분업무역"],
+  "시장·가격기구":["가격기구"],"수요·공급":["수요공급"],"시장균형":["시장균형"],"탄력성":["탄력성"],"잉여·효율":["잉여"],"가격통제":["가격통제"],"시장실패":["시장실패"],
+  "정부·재정":["정부재정"],"거시·사상사":["거시"],"금융·노동시장":["요소시장"],"인구·복지":["인구"],"소비이론":["소비이론"],"가계·소비":["가계","소비이론"],"소비심리":["소비심리"],
+  "기업·정부":["기업","정부"],"유량·저량":["유량저량"],"경제사":["경제사","자본주의사"],"분배·소득":["분배소득"],"농업·가격":["농업가격"],"OPEC·에너지":["OPEC"],"혼합경제":["혼합경제"],
+  "조세·분류":["조세분류"],"자본주의사":["자본주의사"]
+};
+function econRefKeysForCat(cat){return ECON_CAT_TO_REF_KEYS[cat]||["경제개요"];}
+const ECON_REF_TAB_LABELS={경제개요:"경제학 개요",가계:"가계",기업:"기업",정부:"정부",해외:"해외(무역·투자)",재화서비스:"재화·서비스",희소성3대:"희소성·3대 문제·효율·형평",기회비용:"기회비용·선택",PPF:"생산가능곡선(PPF)",유인:"합리적 선택·효율·유인",경제체제:"경제 체제·스미스·분업",분업무역:"분업·무역",가격기구:"시장·가격기구",수요공급:"수요·공급",시장균형:"시장 균형",탄력성:"탄력성",잉여:"잉여·효율·독점",가격통제:"가격 통제",시장실패:"시장 실패",정부재정:"정부·재정·조세",조세분류:"조세 분류(직·간접)",거시:"거시·사상사",요소시장:"노동·금융 시장",인구:"인구·복지",소비이론:"소비 이론",소비심리:"비합리적 소비",혼합경제:"혼합경제",경제사:"자본주의의 흐름",자본주의사:"자본주의사(상업·산업)",유량저량:"유량·저량",분배소득:"분배·소득",농업가격:"농업·가격",OPEC:"OPEC·에너지"};
+let _econRefFrag=null;
+function econRefFragment(){if(_econRefFrag)return _econRefFrag;const t=document.getElementById("econ-ref-snippets");_econRefFrag=t&&t.content?t.content:null;return _econRefFrag;}
+function econRefHtmlForKey(key){const frag=econRefFragment();if(!frag)return"";for(const el of frag.querySelectorAll("[data-econ-ref]")){if(el.getAttribute("data-econ-ref")===key)return el.innerHTML;}return"";}
+function buildEconWrongRefTabsHtml(cat){
+  const keys=econRefKeysForCat(cat),seen={},parts=[];
+  for(const k of keys){if(!k||seen[k])continue;seen[k]=1;const body=econRefHtmlForKey(k);if(!body)continue;
+  const lab=ECON_REF_TAB_LABELS[k]||k;
+  parts.push(`<details class="wrong-ref-tab"><summary>${esc(lab)}</summary><div class="wrong-ref-tab-body">${body}</div></details>`);
+  }
+  if(!parts.length)return"";
+  return`<div class="wrong-ref-wrap"><p class="wrong-ref-intro">이 단원과 연결된 개념만 골라 두었습니다. 필요한 항목만 펼쳐 보세요.</p>${parts.join("")}</div>`;
+}
+const shuffle=a=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=0|Math.random()*(i+1);[b[i],b[j]]=[b[j],b[i]];}return b};
+
+const emptyProg=()=>({mastered:{},wrongCnt:{},best:0});
+const ECON_LS_KEY="economics-quiz-progress-v1";
+function defaultEconomProg(){return{easy:emptyProg(),hard:emptyProg()};}
+function mergeEconomProg(raw){
+  const o=defaultEconomProg();
+  if(!raw||typeof raw!=="object")return o;
+  for(const d of ["easy","hard"]){
+    const src=raw[d];
+    if(!src||typeof src!=="object")continue;
+    if(src.mastered&&typeof src.mastered==="object")Object.assign(o[d].mastered,src.mastered);
+    if(src.wrongCnt&&typeof src.wrongCnt==="object")Object.assign(o[d].wrongCnt,src.wrongCnt);
+    if(typeof src.best==="number"&&src.best>=0)o[d].best=src.best;
+  }
+  return o;
+}
+function loadEconomProg(){try{const t=localStorage.getItem(ECON_LS_KEY);return mergeEconomProg(t?JSON.parse(t):null)}catch(e){return defaultEconomProg()}}
+function saveEconomProg(){try{localStorage.setItem(ECON_LS_KEY,JSON.stringify(S.prog))}catch(e){}}
+let S={topView:"quiz",difficulty:"easy",prog:loadEconomProg(),streak:0,queue:shuffle(Q.map(q=>q.id)),sel:null,phase:"menu",catF:null,sess:{c:0,w:0},timer:0,timerOn:false,revIdx:0,showCard:false,lockedQ:null,lockedOpts:[]};
+let timerInterval=null;
+const $=id=>document.getElementById(id);
+const app=$("app");
+const curProg=()=>S.prog[S.difficulty];
+
+function bindEconTabs(){
+  const nav=$("econTopnav");
+  if(!nav||nav.dataset.bound)return;
+  nav.dataset.bound="1";
+  nav.addEventListener("click",function(ev){
+    const btn=ev.target.closest("[data-econ-view]");
+    if(!btn)return;
+    const v=btn.getAttribute("data-econ-view");
+    if(!v||S.topView===v)return;
+    if(S.topView==="quiz"&&S.phase==="quiz"&&S.timerOn)stopTimer();
+    S.topView=v;
+    nav.querySelectorAll(".econ-topnav__btn").forEach(function(b){
+      const on=b.getAttribute("data-econ-view")===v;
+      b.classList.toggle("is-on",on);
+      b.setAttribute("aria-selected",on?"true":"false");
+    });
+    if(v==="quiz"&&S.phase==="quiz"&&S.lockedQ)startTimer();
+    render();
+  });
+}
+
+function filt(){return S.catF?Q.filter(q=>q.cat===S.catF):Q}
+function mCnt(){return filt().filter(q=>curProg().mastered[q.id]).length}
+function pct(){const f=filt();return f.length?Math.round(mCnt()/f.length*100):0}
+function tM_diff(d){return Q.filter(q=>S.prog[d].mastered[q.id]).length}
+function tP_diff(d){return Math.round(tM_diff(d)/Q.length*100)}
+function fmt(s){return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")}
+function tickEconTimer(){S.timer++;const el=document.getElementById("econ-quiz-timer");if(el)el.textContent=fmt(S.timer)}
+function nextQ(){const n=S.queue.find(id=>{const q=Q.find(x=>x.id===id);return(!S.catF||q.cat===S.catF)&&!curProg().mastered[id]});return n?Q.find(q=>q.id===n):null}
+function wrongQs(){const P=curProg();return Q.filter(q=>P.wrongCnt[q.id]&&!P.mastered[q.id]).sort((a,b)=>(P.wrongCnt[b.id]||0)-(P.wrongCnt[a.id]||0))}
+function weakCats(){const P=curProg(),m={};Q.forEach(q=>{if(!m[q.cat])m[q.cat]={w:0,t:0};m[q.cat].t++;if(P.wrongCnt[q.id])m[q.cat].w+=P.wrongCnt[q.id]});return Object.entries(m).sort((a,b)=>b[1].w/b[1].t-a[1].w/a[1].t).filter(([,v])=>v.w>0).slice(0,3)}
+function catSt(c){const P=curProg(),qs=Q.filter(q=>q.cat===c);const m=qs.filter(q=>P.mastered[q.id]).length;return{t:qs.length,m,p:Math.round(m/qs.length*100)}}
+function startTimer(){S.timerOn=true;clearInterval(timerInterval);timerInterval=setInterval(tickEconTimer,1000)}
+function stopTimer(){S.timerOn=false;clearInterval(timerInterval)}
+
+function lockNext(){
+  const nq=nextQ();
+  if(nq){
+    const base=[...nq.opts];
+    if(S.difficulty==="hard"){
+      const fifth=hardFifthDistractor(nq);
+      if(fifth&&!base.includes(fifth))base.push(fifth);
+    }
+    S.lockedQ=nq;S.lockedOpts=shuffle(base);
+  }else{S.lockedQ=null;S.lockedOpts=[]}
+}
+
+function go(cat){S.catF=cat;S.queue=shuffle(Q.map(q=>q.id));S.sel=null;S.sess={c:0,w:0};S.timer=0;S.streak=0;S.lockedQ=null;S.lockedOpts=[];S.phase="quiz";lockNext();startTimer();render()}
+function rev(){S.revIdx=0;S.showCard=false;S.phase="review";render()}
+function rst(){
+  if(!confirm("현재 선택한 난이도의 저장된 진행도(맞춘 문제·오답 횟수·연속 기록)를 모두 지울까요?"))return;
+  S.prog[S.difficulty]=emptyProg();S.streak=0;S.queue=shuffle(Q.map(q=>q.id));S.sess={c:0,w:0};S.sel=null;S.timer=0;S.lockedQ=null;S.lockedOpts=[];
+  saveEconomProg();render();
+}
+function rstAll(){
+  if(!confirm("쉬운·어려운 난이도 모두 저장된 진행도를 지울까요?"))return;
+  S.prog=defaultEconomProg();S.streak=0;S.queue=shuffle(Q.map(q=>q.id));S.sess={c:0,w:0};S.sel=null;S.timer=0;S.lockedQ=null;S.lockedOpts=[];
+  saveEconomProg();render();
+}
+function toMenu(){S.phase="menu";stopTimer();S.lockedQ=null;S.lockedOpts=[];S.sel=null;render()}
+
+function pick(o){
+  if(S.sel!==null||!S.lockedQ)return;
+  S.sel=o;const ok=o===S.lockedQ.a;
+  if(ok){curProg().mastered[S.lockedQ.id]=true;S.sess.c++;S.streak++;if(S.streak>curProg().best)curProg().best=S.streak}
+  else{curProg().wrongCnt[S.lockedQ.id]=(curProg().wrongCnt[S.lockedQ.id]||0)+1;S.sess.w++;S.streak=0;
+    const rest=S.queue.filter(id=>id!==S.lockedQ.id);S.queue=[...rest,S.lockedQ.id]}
+  saveEconomProg();render()
+}
+
+function nxt(){S.sel=null;S.lockedQ=null;S.lockedOpts=[];lockNext();render()}
+
+function esc(s){const d=document.createElement("div");d.textContent=s;return d.innerHTML}
+
+function renderConcepts(){
+  app.innerHTML=`<div class="concept-wrap">
+<p class="concept-note">먼저 <strong>제1장</strong> 또는 <strong>제2장</strong>을 펼친 뒤, 그 안의 소단원을 펼쳐 보세요.</p>
+
+<details open class="concept-chapter"><summary>제1장 · 경제생활과 경제학</summary><div class="concept-details-body">
+<p class="concept-chapter-hint">이 장을 펼치면 아래 소단원들이 나옵니다.</p>
+
+<details open class="concept-nested"><summary>경제생활과 경제학(개요)</summary><div class="concept-details-body">
+<h3>경제학이란</h3>
+<ul>
+<li>희소한 자원을 놓고 무엇을 어떻게 생산·분배·소비할지 선택하는 문제를 다루는 사회과학.</li>
+<li>전통적으로 생산·교환·소비가 중심이었으나 범죄, 가족, 스포츠 등으로 연구 범위가 넓어지기도 함.</li>
+</ul>
+<h3>경제 활동</h3>
+<ul>
+<li><strong>생산</strong>: 가치를 창조·증대. 제조, 보관, 운반, 판매, 서비스 제공.</li>
+<li><strong>분배</strong>: 생산에 대한 기여의 대가. 임금·이자·지대·이윤 등 요소소득.</li>
+<li><strong>소비</strong>: 분배된 소득으로 재화·서비스를 구매해 욕구를 충족. 소득 = 소비 + 세금 + 저축, 가처분소득 = 소득 − 세금 − 필수비용(개념에 따라 표현 상이).</li>
+</ul>
+<h3>경제 주체(4가지)와 목표</h3>
+<ul>
+<li><strong>가계</strong>: 효용 극대화. 생산물 시장에서는 수요자, 요소 시장에서는 공급자.</li>
+<li><strong>기업</strong>: 이윤 극대화. 생산물 시장 공급, 요소 시장 수요.</li>
+<li><strong>정부</strong>: 사회후생·형평성·효율. 세입·세출·정책.</li>
+<li><strong>외국(해외)</strong>: 무역·투자 등 대외 관계.</li>
+</ul>
+<h3>경제 객체: 재화와 서비스</h3>
+<ul>
+<li><strong>자유재(무상재)</strong>: 부존량이 풍부해 대가 없이 쓸 수 있어 희소성 분석에서 보통 제외.</li>
+<li><strong>경제재</strong>: 대가를 지불해야 하며 희소성이 있음. 수요·공급 변화로 자유재가 경제재로 바뀔 수 있음.</li>
+<li><strong>소비재 / 생산재</strong>: 용도에 따라 달라짐(예: 보리—가정 소비 vs 음료 원료).</li>
+<li><strong>서비스(용역)</strong>: 진료, 연주, 노동, 도소매 등 유용한 행위. 대개 경제재처럼 대가가 붙음.</li>
+</ul>
+</div></details>
+
+<details class="concept-nested"><summary>희소성 · 경제의 3대 문제 · 효율과 형평</summary><div class="concept-details-body">
+<ul>
+<li><strong>희소성의 법칙</strong>: 욕구는 상대적으로 크고 자원은 제한적 → 선택과 경제 문제의 근본 원인.</li>
+<li><strong>경제적 자원</strong>: 넓게는 아껴 써야 할 쓸모 있는 모든 것. 좁게는 생산요소(노동, 자본, 토지, 기업가적 기능 등).</li>
+<li><strong>3대 문제</strong>: 무엇을·얼마나(What), 어떻게(How), 누구에게·어떻게 분배(For whom). 해결 방식은 경제 체제에 따라 다름.</li>
+<li><strong>효율성</strong>: 주어진 자원으로 후생(편익) 최대, 또는 일정 후생에 비용 최소.</li>
+<li><strong>형평성</strong>: ‘공정한 분배’는 기준에 따라 논쟁. 시장은 효율에는 유리한 편이나 형평·시장 실패 보완을 위해 정부 개입 논의.</li>
+</ul>
+</div></details>
+
+<details class="concept-nested"><summary>기회비용 · 매몰비용 · 생산가능곡선(PPF)</summary><div class="concept-details-body">
+<ul>
+<li><strong>편익·비용·순편익</strong>: 순편익 = 편익 − 비용(경제적 비용은 기회비용 관점이 중요).</li>
+<li><strong>기회비용</strong>: 선택으로 포기한 차선 대안 중 가치가 가장 큰 것. 명시적 비용 + 암묵적 비용.</li>
+<li><strong>매몰비용</strong>: 이미 지출되어 회수 불가한 비용. 앞으로의 합리적 선택에서는 보통 제외.</li>
+<li><strong>PPF</strong>: 자원을 효율적으로 쓸 때 두 재화의 최대 조합. 우하향, 보통 원점에 대해 오목(기회비용 체증). 기술·자원 증가 시 바깥으로 이동. 안쪽은 비효율 또는 유휴.</li>
+</ul>
+</div></details>
+
+<details class="concept-nested"><summary>합리적 선택 · 경제적 효율성 · 유인</summary><div class="concept-details-body">
+<ul>
+<li><strong>경제적 효율성</strong>: 최대효과의 원칙 + 최소비용의 원칙(동전의 양면).</li>
+<li><strong>합리적 의사결정</strong>: 문제 인식 → 대안 나열 → 평가 기준 → 대안 평가 → 최종 선택.</li>
+<li><strong>경제적 유인</strong>: 금전적 보상·손실로 행동을 유도. 긍정적(장학금, 보조금 등) / 부정적(과태료, 벌금 등).</li>
+</ul>
+</div></details>
+
+<details class="concept-nested"><summary>경제 체제 · 시장경제의 제도 · 자본주의의 흐름</summary><div class="concept-details-body">
+<h3>체제 유형</h3>
+<table>
+<thead><tr><th>구분</th><th>특징</th></tr></thead>
+<tbody>
+<tr><td>전통경제</td><td>관습·전통·종교 등에 따른 운영</td></tr>
+<tr><td>계획경제</td><td>정부 명령·계획, 생산수단 국·공유에 가까움. 유인 부족·관료 오판 한계</td></tr>
+<tr><td>시장경제</td><td>가격·경쟁, 사유재산·이윤 추구. 빈부격차·경기변동 한계</td></tr>
+<tr><td>혼합경제</td><td>시장 틀 + 정부 개입(복지·규제). 한계: 정부 비대화, 복지병 등</td></tr>
+</tbody></table>
+<h3>시장경제를 뒷받침하는 제도</h3>
+<ul>
+<li>사유재산권, 경제활동의 자유, 공정한 경쟁의 보장.</li>
+<li><strong>아담 스미스</strong>: 이기적이나 합리적 선택이 시장을 통해 사회에 이롭게 작용할 수 있다는 ‘보이지 않는 손’, 가격기구.</li>
+</ul>
+<h3>분업·특화·무역</h3>
+<ul>
+<li><strong>분업</strong>: 기술적 분업(공정 분할) vs 사회적 분업(직업·산업 분화). 생산성↑, 단 반복·지연 리스크.</li>
+<li><strong>특화</strong>: 분업을 통해 특정 재화에 집중.</li>
+<li><strong>절대우위</strong>: 같은 자원으로 더 많이 생산.</li>
+<li><strong>비교우위</strong>: 기회비용이 상대적으로 작은 재화. 한 나라가 두 재화 모두 절대우위여도 비교우위는 나뉨. 교환비율은 양국 기회비용 사이에 있어야 무역 이익.</li>
+</ul>
+<h3>자본주의 단계(요약)</h3>
+<ul>
+<li>상업 자본주의(유통·금융 중심) → 산업 자본주의(공장·부가가치) → 독점 자본주의(대기업 지배) → 수정 자본주의·복지국가(대공황 이후 정부 역할 확대) → 신자유주의(스태그플레이션·정부실패 논의, 규제 완화·작은 정부).</li>
+<li><strong>대공황(1929~)</strong>: 주가 폭락, 실업, 뉴딜 등.</li>
+<li><strong>케인즈</strong>: 유효수요 부족, 재정·통화정책. 절약의 역설, 구성의 오류와 연결.</li>
+<li><strong>석유파동·스태그플레이션</strong>: 유가 충격 + 침체·물가상승.</li>
+</ul>
+</div></details>
+
+<details class="concept-nested"><summary>경제 주체의 역할(가계·기업·정부)</summary><div class="concept-details-body">
+<h3>가계</h3>
+<ul>
+<li>생산물 수요, 요소 공급, 납세. 노동: 사회적·경제적 의미. 합리적 소비: 한계효용과 기회비용, 시간 제약.</li>
+<li><strong>소비 이론</strong>: 절대소득(케인즈, 현재 가처분소득), 항상소득, 생애주기, 상대소득(전시·톱니 효과 등), 소비의 비가역성.</li>
+<li><strong>비합리적 소비</strong>: 편승, 스노브(백워), 베블렌, 의존, 가수요 등.</li>
+</ul>
+<h3>기업</h3>
+<ul>
+<li>생산물 공급, 요소 수요, 납세. 기업가 정신, 슘페터의 창조적 파괴(혁신), 사회적 책임.</li>
+</ul>
+<h3>정부</h3>
+<ul>
+<li>재정: 세입(조세·수수료 등) vs 세출. 예산: 편성 → 국회 심의·확정 → 집행 → 결산·감사.</li>
+<li>역할: 효율적 자원배분(경쟁 촉진, 시장 실패 보완), 소득재분배, 성장·안정(확대/긴축 재정).</li>
+<li>고려: 효율·형평, 재정 건전성, 재정 민주주의.</li>
+<li><strong>조세</strong>: 재원, 자원배분(유류세·감면 등), 재분배(누진세). 역기능: 근로·투자 의욕, 수요 위축 가능.</li>
+<li><strong>직접세 vs 간접세</strong>, 누진·비례·역진(간접세 비례 시 부담 역진성), 초과 누진세율(구간별 순차 적용).</li>
+</ul>
+</div></details>
+
+<details class="concept-nested"><summary>인구·고령화(UN 기준)</summary><div class="concept-details-body">
+<ul>
+<li><strong>고령화 사회</strong>: 65세 이상 7% 이상.</li>
+<li><strong>고령 사회</strong>: 14% 이상.</li>
+<li><strong>초고령 사회</strong>: 20% 이상.</li>
+<li>영향: 출산율 감소, 노동력·부양, 의료·연금 부담 등.</li>
+</ul>
+</div></details>
+
+</div></details>
+
+<details class="concept-chapter"><summary>제2장 · 시장과 경제 활동</summary><div class="concept-details-body">
+<p class="concept-chapter-hint">이 장을 펼치면 아래 소단원들이 나옵니다.</p>
+
+<details class="concept-nested"><summary>시장의 의미·기능 · 가격기구</summary><div class="concept-details-body">
+<ul>
+<li>수요자와 공급자가 거래하는 장소·관계(구체적·추상적 시장).</li>
+<li>기능: 거래비용 감소, 분업·특화 촉진, 가격 형성을 통한 정보·자원 배분.</li>
+<li><strong>가격기구</strong>: 신호, 유인, 정보 전달(스미스의 보이지 않는 손과 연결).</li>
+</ul>
+</div></details>
+
+<details class="concept-nested"><summary>수요·공급</summary><div class="concept-details-body">
+<ul>
+<li><strong>수요법칙·공급법칙</strong>: 다른 조건 불변(ceteris paribus) 하에서 가격과 수요량은 부(−), 가격과 공급량은 정(+).</li>
+<li><strong>수요량의 변동</strong> vs <strong>수요의 변동</strong>(가격 외 요인으로 곡선 이동). 공급도 동일.</li>
+<li><strong>정상재·열등재</strong>, <strong>대체재·보완재</strong>, <strong>유량·저량</strong>(GDP·소득은 유량, 재산은 저량).</li>
+</ul>
+</div></details>
+
+<details class="concept-nested"><summary>시장 균형</summary><div class="concept-details-body">
+<ul>
+<li>수요량=공급량인 균형가격·균형거래량. 초과수요→가격 상승 압력, 초과공급→하락 압력.</li>
+<li>수요·공급이 동시에 변하면 균형가격은 불분명할 수 있음.</li>
+</ul>
+</div></details>
+
+<details class="concept-nested"><summary>탄력성</summary><div class="concept-details-body">
+<ul>
+<li><strong>가격탄력성</strong>: Ed>1 탄력(사치에 가까움), 0&lt;Ed&lt;1 비탄력(필수에 가까움), Ed=0 완전비탄력, Ed=∞ 완전탄력.</li>
+<li>총매출(가격×수량)과 Ed 관계: 탄력적이면 가격↑→매출↓ 경향 등.</li>
+<li><strong>소득탄력성</strong>: 음수 열등재, 0~1 필수적 정상재, 1 초과 사치.</li>
+<li><strong>교차탄력성</strong>: 대체재는 양(+), 보완재는 음(−).</li>
+<li><strong>공급의 가격탄력성</strong>: 기간·저장·생산 유연성. 농산물은 단기 비탄력적이기 쉬움.</li>
+</ul>
+</div></details>
+
+<details class="concept-nested"><summary>잉여 · 효율 · 가격 통제</summary><div class="concept-details-body">
+<ul>
+<li><strong>소비자 잉여</strong>: 지불 의사 − 실제 지불. <strong>생산자 잉여</strong>: 실제 수취 − 최소 수취 의사.</li>
+<li>경쟁 시장 균형에서 총잉여 최대(외부성 등 없을 때).</li>
+<li><strong>최고가격제(상한)</strong>: 균형보다 낮으면 초과수요, 암시장, 품질저하, 후생손실.</li>
+<li><strong>최저가격제(하한)</strong>: 농산물 지지, 최저임금 등 → 초과공급(잉여농산물, 실업 가능성).</li>
+<li><strong>농산물</strong>: 수요·공급이 비탄력 → 가격 파동. 이중가격제는 재정 부담.</li>
+</ul>
+</div></details>
+
+<details class="concept-nested"><summary>생산요소 시장</summary><div class="concept-details-body">
+<ul>
+<li><strong>노동시장</strong>: 노동 수요·공급으로 임금 결정.</li>
+<li><strong>금융시장</strong>: 저축·잉여자금 공급, 투자 등 수요 → 이자율. 침체 시 투자 감소 → 금리 하락 압력 등.</li>
+</ul>
+</div></details>
+
+<details class="concept-nested"><summary>시장 실패와 정부</summary><div class="concept-details-body">
+<ul>
+<li>독과점·과점, 외부효과(불경제=과다, 경제=과소), 공공재, 정보 비대칭 등.</li>
+<li>정부 개입: 규제, 세금·보조금, 공공재 공급 등(목표와 비용 트레이드오프).</li>
+</ul>
+</div></details>
+
+</div></details>
+
+<p class="concept-note" style="margin-top:1rem">퀴즈 문항의 카테고리 이름과 대응해 두었습니다. 암기보다는 용어 관계(무엇이 원인·무엇이 결과인지)를 함께 읽으면 풀이에 도움이 됩니다.</p>
+</div>`;
+}
+
+function render(){
+  bindEconTabs();
+  if(S.topView==="concepts"){renderConcepts();return;}
+  if(S.phase==="menu")renderMenu();
+  else if(S.phase==="review")renderReview();
+  else renderQuiz();
+}
+
+function renderMenu(){
+  const te=tM_diff("easy"),pe=tP_diff("easy"),th=tM_diff("hard"),ph=tP_diff("hard"),wk=weakCats(),wqs=wrongQs();
+  const diffLabel=S.difficulty==="hard"?"어려운 난이도":"쉬운 난이도";
+  let h=`<p style="text-align:center;font-size:14px;color:#666;line-height:1.65;margin:0 0 14px">${Q.length}문제 · 즉시 피드백·해설 · 틀리면 맨 뒤로 재배치 · 난이도별 진행도는 따로 저장됩니다. 진행도는 이 브라우저에 기억되어 새로고침해도 유지되며, 아래 초기화 버튼으로만 삭제할 수 있습니다.</p>
+  <div class="diff-pick">
+    <button type="button" class="btn ${S.difficulty==="easy"?"btn--on":""}" onclick="S.difficulty='easy';render()">쉬운 난이도<small>기본 4지선다</small></button>
+    <button type="button" class="btn ${S.difficulty==="hard"?"btn--on":""}" onclick="S.difficulty='hard';render()">어려운 난이도<small>5지선다 · 교란 보기 1</small></button>
+  </div>
+  <div class="progress-box">
+    <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px"><span style="font-weight:500;color:var(--color-text-primary)">쉬움 진행</span><span style="color:var(--color-text-secondary)">${te}/${Q.length} (${pe}%)</span></div>
+    <div class="bar"><div class="bar-fill" style="width:${pe}%;background:${pe===100?'var(--color-text-success)':'var(--color-text-info)'}"></div></div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;margin:10px 0 5px"><span style="font-weight:500;color:var(--color-text-primary)">어려움 진행</span><span style="color:var(--color-text-secondary)">${th}/${Q.length} (${ph}%)</span></div>
+    <div class="bar"><div class="bar-fill" style="width:${ph}%;background:${ph===100?'var(--color-text-success)':'#c2410c'}"></div></div>
+    ${curProg().best>0?`<div style="font-size:10px;color:var(--color-text-tertiary);margin-top:6px">선택 중 <strong>${esc(diffLabel)}</strong> · 최고 연속 정답: ${curProg().best}</div>`:""}
+  </div>`;
+
+  if(wk.length>0){h+=`<div class="weak-box"><div style="font-size:11px;font-weight:500;color:var(--color-text-warning);margin-bottom:3px">취약 영역</div>${wk.map(([c,v])=>`<div style="font-size:11px;color:var(--color-text-secondary)">${esc(c)} — 오답 ${v.w}회/${v.t}문제</div>`).join("")}</div>`}
+  if(wqs.length>0){h+=`<button class="btn review-btn" onclick="rev()">오답 플래시카드 복습 (${wqs.length}문제)</button>`}
+
+  h+=`<button class="btn btn-main" onclick="go(null)">${mCnt()===0?"학습 시작":"이어서 풀기"} (${esc(diffLabel)}) — ${filt().length-mCnt()}문제 남음</button>
+  <div style="font-size:13px;font-weight:700;color:#0284c7;margin-bottom:10px">카테고리별</div>`;
+
+  CATS.forEach(c=>{const s=catSt(c);
+    h+=`<button class="btn cat-btn" onclick="go('${esc(c)}')"><span style="color:${s.p===100?'var(--color-text-success)':'var(--color-text-primary)'}">${esc(c)}</span><span style="display:flex;align-items:center;gap:5px"><span style="color:var(--color-text-tertiary);font-size:10px">${s.m}/${s.t}</span><span class="cat-bar"><span class="cat-bar-fill" style="width:${s.p}%;background:${s.p===100?'var(--color-text-success)':'var(--color-text-info)'}"></span></span></span></button>`});
+
+  const anyEconomProg=tM_diff("easy")+tM_diff("hard")>0||Object.keys(S.prog.easy.wrongCnt).length+Object.keys(S.prog.hard.wrongCnt).length>0;
+  if(anyEconomProg){
+    h+=`<div style="margin-top:18px;display:flex;flex-direction:column;gap:8px;align-items:stretch;max-width:320px;margin-left:auto;margin-right:auto">`;
+    if(mCnt()>0||Object.keys(curProg().wrongCnt).length)h+=`<button type="button" onclick="rst()" style="padding:10px 20px;border:none;border-radius:8px;background:#888;color:#fff;cursor:pointer;font-size:13px;font-family:inherit;font-weight:600">${esc(diffLabel)} 진행도 초기화</button>`;
+    h+=`<button type="button" onclick="rstAll()" style="padding:10px 20px;border:none;border-radius:8px;background:#b45309;color:#fff;cursor:pointer;font-size:12px;font-family:inherit;font-weight:600">쉬움·어려움 전체 진행도 초기화</button></div>`;
+  }
+  app.innerHTML=h;
+}
+
+function renderReview(){
+  const wqs=wrongQs();const rq=wqs[S.revIdx];
+  if(!rq){app.innerHTML=`<div style="text-align:center;padding:2rem 0"><p style="font-size:13px;color:var(--color-text-secondary)">복습할 오답이 없습니다.</p><button class="btn" style="width:auto;display:inline-block;margin-top:10px;padding:8px 18px" onclick="toMenu()">메뉴로</button></div>`;return}
+
+  let h=`<div style="display:flex;justify-content:space-between;margin-bottom:14px"><button class="link-btn" onclick="toMenu()">← 메뉴</button><span style="font-size:10px;color:var(--color-text-tertiary)">${S.revIdx+1}/${wqs.length}</span></div>
+  <div style="font-size:10px;color:var(--color-text-warning);margin-bottom:5px">오답 ${curProg().wrongCnt[rq.id]}회 — ${esc(rq.cat)}</div>
+  <div class="card" onclick="S.showCard=!S.showCard;render()">`;
+
+  if(!S.showCard){h+=`<div style="font-size:14px;font-weight:500;color:var(--color-text-primary);line-height:1.6;margin-bottom:6px">${esc(rq.q)}</div><div style="font-size:10px;color:var(--color-text-tertiary)">탭하여 정답 보기</div>`}
+  else{h+=`<div style="font-size:10px;font-weight:600;color:var(--color-text-tertiary);margin-bottom:4px">관련 개념(단원)</div><div style="font-size:12px;font-weight:600;color:var(--color-text-primary);margin-bottom:10px">${esc(rq.cat)}</div><div style="font-size:14px;font-weight:500;color:var(--color-text-success);line-height:1.6;margin-bottom:6px">${esc(rq.a)}</div><div style="font-size:11px;color:var(--color-text-secondary);line-height:1.6"><strong style="color:var(--color-text-primary)">해설·풀이</strong> — ${esc(rq.ex)}</div>`}
+
+  h+=`</div><div style="display:flex;gap:6px;margin-top:12px">
+  <button class="btn" style="flex:1;text-align:center;${S.revIdx===0?'color:var(--color-text-tertiary);cursor:default':''}" ${S.revIdx===0?'disabled':''} onclick="S.revIdx--;S.showCard=false;render()">← 이전</button>
+  <button class="btn" style="flex:1;text-align:center;font-weight:500;border-color:var(--color-border-secondary)" onclick="${S.revIdx<wqs.length-1?'S.revIdx++;S.showCard=false;render()':'toMenu()'}">${S.revIdx<wqs.length-1?"다음 →":"완료"}</button></div>`;
+  app.innerHTML=h;
+}
+
+function renderQuiz(){
+  const cur=S.lockedQ,P=curProg();const unmast=filt().filter(q=>!P.mastered[q.id]).length;const done=!cur&&unmast===0;const p=pct();const mc=mCnt();const fl=filt().length;
+  const rate=S.sess.c+S.sess.w>0?Math.round(S.sess.c/(S.sess.c+S.sess.w)*100):0;
+  const diffTag=S.difficulty==="hard"?"어려움 · 5지선다":"쉬움 · 4지선다";
+
+  let h=`<div class="header"><button class="link-btn" onclick="toMenu()">← 메뉴</button><div style="display:flex;gap:10px;font-size:10px;color:var(--color-text-tertiary)"><span id="econ-quiz-timer">${fmt(S.timer)}</span>${S.streak>=3?`<span style="color:var(--color-text-warning);font-weight:500">연속 ${S.streak}정답!</span>`:""}</div></div>
+  <div class="meta"><span>${esc(S.catF||"전체")}</span><span>${mc}/${fl} 마스터 · 정답률 ${rate}% · <span style="color:var(--color-text-info);font-weight:600">${esc(diffTag)}</span></span></div>
+  <div class="bar bar-sm"><div class="bar-fill" style="width:${p}%;background:${p===100?'var(--color-text-success)':'var(--color-text-info)'}"></div></div>`;
+
+  if(done){
+    h+=`<div style="text-align:center;padding:40px 12px"><div style="font-size:48px;margin-bottom:8px;color:#4CAF50;line-height:1">&#10003;</div><h3 style="font-size:1.35em;font-weight:700;color:#0284c7;margin:0 0 10px">${esc(S.catF||"전체")} 완료! <span style="font-size:0.75em;font-weight:600;color:#666">(${S.difficulty==="hard"?"어려움":"쉬움"})</span></h3><p style="font-size:1.05em;color:#666;margin:0 0 6px">${S.sess.c}정답 / ${S.sess.w}오답 · ${fmt(S.timer)}</p>${S.sess.w>0?`<p style="font-size:0.95em;color:#e65100;margin-bottom:4px">오답 ${S.sess.w}문제 → 메뉴에서 복습 가능</p>`:""}<button class="btn btn-next" style="margin-top:18px" onclick="toMenu()">메뉴로</button></div>`;
+  } else if(cur){
+    h+=`<div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:10px;color:var(--color-text-tertiary)">${esc(cur.cat)}</span>${P.wrongCnt[cur.id]>0&&S.sel===null?`<span style="font-size:10px;color:var(--color-text-warning)">이전 오답 ${P.wrongCnt[cur.id]}회</span>`:""}</div>
+    <h3 style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin:0 0 14px;line-height:1.6">${esc(cur.q)}</h3>
+    <div style="display:flex;flex-direction:column;gap:5px">`;
+
+    S.lockedOpts.forEach((o,i)=>{
+      const isA=o===cur.a,isS=o===S.sel;
+      let cls="",lbl="",extra="";
+      if(S.sel!==null){
+        if(isA){cls="bg-ok";lbl="정답";extra="color:var(--color-text-success)"}
+        else if(isS&&!isA){cls="bg-err";lbl="오답";extra="color:var(--color-text-danger)"}
+        else{extra="color:var(--color-text-tertiary)"}
+      }
+      const pad=`padding-left:48px;${lbl?"padding-right:52px":""}`;
+      h+=`<button type="button" class="btn ${cls}" ${S.sel!==null?"disabled":""} onclick="pick('${o.replace(/'/g,"\\'")}')" style="${extra};${pad}"><span class="opt-num" aria-hidden="true">${i+1}</span>${esc(o)}${lbl?`<span class="opt-label">${lbl}</span>`:""}</button>`;
+    });
+    h+=`</div>`;
+
+    if(S.sel!==null){
+      const exHtml=cur.ex?esc(cur.ex):"(이 문항에는 별도 해설이 없습니다.)";
+      h+=`<div style="margin-top:10px">`;
+      if(S.sel!==cur.a){
+        h+=`<div class="wrong-learn-box" style="padding:10px 14px 14px;border-radius:12px;border:1px solid rgba(244,67,54,0.35);background:linear-gradient(135deg,#fff8f8 0%,#ffebee 100%);box-shadow:0 2px 10px rgba(244,67,54,0.08);margin-bottom:10px">
+              <div style="margin-bottom:10px">
+                <div style="font-size:10px;font-weight:600;color:var(--color-text-tertiary);margin-bottom:4px">관련 개념(단원)</div>
+                <div style="font-size:14px;font-weight:600;color:var(--color-text-primary)">${esc(cur.cat)}</div>
+              </div>
+              <div style="margin-bottom:10px">
+                <div style="font-size:10px;font-weight:600;color:var(--color-text-tertiary);margin-bottom:4px">정답</div>
+                <div style="font-size:14px;font-weight:600;color:#1b5e20">${esc(cur.a)}</div>
+              </div>
+              <div style="margin-bottom:10px">
+                <div style="font-size:10px;font-weight:600;color:var(--color-text-tertiary);margin-bottom:4px">해설·문제 풀이</div>
+                <div style="font-size:12px;color:#444;line-height:1.65">${exHtml}</div>
+              </div>
+              ${buildEconWrongRefTabsHtml(cur.cat)}
+        </div>
+        <div style="font-size:11px;color:var(--color-text-danger);margin-bottom:8px">이 문제는 대기열 맨 뒤로 보내져, 다른 문제를 먼저 풉니다.</div>`;
+      }else{
+        h+=`<div class="ex-box"><div style="font-size:10px;font-weight:600;color:var(--color-text-tertiary);margin-bottom:6px">해설</div><div style="font-size:11px;color:var(--color-text-secondary);line-height:1.6">${exHtml}</div></div>`;
+      }
+      h+=`<button class="btn btn-next" onclick="nxt()">다음 →</button></div>`;
+    }
+  } else {
+    h+=`<div style="text-align:center;padding:24px 0;color:var(--color-text-tertiary);font-size:12px">불러오는 중...</div>`;
+  }
+  app.innerHTML=h;
+}
+
+document.addEventListener("keydown",function(ev){
+  if(ev.target&&["INPUT","TEXTAREA","SELECT"].includes(ev.target.tagName))return;
+  if(ev.target&&ev.target.isContentEditable)return;
+  if(S.topView!=="quiz")return;
+  if(ev.key==="Enter"&&S.phase==="quiz"&&S.sel!==null&&S.lockedQ){
+    ev.preventDefault();
+    nxt();
+    return;
+  }
+  if(S.phase!=="quiz"||S.sel!==null||!S.lockedQ||!S.lockedOpts.length)return;
+  const m=/^(?:Digit|Numpad)([1-9])$/.exec(ev.code);
+  if(!m)return;
+  const idx=Number(m[1])-1;
+  if(idx>=S.lockedOpts.length)return;
+  ev.preventDefault();
+  pick(S.lockedOpts[idx]);
+});
+
+render();
+</script>
+  <link rel="stylesheet" href="ai-quiz-ui.css" />
+  <script src="ai-quiz-config.js"></script>
+  <script src="ai-quiz-bridge.js"></script>
+  <script src="ai-quiz-runner.js"></script>
+  <script src="ai-quiz-subjects.js"></script>
+  <link rel="stylesheet" href="bgm-player.css" />
+  <script src="bgm-player.js" defer></script>
+</body>
+</html>

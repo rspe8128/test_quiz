@@ -1,0 +1,170 @@
+/* Shared site theme — sky blue, simple */
+:root {
+  --font: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --bg: #ffffff;
+  --sky-50: #f0f9ff;
+  --sky-100: #e0f2fe;
+  --sky-200: #bae6fd;
+  --sky-300: #7dd3fc;
+  --sky-500: #0ea5e9;
+  --sky-600: #0284c7;
+  --text: #1e293b;
+  --text-muted: #64748b;
+  --border: #cfe8f6;
+  --card-radius: 16px;
+  --shadow-card: 0 2px 12px rgba(14, 165, 233, 0.1);
+  --accent: #0284c7;
+  --accent-soft: #e0f2fe;
+  --ink: #1e293b;
+  --muted: #64748b;
+  --line: #cfe8f6;
+}
+
+html { -webkit-font-smoothing: antialiased; }
+
+body {
+  font-family: var(--font) !important;
+  color: var(--text) !important;
+  background:
+    radial-gradient(ellipse 120% 80% at 50% -20%, #bae6fd 0%, transparent 55%),
+    linear-gradient(180deg, #cfe8f6 0%, #e0f2fe 50%, #f0f9ff 100%) !important;
+  background-attachment: fixed !important;
+}
+
+.site-nav {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.site-nav__link,
+.site-nav a,
+.site-nav__btn {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--text-muted) !important;
+  font-weight: 500 !important;
+  font-size: 0.8125rem !important;
+  text-decoration: none;
+  padding: 0.4rem 0.85rem !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  border: 1px solid var(--border) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.site-nav__link:hover,
+.site-nav a:hover,
+.site-nav__btn:hover {
+  background: var(--sky-50) !important;
+  color: var(--sky-600) !important;
+  border-color: var(--sky-100) !important;
+  transform: none !important;
+}
+
+h1,
+.app-title,
+.page-title {
+  color: var(--text) !important;
+  text-shadow: none !important;
+}
+
+.page-sub {
+  color: var(--text-muted) !important;
+}
+
+.page-eyebrow {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--sky-600);
+  background: var(--sky-50);
+  border: 1px solid var(--sky-100);
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+}
+
+.footer,
+.page-footer {
+  position: static !important;
+  left: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  text-align: center;
+  margin-top: 2rem;
+  padding: 1rem 0 0 !important;
+  color: var(--text-muted) !important;
+  font-size: 0.75rem;
+  font-weight: 400;
+  background: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  z-index: auto !important;
+}
+
+.page-card,
+.question-box,
+.card,
+#home,
+#wordSubHome,
+#litSubHome,
+#listSelection,
+#wordStudySelection,
+#selection,
+#results {
+  border-color: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-card);
+}
+
+/* 공통 버튼 — 테마 마이그레이션 후 깨진 기본 버튼 복구 */
+.btn.btn-main,
+.btn.btn-next,
+.btn.btn--pri,
+.btn.btn--teal,
+.paper-btn {
+  background: var(--sky-100) !important;
+  color: var(--sky-600) !important;
+  border: 1px solid var(--sky-200) !important;
+  box-shadow: none !important;
+}
+
+.btn.btn--sec {
+  background: #f1f5f9 !important;
+  color: var(--text-muted) !important;
+  border: 1px solid var(--border) !important;
+}
+
+.paper-btn {
+  background: var(--sky-50) !important;
+  border-color: var(--sky-100) !important;
+}
+
+.paper-btn:hover,
+.btn.btn-main:hover:not(:disabled),
+.btn.btn-next:hover:not(:disabled),
+.btn.btn--pri:hover:not(:disabled) {
+  background: var(--sky-200) !important;
+  border-color: var(--sky-300) !important;
+  transform: none !important;
+}
+
+.hist-topnav__btn.is-on,
+.econ-topnav__btn.is-on,
+.fk-topnav__btn.is-on,
+.diff-pick .btn--on {
+  background: var(--sky-500) !important;
+  color: #fff !important;
+  border: 1px solid var(--sky-600) !important;
+  box-shadow: none !important;
+}
+
+.review-btn {
+  border: 1px solid #fed7aa !important;
+}

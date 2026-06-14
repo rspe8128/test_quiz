@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>프로그래밍 기초 연습 (Java)</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="site-theme.css" />
+  <style>
+    :root {
+      --font: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --radius: 20px;
+      --shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 20px 40px -12px rgba(14, 165, 233, 0.18);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: var(--font);
+      padding: clamp(16px, 3vw, 28px) 16px 120px;
+      min-height: 100vh;
+      color: #0f172a;
+      }
+    .page-title {
+      text-align: center;
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+    }
+    .page-sub {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 36em;
+      margin: 0 auto 1.25rem;
+      line-height: 1.55;
+    }
+    .wrap { max-width: 820px; margin: 0 auto; }
+    .notice {
+      background: rgba(254, 252, 232, 0.98);
+      border: 1px solid #fcd34d;
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.25rem;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #713f12;
+      box-shadow: var(--shadow);
+    }
+    .notice strong { color: #854d0e; }
+    .toc {
+      background: rgba(255, 255, 255, 0.97);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+    }
+    .toc h2 { font-size: 1rem; color: #0284c7; margin-bottom: 0.75rem; font-weight: 800; }
+    .toc ul { list-style: none; display: grid; gap: 0.35rem; }
+    @media (min-width: 560px) { .toc ul { grid-template-columns: 1fr 1fr; } }
+    .toc a {
+      color: #0284c7;
+      font-weight: 600;
+      font-size: 0.88rem;
+      text-decoration: none;
+      display: block;
+      padding: 0.25rem 0;
+    }
+    .toc a:hover { text-decoration: underline; }
+    section {
+      background: rgba(255, 255, 255, 0.97);
+      border-radius: var(--radius);
+      padding: clamp(1.25rem, 3vw, 1.75rem);
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+    }
+    section h2 {
+      font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+      color: #0284c7;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #e9d5ff;
+    }
+    .prob { padding: 0.85rem 0; border-bottom: 1px solid #f1f5f9; }
+    .prob:last-child { border-bottom: none; }
+    .prob-num {
+      display: inline-block;
+      min-width: 2.75rem;
+      font-weight: 800;
+      color: #0284c7;
+      font-size: 0.85rem;
+    }
+    .prob p, .prob li { font-size: 0.92rem; line-height: 1.65; color: #334155; margin-top: 0.35rem; }
+    .prob ul { margin-left: 1.25rem; margin-top: 0.35rem; }
+    .tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.15rem 0.5rem;
+      border-radius: 6px;
+      margin-left: 0.35rem;
+      vertical-align: middle;
+    }
+    .tag-later { background: #fef3c7; color: #92400e; }
+    .tag-skip { background: #e2e8f0; color: #475569; }
+    .tag-ref { background: #dbeafe; color: #1e40af; }
+    pre.hint {
+      margin-top: 0.5rem;
+      padding: 0.65rem 0.85rem;
+      background: #f8fafc;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      color: #475569;
+      overflow-x: auto;
+      border: 1px solid #e2e8f0;
+    }
+    details.sol {
+      margin-top: 0.65rem;
+      border-radius: 12px;
+      border: 1px solid #c4b5fd;
+      background: #f0f9ff;
+      overflow: hidden;
+    }
+    details.sol summary {
+      cursor: pointer;
+      padding: 0.55rem 0.85rem;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #0284c7;
+      list-style: none;
+      user-select: none;
+    }
+    details.sol summary::-webkit-details-marker { display: none; }
+    details.sol summary::after { content: " ▼"; font-size: 0.7rem; opacity: 0.7; }
+    details.sol[open] summary::after { content: " ▲"; }
+    textarea.sol-code {
+      display: block;
+      width: 100%;
+      min-height: 8rem;
+      padding: 0.75rem 0.85rem;
+      font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+      font-size: 0.72rem;
+      line-height: 1.45;
+      color: #1e293b;
+      background: var(--sky-50);
+      color: #e2e8f0;
+      border: none;
+      resize: vertical;
+      border-top: 1px solid #e9d5ff;
+    }
+    .sol-note {
+      font-size: 0.78rem;
+      color: #64748b;
+      padding: 0.35rem 0.85rem 0.65rem;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <nav class="site-nav">
+    <a href="index.html#midterm">&larr; 중간 대비 메인</a>
+  </nav>
+  <h1 class="page-title">프로그래밍 기초 연습</h1>
+  <p class="page-sub">Java 문법·제어·반복 연습 문제 모음입니다. 각 문제 아래 <strong>예시 답</strong>은 참고용이며, 이름·변수 값은 바꿔 써도 됩니다.</p>
+
+  <div class="wrap">
+    <div class="notice">
+      <strong>실행 안내</strong> 예시 코드는 IDE에서 붙여 넣어 실행하세요. <code>Scanner</code> 문제는 콘솔에 숫자를 입력해야 합니다. 답이 수업에서 배운 방식과 다를 수 있으면 수업 기준을 따르세요.
+    </div>
+
+    <nav class="toc" aria-label="목차">
+      <h2>바로 가기</h2>
+      <ul>
+        <li><a href="#sec-if">Simple if</a></li>
+        <li><a href="#sec-ifelse">if-else</a></li>
+        <li><a href="#sec-ifelseif">if-else if-else</a></li>
+        <li><a href="#sec-for">for</a></li>
+        <li><a href="#sec-nested">제어의 중첩</a></li>
+        <li><a href="#sec-etc1">약수·소수·배수</a></li>
+        <li><a href="#sec-patterns">출력 모양</a></li>
+        <li><a href="#sec-series">급수·분수</a></li>
+        <li><a href="#sec-misc">기타</a></li>
+        <li><a href="#sec-random">Math.random</a></li>
+        <li><a href="#sec-monte">Monte Carlo</a></li>
+        <li><a href="#sec-scanner">Scanner</a></li>
+        <li><a href="#sec-algo">알고리즘</a></li>
+      </ul>
+    </nav>
+
+    <section id="sec-if">
+      <h2>Simple if 연습</h2>
+      <div class="prob" id="p1"><span class="prob-num">1.</span> 자신의 이름을 출력하라.
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <p class="sol-note">이름은 본인 것으로 바꾸세요.</p>
+          <textarea readonly class="sol-code" rows="4">public class P01 {
+    public static void main(String[] args) {
+        System.out.println("홍길동");
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p2"><span class="prob-num">2.</span> 정수형 변수 <code>n</code>의 값이 짝수인 경우에만 자신의 이름을 출력하라.
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="8">public class P02 {
+    public static void main(String[] args) {
+        int n = 4; // 예시 값
+        if (n % 2 == 0) {
+            System.out.println("홍길동");
+        }
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p3"><span class="prob-num">3.</span> 정수형 변수 <code>m</code>의 값이 짝수인 경우에만 자신과 친구의 이름을 출력하라.
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="10">public class P03 {
+    public static void main(String[] args) {
+        int m = 2;
+        if (m % 2 == 0) {
+            System.out.println("홍길동");
+            System.out.println("김철수");
+        }
+    }
+}</textarea>
+        </details>
+      </div>
+    </section>
+
+    <section id="sec-ifelse">
+      <h2>if-else 연습</h2>
+      <div class="prob" id="p4"><span class="prob-num">4.</span> 정수형 변수 <code>a</code>가 짝수인 경우 자신의 이름을, 홀수인 경우 친구의 이름을 출력하라.
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="11">public class P04 {
+    public static void main(String[] args) {
+        int a = 7;
+        if (a % 2 == 0) {
+            System.out.println("홍길동");
+        } else {
+            System.out.println("김철수");
+        }
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p5"><span class="prob-num">5.</span> 정수형 변수 <code>c</code>와 <code>d</code> 중에서 더 큰 값을 출력하라.
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="12">public class P05 {
+    public static void main(String[] args) {
+        int c = 5, d = 12;
+        if (c >= d) {
+            System.out.println(c);
+        } else {
+            System.out.println(d);
+        }
+        // 또는 System.out.println(Math.max(c, d));
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p6"><span class="prob-num">6.</span> 정수형 변수 <code>p</code>와 <code>q</code> 중에서 더 큰 값은 <code>big</code>에, 작은 값은 <code>small</code>에 대입한 후 <code>big</code>과 <code>small</code>을 출력하시오.
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="16">public class P06 {
+    public static void main(String[] args) {
+        int p = 3, q = 8;
+        int big, small;
+        if (p >= q) {
+            big = p;
+            small = q;
+        } else {
+            big = q;
+            small = p;
+        }
+        System.out.println("big=" + big + ", small=" + small);
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p7"><span class="prob-num">7.</span> 삼각형의 세 변의 길이를 의미하는 <code>s</code>, <code>t</code>, <code>u</code>로 삼각형이 이루어지는지 아닌지 여부를 출력하라.
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="16">public class P07 {
+    public static void main(String[] args) {
+        int s = 3, t = 4, u = 5;
+        if (s + t > u && s + u > t && t + u > s) {
+            System.out.println("삼각형이 된다.");
+        } else {
+            System.out.println("삼각형이 되지 않는다.");
+        }
+    }
+}</textarea>
+        </details>
+      </div>
+    </section>
+
+    <section id="sec-ifelseif">
+      <h2>if-else if-else</h2>
+      <div class="prob" id="p8"><span class="prob-num">8.</span> 정수형 변수 <code>x</code>, <code>y</code>, <code>z</code> 중에서 가장 큰 값을 출력하라.
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="14">public class P08 {
+    public static void main(String[] args) {
+        int x = 2, y = 9, z = 5;
+        int max = x;
+        if (y > max) max = y;
+        if (z > max) max = z;
+        System.out.println(max);
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p9"><span class="prob-num">9.</span> 정수형 변수 <code>j</code>, <code>k</code>, <code>l</code>이 가진 값을 이용하여 그중 가장 큰 값은 <code>max</code>, 중간값은 <code>mid</code>, 가장 작은 값은 <code>min</code>에 넣은 후 <code>max</code>, <code>mid</code>, <code>min</code>을 출력하시오.
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="28">public class P09 {
+    public static void main(String[] args) {
+        int j = 7, k = 2, l = 5;
+        int max, mid, min;
+        if (j >= k && j >= l) {
+            max = j;
+            if (k >= l) { mid = k; min = l; }
+            else { mid = l; min = k; }
+        } else if (k >= j && k >= l) {
+            max = k;
+            if (j >= l) { mid = j; min = l; }
+            else { mid = l; min = j; }
+        } else {
+            max = l;
+            if (j >= k) { mid = j; min = k; }
+            else { mid = k; min = j; }
+        }
+        System.out.println(max + " " + mid + " " + min);
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p10"><span class="prob-num">10.</span> 삼각형의 세 변… (네 가지 출력)
+        <ul>
+          <li><code>삼각형을 만들 수 없다.</code></li>
+          <li><code>예각 삼각형을 만들 수 있다.</code></li>
+          <li><code>직각 삼각형을 만들 수 있다.</code></li>
+          <li><code>둔각 삼각형을 만들 수 있다.</code></li>
+        </ul>
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <p class="sol-note">가장 긴 변을 c로 두고, a²+b²와 c²를 비교합니다.</p>
+          <textarea readonly class="sol-code" rows="42">public class P10 {
+    public static void main(String[] args) {
+        int aa = 3, ab = 4, ac = 5;
+        int a = aa, b = ab, c = ac;
+        // a ≤ b ≤ c 가 되도록 정렬
+        if (a > b) { int t = a; a = b; b = t; }
+        if (b > c) { int t = b; b = c; c = t; }
+        if (a > b) { int t = a; a = b; b = t; }
+
+        if (a + b <= c) {
+            System.out.println("삼각형을 만들 수 없다.");
+        } else {
+            long a2 = (long) a * a, b2 = (long) b * b, c2 = (long) c * c;
+            if (a2 + b2 == c2) {
+                System.out.println("직각 삼각형을 만들 수 있다.");
+            } else if (a2 + b2 > c2) {
+                System.out.println("예각 삼각형을 만들 수 있다.");
+            } else {
+                System.out.println("둔각 삼각형을 만들 수 있다.");
+            }
+        }
+    }
+}</textarea>
+        </details>
+      </div>
+    </section>
+
+    <section id="sec-for">
+      <h2>for</h2>
+      <div class="prob" id="p11"><span class="prob-num">11.</span> 자신의 이름을 한 번 출력하시오.
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="6">public class P11 {
+    public static void main(String[] args) {
+        System.out.println("홍길동");
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p12"><span class="prob-num">12.</span> 자신의 이름을 10번 출력하시오.
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="9">public class P12 {
+    public static void main(String[] args) {
+        for (int i = 0; i < 10; i++) {
+            System.out.println("홍길동");
+        }
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p12-1"><span class="prob-num">12-1.</span> 1부터 <code>x</code>까지의 모든 숫자를 출력하시오.
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="10">public class P12_1 {
+    public static void main(String[] args) {
+        int x = 5;
+        for (int i = 1; i <= x; i++) {
+            System.out.println(i);
+        }
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p13"><span class="prob-num">13.</span> 1~<code>x</code> 사이의 숫자들의 합을 구하여 출력하시오.
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="12">public class P13 {
+    public static void main(String[] args) {
+        int x = 10;
+        int sum = 0;
+        for (int i = 1; i <= x; i++) {
+            sum += i;
+        }
+        System.out.println(sum);
+    }
+}</textarea>
+        </details>
+      </div>
+    </section>
+
+    <section id="sec-nested">
+      <h2>제어의 중첩</h2>
+      <div class="prob" id="p14"><span class="prob-num">14.</span> 1~<code>x</code> 사이의 숫자 중 짝수만… (반복만 / 반복+선택)
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <p class="sol-note">아래 두 방식은 둘 다 예시입니다. 실행할 때는 한 가지 방식만 남기면 됩니다.</p>
+          <textarea readonly class="sol-code" rows="19">public class P14 {
+    public static void main(String[] args) {
+        int x = 10;
+        // (1) 반복만: 2씩 증가
+        for (int i = 2; i <= x; i += 2) {
+            System.out.println(i);
+        }
+        // (2) 반복 + 선택
+        for (int i = 1; i <= x; i++) {
+            if (i % 2 == 0) System.out.println(i);
+        }
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p15"><span class="prob-num">15.</span> 1~<code>x</code> 사이의 숫자 중 짝수의 합
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="12">public class P15 {
+    public static void main(String[] args) {
+        int x = 10, sum = 0;
+        for (int i = 2; i <= x; i += 2) sum += i;
+        System.out.println(sum);
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p16"><span class="prob-num">16.</span> 짝수의 합과 홀수의 합
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="16">public class P16 {
+    public static void main(String[] args) {
+        int x = 10, even = 0, odd = 0;
+        for (int i = 1; i <= x; i++) {
+            if (i % 2 == 0) even += i;
+            else odd += i;
+        }
+        System.out.println("짝수합=" + even + ", 홀수합=" + odd);
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p17"><span class="prob-num">17.</span> 3의 배수만 출력
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="11">public class P17 {
+    public static void main(String[] args) {
+        int x = 15;
+        for (int i = 3; i <= x; i += 3) {
+            System.out.println(i);
+        }
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p18"><span class="prob-num">18.</span> 3의 배수의 합
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="12">public class P18 {
+    public static void main(String[] args) {
+        int x = 15, sum = 0;
+        for (int i = 3; i <= x; i += 3) sum += i;
+        System.out.println(sum);
+    }
+}</textarea>
+        </details>
+      </div>
+    </section>
+
+    <section id="sec-etc1">
+      <h2>약수·배수·소수 등</h2>
+      <div class="prob" id="p19"><span class="prob-num">19.</span> <code>n</code>의 약수
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="12">public class P19 {
+    public static void main(String[] args) {
+        int n = 12;
+        for (int i = 1; i <= n; i++) {
+            if (n % i == 0) System.out.println(i);
+        }
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p19-1"><span class="prob-num">19-1.</span> 약수의 합
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="13">public class P19_1 {
+    public static void main(String[] args) {
+        int n = 12, sum = 0;
+        for (int i = 1; i <= n; i++) {
+            if (n % i == 0) sum += i;
+        }
+        System.out.println(sum);
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p19-2"><span class="prob-num">19-2.</span> 약수들과 합
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="15">public class P19_2 {
+    public static void main(String[] args) {
+        int n = 12, sum = 0;
+        for (int i = 1; i <= n; i++) {
+            if (n % i == 0) {
+                System.out.println(i);
+                sum += i;
+            }
+        }
+        System.out.println("합=" + sum);
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p20"><span class="prob-num">20.</span> 약수의 개수
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="13">public class P20 {
+    public static void main(String[] args) {
+        int n = 12, cnt = 0;
+        for (int i = 1; i <= n; i++) {
+            if (n % i == 0) cnt++;
+        }
+        System.out.println(cnt);
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p21"><span class="prob-num">21.</span> 소수 판별
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="18">public class P21 {
+    public static void main(String[] args) {
+        int n = 17;
+        boolean isPrime = n >= 2;
+        for (int i = 2; i * i <= n && isPrime; i++) {
+            if (n % i == 0) isPrime = false;
+        }
+        System.out.println(isPrime ? "소수이다." : "소수가 아니다.");
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p22"><span class="prob-num">22.</span> 완전제곱수
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="14">public class P22 {
+    public static void main(String[] args) {
+        int n = 36;
+        int r = (int) Math.round(Math.sqrt(n));
+        if (r * r == n) System.out.println("완전제곱수이다.");
+        else System.out.println("완전제곱수가 아니다.");
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p23"><span class="prob-num">23.</span> 공약수
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="14">public class P23 {
+    public static void main(String[] args) {
+        int m = 24, n = 36;
+        int g = Math.min(m, n);
+        for (int i = 1; i <= g; i++) {
+            if (m % i == 0 && n % i == 0) System.out.println(i);
+        }
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p24"><span class="prob-num">24.</span> 구구단 한 단
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="12">public class P24 {
+    public static void main(String[] args) {
+        int dan = 7;
+        for (int i = 1; i <= 9; i++) {
+            System.out.println(dan + " x " + i + " = " + (dan * i));
+        }
+    }
+}</textarea>
+        </details>
+      </div>
+    </section>
+
+    <section id="sec-patterns">
+      <h2>출력 모양</h2>
+      <div class="prob" id="p25"><span class="prob-num">25.</span> 4×5 별
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="12">public class P25 {
+    public static void main(String[] args) {
+        for (int r = 0; r < 4; r++) {
+            for (int c = 0; c < 5; c++) System.out.print("*");
+            System.out.println();
+        }
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p26"><span class="prob-num">26.</span> 구구단 전체
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="14">public class P26 {
+    public static void main(String[] args) {
+        for (int d = 2; d <= 9; d++) {
+            for (int i = 1; i <= 9; i++) {
+                System.out.println(d + " x " + i + " = " + (d * i));
+            }
+            System.out.println();
+        }
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p27"><span class="prob-num">27.</span> 계단 별
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="12">public class P27 {
+    public static void main(String[] args) {
+        for (int r = 1; r <= 5; r++) {
+            for (int c = 0; c < r; c++) System.out.print("*");
+            System.out.println();
+        }
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p28"><span class="prob-num">28.</span> 역계단 별
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="12">public class P28 {
+    public static void main(String[] args) {
+        for (int r = 5; r >= 1; r--) {
+            for (int c = 0; c < r; c++) System.out.print("*");
+            System.out.println();
+        }
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p29"><span class="prob-num">29.</span> @와 * 피라미드
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="16">public class P29 {
+    public static void main(String[] args) {
+        int n = 4;
+        for (int r = 1; r <= n; r++) {
+            int at = n - r;
+            int st = 2 * r - 1;
+            for (int i = 0; i < at; i++) System.out.print("@");
+            for (int i = 0; i < st; i++) System.out.print("*");
+            for (int i = 0; i < at; i++) System.out.print("@");
+            System.out.println();
+        }
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p30"><span class="prob-num">30.</span> 문자 피라미드 <span class="tag tag-later">나중에</span>
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="20">public class P30 {
+    public static void main(String[] args) {
+        int n = 4;
+        for (int r = 1; r <= n; r++) {
+            int at = n - r;
+            for (int i = 0; i < at; i++) System.out.print("@");
+            for (int c = 0; c < 2 * r - 1; c++) {
+                System.out.print((char) ('A' + c));
+            }
+            for (int i = 0; i < at; i++) System.out.print("@");
+            System.out.println();
+        }
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p31"><span class="prob-num">31.</span> n 이하 소수 전부
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="22">public class P31 {
+    public static void main(String[] args) {
+        int n = 30;
+        for (int p = 2; p <= n; p++) {
+            boolean prime = true;
+            for (int d = 2; d * d <= p; d++) {
+                if (p % d == 0) { prime = false; break; }
+            }
+            if (prime) System.out.println(p);
+        }
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p32"><span class="prob-num">32.</span> n 이하 완전제곱수
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="11">public class P32 {
+    public static void main(String[] args) {
+        int n = 30;
+        for (int k = 1; k * k <= n; k++) {
+            System.out.println(k * k);
+        }
+    }
+}</textarea>
+        </details>
+      </div>
+    </section>
+
+    <section id="sec-series">
+      <h2>급수·교대합·분수 급수</h2>
+      <div class="prob" id="p33"><span class="prob-num">33.</span> 등차 n번째 항 <span class="tag tag-ref">참고</span>
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="8">// 초항 3, 공차 5 → an = 3 + (n-1)*5
+int n = 4;
+int an = 3 + (n - 1) * 5;
+System.out.println(an);</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p34"><span class="prob-num">34.</span> 등차 n항까지 합 <span class="tag tag-ref">참고</span>
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="8">int n = 4;
+int sum = n * (2 * 3 + (n - 1) * 5) / 2;
+System.out.println(sum);</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p35"><span class="prob-num">35.</span> 등비 n번째 항 <span class="tag tag-ref">참고</span>
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="6">int n = 5;
+long an = (long) (2 * Math.pow(2, n - 1));
+System.out.println(an);</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p36"><span class="prob-num">36.</span> 등비 n항까지 합 <span class="tag tag-ref">참고</span>
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="8">int n = 5;
+long sum = (long) (2 * (Math.pow(2, n) - 1)); // r≠1: a(r^n-1)/(r-1)
+System.out.println(sum);</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p37"><span class="prob-num">37.</span> 1-2+3-4+…±n
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="14">public class P37 {
+    public static void main(String[] args) {
+        int n = 6;
+        int sum = 0, sign = 1;
+        for (int i = 1; i <= n; i++) {
+            sum += sign * i;
+            sign *= -1;
+        }
+        System.out.println(sum);
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p38-1"><span class="prob-num">38-1.</span> 홀수 교대합 (1~n, n은 홀수라고 가정)
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="16">public class P38_1 {
+    public static void main(String[] args) {
+        int n = 9;
+        int sum = 0, sign = 1;
+        for (int k = 1; k <= n; k += 2) {
+            sum += sign * k;
+            sign *= -1;
+        }
+        System.out.println(sum);
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p38-2"><span class="prob-num">38-2.</span> 소수 교대합 (2 - 3 + 5 - 7 + …, n까지의 소수)
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <p class="sol-note">n 이하의 소수만 항으로 쓰고 부호를 번갈아 적용한 예시입니다.</p>
+          <textarea readonly class="sol-code" rows="28">public class P38_2 {
+    static boolean isPrime(int p) {
+        if (p < 2) return false;
+        for (int d = 2; d * d <= p; d++) if (p % d == 0) return false;
+        return true;
+    }
+    public static void main(String[] args) {
+        int n = 13;
+        int sum = 0, sign = 1;
+        for (int p = 2; p <= n; p++) {
+            if (isPrime(p)) {
+                sum += sign * p;
+                sign *= -1;
+            }
+        }
+        System.out.println(sum);
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p39"><span class="prob-num">39.</span> 조화급수 1/1+…+1/n
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="12">public class P39 {
+    public static void main(String[] args) {
+        int n = 10;
+        double sum = 0;
+        for (int i = 1; i <= n; i++) sum += 1.0 / i;
+        System.out.println(sum);
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p40"><span class="prob-num">40.</span> 1/1 - 1/3 + 1/5 - …
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <p class="sol-note">홀수 분모만 사용, n이 마지막 분모 상한(홀수)이라고 가정.</p>
+          <textarea readonly class="sol-code" rows="16">public class P40 {
+    public static void main(String[] args) {
+        int n = 9;
+        double sum = 0;
+        int sign = 1;
+        for (int d = 1; d <= n; d += 2) {
+            sum += sign * (1.0 / d);
+            sign *= -1;
+        }
+        System.out.println(sum);
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p41"><span class="prob-num">41.</span> 1/2+1/3+1/5+… (분모는 n 이하의 소수)
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="22">public class P41 {
+    static boolean isPrime(int p) {
+        if (p < 2) return false;
+        for (int d = 2; d * d <= p; d++) if (p % d == 0) return false;
+        return true;
+    }
+    public static void main(String[] args) {
+        int n = 11;
+        double sum = 0;
+        for (int p = 2; p <= n; p++) {
+            if (isPrime(p)) sum += 1.0 / p;
+        }
+        System.out.println(sum);
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p42"><span class="prob-num">42.</span> 1/2 - 1/3 + 1/5 - … (n 이하 소수)
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="24">public class P42 {
+    static boolean isPrime(int p) {
+        if (p < 2) return false;
+        for (int d = 2; d * d <= p; d++) if (p % d == 0) return false;
+        return true;
+    }
+    public static void main(String[] args) {
+        int n = 11;
+        double sum = 0;
+        int sign = 1;
+        for (int p = 2; p <= n; p++) {
+            if (isPrime(p)) {
+                sum += sign * (1.0 / p);
+                sign *= -1;
+            }
+        }
+        System.out.println(sum);
+    }
+}</textarea>
+        </details>
+      </div>
+    </section>
+
+    <section id="sec-misc">
+      <h2>기타</h2>
+      <div class="prob" id="p43"><span class="prob-num">43.</span> swap
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="12">public class P43 {
+    public static void main(String[] args) {
+        int x = 3, y = 7;
+        int t = x;
+        x = y;
+        y = t;
+        System.out.println(x + " " + y);
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p44"><span class="prob-num">44.</span> 유클리드 호제법 GCD <span class="tag tag-ref">4-2장</span>
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="16">public class P44 {
+    public static void main(String[] args) {
+        int m = 48, n = 18;
+        int a = m, b = n;
+        while (b != 0) {
+            int r = a % b;
+            a = b;
+            b = r;
+        }
+        System.out.println(a); // gcd
+    }
+}</textarea>
+        </details>
+      </div>
+    </section>
+
+    <section id="sec-random">
+      <h2>Math.random()</h2>
+      <div class="prob" id="p45"><span class="prob-num">45.</span>
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="6">double r = Math.random(); // [0.0, 1.0)
+System.out.println(r);</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p46"><span class="prob-num">46.</span> 0.0~100.0 실수
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="4">double x = Math.random() * 100.0;
+System.out.println(x);</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p47"><span class="prob-num">47.</span> 1.0~100.0 실수
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="4">double x = 1.0 + Math.random() * 99.0;
+System.out.println(x);</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p48"><span class="prob-num">48.</span> 0~100 정수
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="4">int k = (int) (Math.random() * 101); // 0~100
+System.out.println(k);</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p49"><span class="prob-num">49.</span> 50~100 정수
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="4">int k = 50 + (int) (Math.random() * 51);
+System.out.println(k);</textarea>
+        </details>
+      </div>
+    </section>
+
+    <section id="sec-monte">
+      <h2>Monte Carlo · 확률</h2>
+      <div class="prob" id="p50"><span class="prob-num">50.</span> Monte Carlo로 π 근사 <span class="tag tag-skip">학기 생략 가능</span>
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <p class="sol-note">단위 정사각형 [0,1]×[0,1]에 무작위 점을 찍어 x²+y²≤1인 비율 ≈ π/4.</p>
+          <textarea readonly class="sol-code" rows="18">public class P50 {
+    public static void main(String[] args) {
+        int trials = 1_000_000;
+        int inside = 0;
+        for (int i = 0; i < trials; i++) {
+            double x = Math.random(), y = Math.random();
+            if (x * x + y * y <= 1) inside++;
+        }
+        double pi = 4.0 * inside / trials;
+        System.out.println(pi);
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p51"><span class="prob-num">51.</span> 동전 100번
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="16">public class P51 {
+    public static void main(String[] args) {
+        int head = 0, tail = 0;
+        for (int i = 0; i < 100; i++) {
+            if (Math.random() < 0.5) head++;
+            else tail++;
+        }
+        System.out.println("앞면 비율=" + (head / 100.0));
+        System.out.println("뒷면 비율=" + (tail / 100.0));
+    }
+}</textarea>
+        </details>
+      </div>
+    </section>
+
+    <section id="sec-scanner">
+      <h2>Scanner 입력</h2>
+      <div class="prob" id="p52"><span class="prob-num">52.</span>
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="12">import java.util.Scanner;
+public class P52 {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int a = sc.nextInt();
+        System.out.println("입력값: " + a);
+        sc.close();
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p53"><span class="prob-num">53.</span>
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="12">import java.util.Scanner;
+public class P53 {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        double x = sc.nextDouble();
+        System.out.println(x);
+        sc.close();
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p54"><span class="prob-num">54.</span>
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="14">import java.util.Scanner;
+public class P54 {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int sum = 0;
+        for (int i = 0; i < 10; i++) sum += sc.nextInt();
+        System.out.println(sum);
+        sc.close();
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p55"><span class="prob-num">55.</span>
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="24">import java.util.Scanner;
+public class P55 {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int tries = 0, ok = 0, sum = 0;
+        while (ok < 10) {
+            tries++;
+            int v = sc.nextInt();
+            if (v >= 1 && v <= 100) { ok++; sum += v; }
+        }
+        System.out.println("시도=" + tries + ", 유효=" + ok + ", 합=" + sum);
+        sc.close();
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p56"><span class="prob-num">56.</span> 가위바위보 한 판
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="28">import java.util.Scanner;
+public class P56 {
+    public static void main(String[] args) {
+        int com = 1 + (int) (Math.random() * 3);
+        Scanner sc = new Scanner(System.in);
+        int user = sc.nextInt();
+        if (user == com) System.out.println("비김");
+        else if ((user == 1 && com == 3) || (user == 2 && com == 1) || (user == 3 && com == 2))
+            System.out.println("사용자 승");
+        else System.out.println("컴퓨터 승");
+        sc.close();
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p57"><span class="prob-num">57.</span> 승부 날 때까지 + 잘못된 입력 재입력
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="36">import java.util.Scanner;
+public class P57 {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            int com = 1 + (int) (Math.random() * 3);
+            int user;
+            while (true) {
+                user = sc.nextInt();
+                if (user >= 1 && user <= 3) break;
+            }
+            if (user != com) {
+                if ((user == 1 && com == 3) || (user == 2 && com == 1) || (user == 3 && com == 2))
+                    System.out.println("사용자 승");
+                else System.out.println("컴퓨터 승");
+                break;
+            }
+            System.out.println("비김, 다시");
+        }
+        sc.close();
+    }
+}</textarea>
+        </details>
+      </div>
+      <div class="prob" id="p58"><span class="prob-num">58.</span> 숫자별 개수 (0 이하 종료)
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <textarea readonly class="sol-code" rows="26">import java.util.Scanner;
+public class P58 {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int[] cnt = new int[11]; // 1~10
+        while (true) {
+            int v = sc.nextInt();
+            if (v <= 0) break;
+            if (v >= 1 && v <= 10) cnt[v]++;
+        }
+        for (int d = 1; d <= 10; d++) {
+            System.out.println(d + ": " + cnt[d]);
+        }
+        sc.close();
+    }
+}</textarea>
+        </details>
+      </div>
+    </section>
+
+    <section id="sec-algo">
+      <h2>알고리즘 (참고)</h2>
+      <div class="prob" id="p-algo"><span class="prob-num">※</span> 근사 반복 <span class="tag tag-skip">이번 학기 생략</span>
+        <details class="sol"><summary>예시 답 (Java)</summary>
+          <p class="sol-note">문제에 적힌 3단계를 그대로 50번 반복한 틀입니다. 초기 근사값은 임의로 잡습니다.</p>
+          <textarea readonly class="sol-code" rows="22">public class AlgoSqrtish {
+    public static void main(String[] args) {
+        double n = 2.0;
+        double approx = 1.0;
+        for (int i = 0; i < 50; i++) {
+            double step1 = n / approx;
+            approx = approx + step1;
+            approx = approx / 2.0;
+        }
+        System.out.println(approx);
+    }
+}</textarea>
+        </details>
+      </div>
+    </section>
+  </div>
+
+  <div class="footer">제작자: 정해우</div>
+  <link rel="stylesheet" href="ai-quiz-ui.css" />
+  <script src="ai-quiz-config.js"></script>
+  <script src="ai-quiz-bridge.js"></script>
+  <script src="ai-quiz-runner.js"></script>
+  <script src="ai-quiz-subjects.js"></script>
+  <link rel="stylesheet" href="bgm-player.css" />
+  <script src="bgm-player.js" defer></script>
+</body>
+</html>

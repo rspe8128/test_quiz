@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>국어 · 문법 객관식 모의고사</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="site-theme.css" />
+  <style>
+    :root {
+      --font: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --card: rgba(255, 255, 255, 0.97);
+      --shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 24px 48px -12px rgba(14, 165, 233, 0.22);
+      --ink: #1e293b;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --violet: #0284c7;
+      --teal: #0f766e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: var(--font);
+      color: var(--text);
+      padding: clamp(16px, 3vw, 28px) 16px 120px;
+      min-height: 100vh;
+      }
+    
+    h1 {
+      text-align: center;
+      font-size: clamp(1.35rem, 4vw, 1.85rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.35rem;
+    }
+    .page-sub {
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      max-width: 34em;
+      margin: 0 auto 1.25rem;
+      line-height: 1.55;
+    }
+    .shell { max-width: 640px; margin: 0 auto; }
+    .card {
+      background: var(--card);
+      color: var(--ink);
+      border-radius: 22px;
+      padding: clamp(22px, 4vw, 32px) clamp(18px, 4vw, 28px);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+    }
+    .intro h2 { font-size: 1rem; color: #0284c7; margin-bottom: 0.75rem; }
+    .intro p { font-size: 0.9rem; color: var(--muted); line-height: 1.6; margin-bottom: 1rem; }
+    .paper-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    @media (min-width: 480px) {
+      .paper-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .paper-btn {
+      font-family: inherit;
+      border: 1px solid var(--sky-100);
+      background: var(--sky-50);
+      color: var(--sky-600);
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 0.85rem 0.75rem;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .paper-btn:hover { background: var(--sky-100); border-color: var(--sky-200); }
+    .paper-btn small { display: block; font-weight: 500; font-size: 0.72rem; color: #64748b; margin-top: 4px; }
+    .hud {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 14px;
+      padding: 10px 14px;
+      background: #f8fafc;
+      border-radius: 12px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #334155;
+    }
+    .q-block { margin-bottom: 18px; }
+    .q-block .q-text { font-size: 0.95rem; font-weight: 700; color: #0f172a; line-height: 1.5; margin-bottom: 10px; }
+    .choices { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+    .choices li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 2px solid var(--line);
+      background: #fff;
+      cursor: pointer;
+      font-size: 0.9rem;
+      line-height: 1.45;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .choices .ch-num {
+      flex: 0 0 1.65rem;
+      width: 1.65rem;
+      height: 1.65rem;
+      border-radius: 999px;
+      background: #e2e8f0;
+      color: #1e293b;
+      font-weight: 800;
+      font-size: 0.78rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      margin-top: 1px;
+    }
+    .choices li.correct .ch-num { background: #22c55e; color: #fff; }
+    .choices li.wrong .ch-num { background: #ef4444; color: #fff; }
+    .choices .ch-body { flex: 1; min-width: 0; }
+    .choices li:hover:not(.locked) { border-color: #a5b4fc; background: #f5f3ff; }
+    .choices li.correct { border-color: #22c55e; background: #ecfdf3; }
+    .choices li.wrong { border-color: #ef4444; background: #fef2f2; }
+    .choices li.locked { cursor: default; opacity: 0.95; }
+    .choices li.dim { opacity: 0.45; }
+    details.ex { margin-top: 10px; font-size: 0.82rem; color: var(--muted); }
+    details.ex summary { cursor: pointer; font-weight: 600; color: #38bdf8; }
+    .nav-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 18px; }
+    .btn {
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.875rem;
+      padding: 0.6rem 1.1rem;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+    .btn:hover:not(:disabled) { transform: translateY(-1px); }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn--pri { background: var(--sky-100); color: var(--sky-600); border: 1px solid var(--sky-200); }
+    .btn--sec { background: #e2e8f0; color: #475569; }
+    .btn--teal { background: var(--sky-50); color: var(--sky-600); border: 1px solid var(--sky-100); }
+    .result-panel {
+      text-align: center;
+      padding: 24px 16px;
+      background: linear-gradient(180deg, #ecfdf5 0%, #fff 50%);
+      border: 1px solid #bbf7d0;
+      border-radius: 16px;
+      margin-top: 16px;
+    }
+    .result-panel .score { font-size: 1.75rem; font-weight: 800; color: #0f172a; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="site-nav">
+      <a class="site-nav__link" href="index.html#midterm">← 중간 대비 메인</a>
+      <a class="site-nav__link" href="word-quiz.html">국어 퀴즈·문학</a>
+      <a class="site-nav__link" href="korean-grammar.html">문법 개념 정리</a>
+    </nav>
+    <h1>국어 · 문법 객관식 모의고사</h1>
+    <p class="page-sub"><strong>선택: 언어와 매체 · 중세국어·한글 제자</strong> — 제1~3회, 회차당 <strong>10문항</strong>. 맞힘은 <strong>각 문항 첫 선택</strong>만 반영합니다. 매 문항마다 보기 <strong>1~4번</strong>에 적히는 내용과 <strong>정답이 놓이는 번호</strong>가 무작위로 바뀝니다.</p>
+
+    <div class="card intro" id="kgq-intro">
+      <h2>회차 선택</h2>
+      <p>개념은 <a href="korean-grammar.html" style="color:#0284c7;font-weight:600">문법 개념 정리</a> 탭을 복습한 뒤 풀면 좋습니다.</p>
+      <div class="paper-grid">
+        <button type="button" class="paper-btn" data-round="1">제1회<small>문항 1~10</small></button>
+        <button type="button" class="paper-btn" data-round="2">제2회<small>문항 11~20</small></button>
+        <button type="button" class="paper-btn" data-round="3">제3회<small>문항 21~30</small></button>
+      </div>
+      <p style="font-size:0.8rem;color:#94a3b8;text-align:center">기록: 로컬 저장(브라우저) · <button type="button" class="btn btn--sec" id="kgq-reset" style="font-size:0.78rem;padding:0.35rem 0.65rem">기록 초기화</button></p>
+    </div>
+
+    <div class="card hidden" id="kgq-runner">
+      <div class="hud">
+        <span><span id="kgq-label" style="color:#0284c7">제1회</span> — <strong id="kgq-cur">1</strong> / 10</span>
+        <span>맞힘 <strong id="kgq-score">0</strong> <span style="font-weight:500;color:#64748b">(첫 선택)</span></span>
+      </div>
+      <div id="kgq-slot"></div>
+      <div class="nav-row">
+        <button type="button" class="btn btn--sec" id="kgq-prev" disabled>이전</button>
+        <button type="button" class="btn btn--pri" id="kgq-next" disabled>다음 문항</button>
+        <button type="button" class="btn btn--teal" id="kgq-quit">처음으로</button>
+      </div>
+      <div class="result-panel hidden" id="kgq-result">
+        <p style="font-weight:700;color:#047857;margin-bottom:6px">결과</p>
+        <p class="score"><span id="kgq-res-num">0</span> / 10</p>
+        <p style="font-size:0.85rem;color:#64748b;margin:10px 0">틀린 문항은 해설을 펼쳐 복습하세요.</p>
+        <div class="nav-row">
+          <button type="button" class="btn btn--pri" id="kgq-retry">다시 풀기</button>
+          <button type="button" class="btn btn--sec" id="kgq-back">회차 선택</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var LS_KEY = "kgGrammarMock_v2";
+      var BANK = [
+        { q: "ㄷ을 ‘상형 기본자’가 아니라 가획·이체 흐름으로 설명할 때, ㄴ과의 관계를 가장 정확히 짚은 것은?", c: ["ㄴ에 획을 더한 ㄷ은 같은 조음 위치에서 소리를 더 세게 낸다는 가획 원리와 잘 맞는다", "ㄷ은 ㅅ과 같은 상형 기본자이므로 ㄴ과 무관하다", "ㄷ은 중성 기본자 천·지·인 중 하나이다", "ㄷ은 종성에만 쓰이므로 초성 원리와 무관하다"], a: 1, e: "ㄱ·ㄴ·ㅁ·ㅅ·ㅇ 다섯 상형 기본자 밖의 ㄷ은 ㄴ의 가획으로 정리합니다." },
+        { q: "반설음 ㄹ을 이체자로 보는 설명과 가장 거리가 먼 것은?", c: ["ㄴ의 다른 획 추가로 형태가 달라졌다는 점을 든다", "‘더 세게’만으로는 설명이 어렵다는 점을 강조한다", "천(天)·지(地)·인(人)의 중성 기본자와 직접 대응된다", "교과서마다 용어·그림이 조금씩 다를 수 있다"], a: 3, e: "이체(林谷)는 초성 체계 안에서 논의되며, 천지인은 중성 쪽 개념입니다." },
+        { q: "종성부용초성(終聲復用初聲)과 모순되는 서술은?", c: ["받침 ㄱ은 초성 ㄱ 자형을 다시 쓴다", "겹받침은 허용되는 자모 조합으로 겹쓴다", "받침은 원칙적으로 초성 자모 집합 밖의 전용 글자만 쓴다", "두벌식에서도 받침은 같은 취지로 운용된다"], a: 3, e: "받침은 초성에 쓰인 자모를 ‘다시 쓴다’는 원리가 핵심입니다." },
+        { q: "병서(나란히 쓰기)의 유형을 가를 때, ‘합용병서’에만 해당하는 예에 가깝다고 보기 쉬운 것은?", c: ["ㄲ (ㄱ+ㄱ)", "ㅆ (ㅅ+ㅅ)", "ㅺ (ㅅ+ㄱ)", "ㅗ+ㆍ"], a: 3, e: "ㄲ·ㅆ은 같은 자음의 각자병서, ㅺ은 서로 다른 자음의 합용병서로 정리합니다." },
+        { q: "연서(이어쓰기)와 부서(붙여쓰기)를 한꺼번에 설명한 문장으로 가장 적절한 것은?", c: ["순경음을 만들 때 자음을 세로로 이어 붙이고, 모음은 초성 옆·아래에 부순다", "모든 글자를 가로 한 줄에만 쓴다", "띄어쓰기로 음절 경계를 드러낸다", "한자 획순을 따른다"], a: 1, e: "연서·부서는 문자 배열의 두 축으로 배웁니다." },
+        { q: "중세 국어 표기에서 연철·분철·중철을 가를 때 ‘형태소 경계’와의 관계를 가장 잘 짚은 것은?", c: ["연철은 표음에 가깝게 받침을 뒤 초성에 이어 붙이고, 분철은 경계를 살려 받침을 유지한 채 모음 앞에 ㅇ을 둔다", "셋 모두 성조만으로만 구분된다", "중철은 한자만 해당한다", "분철은 항상 연철의 오타이다"], a: 1, e: "연철·분철·중철은 형태소 인식과 표기 관행의 차이로 설명합니다." },
+        { q: "8종성법 체계에서 ‘종성 ㅅ’과 ‘종성 ㄷ’을 현대 받침과 대비해 설명할 때 바람직한 것은?", c: ["중세에는 두 종성의 실제 음가 구별이 지금처럼 뭉개지기 전에 뚜렷했다는 점을 든다", "둘은 항상 같은 파열음이었다", "둘은 모음이었다", "둘은 성조를 나타냈다"], a: 1, e: "팔자 종성의 음운적 자리와 후대의 동화·약화를 연결해 설명합니다." },
+        { q: "평성·거성·상성 가운데, ‘처음은 낮고 끝은 높다’는 묘사와 가장 잘 맞는 것은?", c: ["상성", "거성", "평성", "장음"], a: 1, e: "상성은 저→고의 곡선, 거성은 높은 평선(방점 1), 평성은 방점 없음으로 정리합니다." },
+        { q: "ㆍ(아래아)의 소실을 ‘단계’로 설명할 때, 교재 흐름과 어긋나기 쉬운 것은?", c: ["둘째 음절 이하에서 먼저 ㅡ로 바뀌는 양상을 든다", "첫 음절의 ㅏ 병합이 뒤늦게 논의되기도 한다", "ㆍ가 처음부터 한 번에 모두 ㅣ로만 바뀌었다", "겹모음 형성과 연계해 설명한다"], a: 3, e: "지역·시기·음절 위치에 따라 단계가 달라 보인다는 점이 핵심입니다." },
+        { q: "모음 조화가 크게 흔들리기 시작하는 방향으로, 수업에서 가장 자주 연결하는 요인은?", c: ["양성 축(ㆍ 계열)이 약해지며 음성 모음 쪽으로 재편된다", "자음군이 한꺼번에 사라진다", "외래어가 전혀 없던 시기 때문이다", "종성 28자가 도입되었기 때문이다"], a: 1, e: "ㆍ의 변화가 조화 파괴와 겹모음 확대를 동시에 설명합니다." },
+        { q: "구개음화와 두음 법칙을 구분해 설명한 것으로 타당한 것은?", c: ["구개음화는 주로 ㅣ 계열 모음 앞에서 자음의 조음 위치가 바뀌는 현상이고, 두음 법칙은 단어 첫 음절에서만 제한적으로 일어나는 자음 대치로 잡는다", "둘은 같은 현상에 붙인 이름이다", "두음 법칙은 받침에서만 일어난다", "구개음화는 성조만 바꾼다"], a: 1, e: "환경(모음 앞·어두)과 대상(자음 종류)을 나누어 암기하는 것이 중요합니다." },
+        { q: "두음이 적용되지 않거나 예외로 남는 양상(예: 양, 노 등)을 설명할 때 가장 설득력 있는 쪽은?", c: ["복합어·고유어에서 의미 덩어리가 굳어져 음이 고정된 경우를 든다", "성조가 없어서 예외가 된다", "모두 영어 차용이라서 그렇다", "모음 조화가 없으면 무조건 예외다"], a: 1, e: "형태·의미·사용 빈도가 음운 규칙과 맞물려 예외를 만듭니다." },
+        { q: "‘뜻, 쌀, 때’ 같은 예를 들 때, 어두 자음군 변화 설명의 초점으로 가장 적절한 것은?", c: ["중세의 자음 군집이 현대의 단일 초성(된소리 등)로 정리되는 양상을 보여 준다", "받침만 변한 사례이다", "모음 ㅣ가 소실한 사례이다", "연철만의 결과이다"], a: 1, e: "뜻ᆞᄫᅳᆯ, ᄯᅡᇙ 등에서 된소리 단일화로 이어지는 논의가 핵심입니다." },
+        { q: "중세 사잇소리 ㅅ과 현대 관형격 ‘의’를 단순 동일시할 때 생기는 문제로 적절한 것은?", c: ["중세에는 앞말 받침 유무·결합 범위가 현대와 달랐다", "철자가 항상 같다", "둘 다 성조 표기다", "둘 다 피동 접미사다"], a: 1, e: "기능은 비슷해 보여도 분포·음절 조건이 다릅니다." },
+        { q: "한자어 음을 적을 때 받침 없는 음절 끝에 ‘음가 없는 ㅇ’이 오는 관행에 가까운 설명은?", c: ["한자 음이 받침 없이 끝날 때 종성 자리를 메우는 표기 관행으로 이해한다", "항상 ㅎ의 성모를 뜻한다", "항상 된소리를 만든다", "띄어쓰기 대용이다"], a: 1, e: "표기상 종성 칸을 채우되 실제 받침 소리는 없는 경우로 배웁니다." },
+        { q: "ㅸ의 변천을 ㅂ 계열 불규칙 활용과 연결해 설명하는 이유로 가장 맞는 것은?", c: ["순경음에서 반모음 탈락·동화 등 움직임이 ㅂ 어간의 불규칙과 평행하게 논의되기 때문", "ㅸ이 항상 ㄲ로만 바뀌었기 때문", "ㅸ이 종성에만 있었기 때문", "방점 2개 때문만이다"], a: 1, e: "수희, 셔울 등 예에서 반모음·탈락을 함께 봅니다." },
+        { q: "ㅿ(반치음)이 ㅅ 쪽으로 정리된다는 설명이 음운사적으로 설득력을 얻는 근거는?", c: ["같은 설 자리에서 대립이 완화되며 마찰 계열로 흡수되는 변화와 맞물린다", "반치음은 원래 모음이었기 때문", "한자음이라서 그렇다", "방점이 없어서 그렇다"], a: 1, e: "마음, 한숨 등 형태로 ㅿ→ㅅ 계열을 추적합니다." },
+        { q: "ㆁ(옛이응)과 종성 ㅇ의 대체 관계를 한 줄로 압축하면?", c: ["음가 있는 종성 ㆁ이 사라지며 무성 종성의 자리에 ㅇ이 기능적으로 자리 잡았다는 정리", "ㆁ이 항상 ㅎ으로만 바뀌었다", "ㆁ은 초성에만 있었다", "둘은 철자만 다르고 음이 항상 같았다"], a: 1, e: "짐승(즁생 등) 같은 예와 함께 종성 체계의 재편을 봅니다." },
+        { q: "중철(거듭 적기)과 연철을 대비한 설명으로 바른 것은?", c: ["중철은 앞 음절 끝 자음이 뒤 음절 초성에도 다시 나타나 ‘거듭’ 보인다", "중철은 뒤 초성을 항상 ㅇ만 쓴다", "연철은 형태소 경계를 드러내는 데만 쓴다", "둘은 같은 말이다"], a: 1, e: "사ᄅᆞᆷᄆᆞ vs 사ᄅᆞ미 식으로 비교합니다." },
+        { q: "분철(끊어 적기)가 맞춤법 방향과 맞닿는 설명은?", c: ["형태소 경계를 인식해 앞 받침을 유지하고, 모음 시작 초성에 ㅇ을 두어 낱말을 끊어 적는다", "성조 표기 폐지", "한글 폐지 논의", "영어 철자법 수입"], a: 1, e: "현대 띄어쓰기·받침 유지와 연결됩니다." },
+        { q: "주체 높임 ‘-시- / -으시-’의 분포를 교과서식으로 정리한 것은?", c: ["어간이 모음으로 끝나면 ‘-시-’, 받침이 있거나 자음으로 끝나면 ‘-으시-’가 붙는다", "항상 ‘-시-’만 쓴다", "체언 뒤에만 붙는다", "종결 어미에만 붙는다"], a: 1, e: "모음 어간 vs 받침·자음 어간의 대비로 암기합니다." },
+        { q: "객체 높임 선어말 어미가 어간 말소리에 따라 갈리는 정리에 가장 가까운 것은?", c: ["막음(ㄱ·ㅂ·ㅅ·ㅎ)·닿음(ㄷ·ㅌ·ㅈ·ㅊ)·울림(ㄴ·ㄹ·ㅁ·모음)으로 나뉘어 형태가 달라진다", "모두 ‘-시-’로 통일된다", "명사만 높인다", "조사 뒤에만 붙는다"], a: 1, e: "-옵- 계열의 환경별 형태를 표로 외웁니다." },
+        { q: "호격 조사 ‘-하’가 붙는 환경으로 가장 적절한 것은?", c: ["높임 대상이 되는 유정명사", "무생물만", "은어만", "숫자만"], a: 1, e: "님금하(임금님이시여) 등 고전 예와 연결합니다." },
+        { q: "2인칭 서술을 대표하는 종결 어미 예로 교과서에서 자주 드는 것은?", c: ["-ㄴ다 / -는다", "-가 / -녀", "-고 / -뇨", "-리라"], a: 1, e: "1·3인칭 의문과 구별해 표로 정리합니다." },
+        { q: "1·3인칭 판정 의문(‘편안한가’류)에 가까운 결합은?", c: ["-가 / -녀", "-고 / -뇨", "-더니", "-자고"], a: 1, e: "의문 보조사 + 종결의 패턴을 암기합니다." },
+        { q: "1·3인칭 설명 의문(‘어떠한가’류)에 가까운 결합은?", c: ["-고 / -뇨", "-가 / -녀", "-네", "-고요"], a: 1, e: "판정(-가)과 설명(-고)의 짝을 구분합니다." },
+        { q: "주체 높임과 객체 높임을 개념적으로 나눌 때 가장 자연스러운 설명은?", c: ["주체 높임은 서술 주체를, 객체 높임은 타동작의 대상을 높이는 층위로 분리한다", "둘은 완전히 같은 어미만 쓴다", "주체 높임은 조사만 쓴다", "객체 높임은 부사만 쓴다"], a: 1, e: "문장 성분과 높임 대상을 매칭해 판단합니다." },
+        { q: "천·지·인으로 합성 모음을 설명할 때, 틀린 것은?", c: ["ㅏ는 ㅣ와 ㆍ의 합으로 가르친다", "ㅗ는 ㆍ와 ㅡ의 합으로 가르친다", "ㅣ는 항상 지(地)의 기본자만을 뜻한다", "겹모음은 기본 모음의 조합으로 확장된다"], a: 3, e: "ㅣ는 인(人), ㅡ는 지(地), ㆍ는 천(天)에 대응합니다." },
+        { q: "15세기식 표기와 현대 맞춤법의 차이를 한 줄로 압축하면?", c: ["형태소 경계를 글자로 얼마나 드러낼지, 표음과 표의의 균형이 어떻게 달라졌는지", "글자 크기만 다르다", "방점 사용 여부만 다르다", "한자 비율만 다르다"], a: 1, e: "연철·분철·띄어쓰기의 역사를 큰 줄기로 잡습니다." },
+        { q: "구개음화가 아직 오늘처럼 일반적이지 않았던 시기의 예로 자주 드는 말은?", c: ["고티다(고치다)", "피아노", "컴퓨터", "지하철"], a: 1, e: "치조음 ㅌ과 모음 ㅣ의 결합이 구개음으로 정리되기 전의 모습으로 배웁니다." }
+      ];
+
+      function shuffleChoices(item) {
+        var n = item.c.length;
+        var order = [];
+        for (var i = 0; i < n; i++) order.push(i);
+        for (var i = n - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var t = order[i];
+          order[i] = order[j];
+          order[j] = t;
+        }
+        var labels = order.map(function (ix) {
+          return item.c[ix];
+        });
+        var correctIx = item.a - 1;
+        var newA = order.indexOf(correctIx) + 1;
+        return { q: item.q, c: labels, a: newA, e: item.e };
+      }
+
+      var round = 1;
+      var idx = 0;
+      var score = 0;
+      var prepared = [];
+      var scored = [];
+
+      var intro = document.getElementById("kgq-intro");
+      var runner = document.getElementById("kgq-runner");
+      var slot = document.getElementById("kgq-slot");
+      var elCur = document.getElementById("kgq-cur");
+      var elScore = document.getElementById("kgq-score");
+      var elLabel = document.getElementById("kgq-label");
+      var btnPrev = document.getElementById("kgq-prev");
+      var btnNext = document.getElementById("kgq-next");
+      var btnQuit = document.getElementById("kgq-quit");
+      var resultPanel = document.getElementById("kgq-result");
+      var elResNum = document.getElementById("kgq-res-num");
+      var btnRetry = document.getElementById("kgq-retry");
+      var btnBack = document.getElementById("kgq-back");
+
+      function sliceRound(r) {
+        var start = (r - 1) * 10;
+        return BANK.slice(start, start + 10).map(function (it) {
+          return shuffleChoices(it);
+        });
+      }
+
+      function renderQuestion() {
+        var it = prepared[idx];
+        if (!it) return;
+        var num = (round - 1) * 10 + idx + 1;
+        var lis = it.c
+          .map(function (t, i) {
+            var num = i + 1;
+            return (
+              '<li data-i="' +
+              num +
+              '" class="' +
+              (scored[idx] ? "locked" : "") +
+              '"><span class="ch-num">' +
+              num +
+              '</span><span class="ch-body">' +
+              escapeHtml(t) +
+              "</span></li>"
+            );
+          })
+          .join("");
+        slot.innerHTML =
+          '<div class="q-block" data-kgq-idx="' +
+          idx +
+          '">' +
+          '<p class="q-text">' +
+          num +
+          ". " +
+          escapeHtml(it.q) +
+          "</p>" +
+          '<ul class="choices">' +
+          lis +
+          "</ul>" +
+          '<details class="ex"><summary>해설</summary><div>' +
+          escapeHtml(it.e) +
+          "</div></details></div>";
+        if (scored[idx] !== undefined && scored[idx] !== null) {
+          applyMarks(idx);
+        }
+        syncHud();
+      }
+
+      function escapeHtml(s) {
+        return String(s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      function applyMarks(i) {
+        var it = prepared[i];
+        var block = slot.querySelector(".q-block");
+        if (!block) return;
+        var rec = scored[i];
+        var lis = block.querySelectorAll(".choices li");
+        lis.forEach(function (li) {
+          var n = parseInt(li.getAttribute("data-i"), 10);
+          li.classList.add("locked");
+          if (n === it.a) li.classList.add("correct");
+          else if (rec && rec.wrong && n === rec.pick) li.classList.add("wrong");
+          else if (rec && rec.wrong) li.classList.add("dim");
+        });
+        var det = block.querySelector("details");
+        if (det && rec && rec.wrong) det.setAttribute("open", "");
+      }
+
+      function syncHud() {
+        elCur.textContent = String(idx + 1);
+        elScore.textContent = String(score);
+        elLabel.textContent = "제" + round + "회";
+        btnPrev.disabled = idx === 0;
+        var answered = scored[idx] && (scored[idx].ok || scored[idx].wrong);
+        if (idx >= 9) {
+          btnNext.disabled = !answered;
+          btnNext.textContent = answered ? "결과 보기" : "다음 문항";
+        } else {
+          btnNext.textContent = "다음 문항";
+          btnNext.disabled = !answered;
+        }
+      }
+
+      function saveRecord() {
+        try {
+          var o = JSON.parse(localStorage.getItem(LS_KEY) || "{}");
+          if (!o || typeof o !== "object") o = {};
+          if (!o.papers) o.papers = {};
+          var pid = String(round);
+          var prev = o.papers[pid] || { attempts: 0, best: 0, last: 0 };
+          prev.attempts = (prev.attempts || 0) + 1;
+          prev.last = score;
+          prev.best = Math.max(prev.best || 0, score);
+          o.papers[pid] = prev;
+          localStorage.setItem(LS_KEY, JSON.stringify(o));
+        } catch (e) {}
+        updateStatLabels();
+      }
+
+      function updateStatLabels() {
+        var o = {};
+        try {
+          o = JSON.parse(localStorage.getItem(LS_KEY) || "{}") || {};
+        } catch (e) {}
+        var papers = o.papers || {};
+        for (var p = 1; p <= 3; p++) {
+          var el = document.querySelector('.paper-btn[data-round="' + p + '"] small');
+          if (!el) continue;
+          var rec = papers[String(p)];
+          if (!rec || !rec.attempts) el.textContent = "기록 없음";
+          else el.textContent = "최고 " + rec.best + "/10 · 직전 " + rec.last + "/10";
+        }
+      }
+
+      function startRound(r) {
+        round = r;
+        prepared = sliceRound(r);
+        scored = [];
+        idx = 0;
+        score = 0;
+        intro.classList.add("hidden");
+        runner.classList.remove("hidden");
+        resultPanel.classList.add("hidden");
+        document.getElementById("kgq-slot").classList.remove("hidden");
+        document.querySelector("#kgq-runner .nav-row").classList.remove("hidden");
+        document.querySelector("#kgq-runner .hud").classList.remove("hidden");
+        renderQuestion();
+      }
+
+      function showResult() {
+        elResNum.textContent = String(score);
+        saveRecord();
+        resultPanel.classList.remove("hidden");
+        slot.classList.add("hidden");
+        document.querySelector("#kgq-runner .nav-row").classList.add("hidden");
+        document.querySelector("#kgq-runner .hud").classList.add("hidden");
+      }
+
+      function backIntro() {
+        runner.classList.add("hidden");
+        intro.classList.remove("hidden");
+        resultPanel.classList.add("hidden");
+        slot.classList.remove("hidden");
+        document.querySelector("#kgq-runner .nav-row").classList.remove("hidden");
+        document.querySelector("#kgq-runner .hud").classList.remove("hidden");
+        updateStatLabels();
+      }
+
+      document.querySelectorAll(".paper-btn[data-round]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          startRound(parseInt(btn.getAttribute("data-round"), 10) || 1);
+        });
+      });
+
+      document.getElementById("kgq-reset").addEventListener("click", function () {
+        if (!confirm("문법 모의고사 제1~3회 기록을 모두 지울까요?")) return;
+        localStorage.removeItem(LS_KEY);
+        updateStatLabels();
+      });
+
+      slot.addEventListener(
+        "click",
+        function (e) {
+          var li = e.target.closest(".choices li");
+          if (!li || li.classList.contains("locked")) return;
+          if (scored[idx]) return;
+          var pick = parseInt(li.getAttribute("data-i"), 10);
+          var it = prepared[idx];
+          if (pick === it.a) {
+            score += 1;
+            scored[idx] = { ok: true };
+          } else {
+            scored[idx] = { wrong: true, pick: pick };
+          }
+          renderQuestion();
+        },
+        true
+      );
+
+      btnPrev.addEventListener("click", function () {
+        if (idx > 0) {
+          idx--;
+          renderQuestion();
+        }
+      });
+
+      btnNext.addEventListener("click", function () {
+        if (btnNext.disabled) return;
+        if (idx >= 9) {
+          showResult();
+          return;
+        }
+        idx++;
+        renderQuestion();
+      });
+
+      btnQuit.addEventListener("click", backIntro);
+      btnBack.addEventListener("click", backIntro);
+      btnRetry.addEventListener("click", function () {
+        startRound(round);
+      });
+
+      updateStatLabels();
+    })();
+  </script>
+  <link rel="stylesheet" href="ai-quiz-ui.css" />
+  <script src="ai-quiz-config.js"></script>
+  <script src="ai-quiz-bridge.js"></script>
+  <script src="ai-quiz-runner.js"></script>
+  <script src="ai-quiz-subjects.js"></script>
+  <link rel="stylesheet" href="bgm-player.css" />
+  <script src="bgm-player.js" defer></script>
+</body>
+</html>
