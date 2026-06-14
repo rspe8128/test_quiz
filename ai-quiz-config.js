@@ -1,16 +1,9 @@
 /**
- * AI 퀴즈 생성 — 과목별 프리셋 & 기본 설정
- * apiBase는 ai-quiz-bridge.js 설정 화면 또는 localStorage에서 지정합니다.
+ * AI 퀴즈 — Render API 주소 (배포 후 여기만 수정)
+ * 예: https://test-quiz.onrender.com
  */
 (function (global) {
-  var LS_SETTINGS = "ai-quiz-settings-v1";
-
-  var DEFAULT_SETTINGS = {
-    apiBase: "",
-    directMode: false,
-    apiKey: "",
-    model: "gpt-4o-mini"
-  };
+  var BUILTIN_API_BASE = "";
 
   var PRESETS = {
     programming: {
@@ -51,8 +44,7 @@
       label: "통합과학",
       countDefault: 5,
       topicPlaceholder: "예: 세포, 유전, 생태계",
-      system:
-        "당신은 고등학교 통합과학(생물) 객관식 문제 출제자입니다.",
+      system: "당신은 고등학교 통합과학(생물) 객관식 문제 출제자입니다.",
       userTemplate:
         "주제: {{topic}}\n문항 수: {{count}}\n\n" +
         '{"items":[{"cat":"단원","q":"문제","opts":["선지1","선지2","선지3","선지4"],"a":"정답","ex":"해설"}]}'
@@ -61,8 +53,7 @@
       label: "일반 객관식",
       countDefault: 5,
       topicPlaceholder: "과목·단원·키워드",
-      system:
-        "당신은 학습용 객관식 퀴즈 출제자입니다. 4지선다 문제를 만듭니다.",
+      system: "당신은 학습용 객관식 퀴즈 출제자입니다. 4지선다 문제를 만듭니다.",
       userTemplate:
         "주제: {{topic}}\n문항 수: {{count}}\n\n" +
         '{"items":[{"cat":"분류","q":"문제","opts":["선지1","선지2","선지3","선지4"],"a":"정답","ex":"해설"}]}'
@@ -81,8 +72,7 @@
       label: "경제",
       countDefault: 5,
       topicPlaceholder: "예: 기회비용, 수요·공급, 시장실패",
-      system:
-        "당신은 고등학교 경제 객관식 문제 출제자입니다.",
+      system: "당신은 고등학교 경제 객관식 문제 출제자입니다.",
       userTemplate:
         "주제: {{topic}}\n문항 수: {{count}}\n\n" +
         '{"items":[{"cat":"단원","q":"문제","opts":["선지1","선지2","선지3","선지4"],"a":"정답","ex":"해설"}]}'
@@ -101,8 +91,7 @@
       label: "국어 문법",
       countDefault: 5,
       topicPlaceholder: "예: 조사, 높임법, 중세국어",
-      system:
-        "당신은 고등학교 국어 문법 객관식 문제 출제자입니다.",
+      system: "당신은 고등학교 국어 문법 객관식 문제 출제자입니다.",
       userTemplate:
         "주제: {{topic}}\n문항 수: {{count}}\n\n" +
         '{"items":[{"cat":"문법","q":"문제","opts":["선지1","선지2","선지3","선지4"],"a":"정답","ex":"해설"}]}'
@@ -121,8 +110,7 @@
       label: "Java 연습",
       countDefault: 5,
       topicPlaceholder: "예: if문, for문, Scanner",
-      system:
-        "당신은 Java 프로그래밍 기초 객관식 문제 출제자입니다.",
+      system: "당신은 Java 프로그래밍 기초 객관식 문제 출제자입니다.",
       userTemplate:
         "주제: {{topic}}\n문항 수: {{count}}\n\n" +
         '{"items":[{"cat":"Java","q":"문제","opts":["선지1","선지2","선지3","선지4"],"a":"정답","ex":"해설"}]}'
@@ -139,27 +127,13 @@
     }
   };
 
-  function loadSettings() {
-    try {
-      var raw = localStorage.getItem(LS_SETTINGS);
-      if (!raw) return Object.assign({}, DEFAULT_SETTINGS);
-      return Object.assign({}, DEFAULT_SETTINGS, JSON.parse(raw));
-    } catch (e) {
-      return Object.assign({}, DEFAULT_SETTINGS);
-    }
-  }
-
-  function saveSettings(s) {
-    try {
-      localStorage.setItem(LS_SETTINGS, JSON.stringify(s));
-    } catch (e) {}
+  function getApiBase() {
+    return (BUILTIN_API_BASE || "").trim().replace(/\/+$/, "");
   }
 
   global.AIQuizConfig = {
-    LS_SETTINGS: LS_SETTINGS,
-    DEFAULT_SETTINGS: DEFAULT_SETTINGS,
     PRESETS: PRESETS,
-    loadSettings: loadSettings,
-    saveSettings: saveSettings
+    getApiBase: getApiBase,
+    BUILTIN_API_BASE: BUILTIN_API_BASE
   };
 })(typeof window !== "undefined" ? window : globalThis);

@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <link rel="stylesheet" href="site-theme.css" />
   <link rel="stylesheet" href="hub.css" />
-  <link rel="stylesheet" href="ai-quiz-ui.css" />
 </head>
 <body>
   <div class="wrap">
@@ -32,7 +31,6 @@
           </button>
         </div>
         <p class="hub-hint">중간고사 자료는 그대로 유지됩니다. 기말고사 과목은 순차적으로 채워 넣을 예정입니다.</p>
-        <div id="hubAiSettings"></div>
       </div>
 
       <div id="panelMidterm" class="hub-panel">
@@ -68,8 +66,6 @@
   <div class="footer">제작자: 정해우</div>
   <link rel="stylesheet" href="bgm-player.css" />
   <script src="bgm-player.js" defer></script>
-  <script src="ai-quiz-config.js"></script>
-  <script src="ai-quiz-bridge.js"></script>
   <script>
     (function () {
       const panels = {
@@ -119,11 +115,6 @@
       const hash = location.hash.replace("#", "");
       if (hash === "midterm" || hash === "final") {
         showPanel(hash);
-      }
-
-      var hubAi = document.getElementById("hubAiSettings");
-      if (hubAi && typeof AIQuiz !== "undefined") {
-        hubAi.innerHTML = AIQuiz.menuHtml();
       }
     })();
   </script>

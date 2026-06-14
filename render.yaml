@@ -3,7 +3,7 @@ services:
     name: minsa-ai-quiz-api
     runtime: python
     rootDir: ai-quiz-server
-    buildCommand: echo "no build"
+    buildCommand: pip install -r requirements.txt
     startCommand: python server.py
     healthCheckPath: /health
     envVars:
