@@ -1,7 +1,16 @@
+.ai-quiz-stage {
+  margin: 0.75rem 0 1rem;
+  min-height: 4rem;
+}
+
+.ai-quiz-stage[hidden] {
+  display: none !important;
+}
+
 .ai-quiz-gen-mount {
-  margin: 1.5rem 0 0;
-  padding-top: 1rem;
-  border-top: 2px dashed #bae6fd;
+  margin: 0;
+  padding-top: 0;
+  border-top: none;
   position: relative;
   z-index: 2;
 }
@@ -231,6 +240,9 @@ html.site-ready.ai-quiz-mounted .ai-quiz-fab {
   display: none;
   margin-bottom: 0.75rem;
   text-align: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  justify-content: center;
 }
 
 .ai-quiz-standalone__btn,
@@ -246,8 +258,17 @@ html.site-ready.ai-quiz-mounted .ai-quiz-fab {
   color: var(--sky-600, #0284c7);
 }
 
-.ai-quiz-tab:not(.ai-quiz-tab--ready) {
-  display: none;
+.prog-topnav__btn.ai-quiz-tab,
+.fk-mode-nav__btn.ai-quiz-tab,
+.fk-topnav__btn.ai-quiz-tab,
+.kh-topnav__btn.ai-quiz-tab,
+.hist-topnav__btn.ai-quiz-tab,
+.econ-topnav__btn.ai-quiz-tab,
+.ai-quiz-tab {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .prog-topnav__btn.ai-quiz-tab--ready,
@@ -257,7 +278,7 @@ html.site-ready.ai-quiz-mounted .ai-quiz-fab {
 .hist-topnav__btn.ai-quiz-tab--ready,
 .econ-topnav__btn.ai-quiz-tab--ready,
 .ai-quiz-tab.ai-quiz-tab--ready {
-  display: block;
+  display: inline-flex;
 }
 
 .prog-topnav__btn.ai-quiz-tab--ready,

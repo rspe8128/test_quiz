@@ -12,7 +12,6 @@ AI 퀴즈 + 회원 인증 서버 (Gemini API)
   TURSO_DATABASE_URL  — Turso URL (무료 플랜 영구 저장, 선택)
   TURSO_AUTH_TOKEN    — Turso 토큰 (선택)
   AI_QUIZ_HOST        — 0.0.0.0 (Render)
-  AI_QUIZ_MODEL       — gemini-2.0-flash
 """
 from __future__ import annotations
 
@@ -36,7 +35,8 @@ CONFIG_PATH = os.path.join(ROOT, "presets.json")
 HOST = os.environ.get("AI_QUIZ_HOST") or ("0.0.0.0" if os.environ.get("PORT") else "127.0.0.1")
 PORT = int(os.environ.get("PORT", os.environ.get("AI_QUIZ_PORT", "8787")))
 API_KEY = (os.environ.get("GOOGLE_API_KEY") or os.environ.get("GEMINI_API_KEY") or "").strip()
-MODEL = os.environ.get("AI_QUIZ_MODEL", "gemini-2.0-flash")
+# 무료 한도·토큰 절약: flash-lite (환경 변수로 바꾸지 않음)
+MODEL = "gemini-2.0-flash-lite"
 API_BASE = "https://generativelanguage.googleapis.com/v1beta"
 
 USERNAME_RE = re.compile(r"^[a-z0-9_]{3,24}$")
@@ -52,6 +52,17 @@ def fill_template(tpl: str, **kwargs) -> str:
         return str(kwargs.get(m.group(1), ""))
 
     return re.sub(r"\{\{(\w+)\}\}", repl, tpl)
+
+
+def format_gemini_error(code: int, detail: str) -> str:
+    if code == 429 or "quota" in detail.lower() or "rate" in detail.lower():
+        return (
+            f"Gemini 무료 한도를 초과했습니다 (모델: {MODEL}). "
+            "문제 생성은 짧은 번역보다 토큰을 더 많이 씁니다. 잠시 후 다시 시도해 주세요."
+        )
+    if code == 400 and "API key not valid" in detail:
+        return "Gemini API 키가 올바르지 않습니다. Render의 GEMINI_API_KEY를 다시 확인하세요."
+    return f"Gemini API 오류 ({code}): {detail[:400]}"
 
 
 def call_llm(system: str, user: str) -> list:
@@ -78,7 +89,7 @@ def call_llm(system: str, user: str) -> list:
             body = json.loads(resp.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
         detail = e.read().decode("utf-8", errors="replace")
-        raise RuntimeError(f"Gemini API 오류 ({e.code}): {detail[:400]}") from e
+        raise RuntimeError(format_gemini_error(e.code, detail)) from e
 
     candidates = body.get("candidates") or []
     if not candidates:

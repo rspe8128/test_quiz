@@ -4,8 +4,6 @@
 (function () {
   if (typeof AIQuiz === "undefined" || !AIQuiz.mountSubject) return;
 
-  var page = (location.pathname.split("/").pop() || "index.html").toLowerCase();
-
   var SUBJECTS = {
     "final-programming.html": {
       appId: "prog",
@@ -143,30 +141,32 @@
     }
   };
 
-  var cfg = SUBJECTS[page];
+  Object.keys(SUBJECTS).forEach(function (key) {
+    if (key.endsWith(".html")) {
+      var bare = key.slice(0, -5);
+      if (!SUBJECTS[bare]) SUBJECTS[bare] = SUBJECTS[key];
+    }
+  });
+
+  function pageKey() {
+    var tail = (location.pathname.split("/").filter(Boolean).pop() || "index.html").toLowerCase();
+    if (SUBJECTS[tail]) return tail;
+    if (!/\.html$/i.test(tail) && SUBJECTS[tail + ".html"]) return tail + ".html";
+    return tail;
+  }
+
+  var cfg = SUBJECTS[pageKey()];
   if (!cfg) return;
 
   var mounted = false;
 
-  function canMount() {
-    if (!window.SiteAuth) return true;
-    var user = SiteAuth.getUser();
-    return SiteAuth.isReady() && user && (user.role === "admin" || user.role === "vip" || user.status === "approved");
-  }
-
   function tryBoot() {
-    if (window.SiteAuth && !SiteAuth.isReady()) {
-      document.addEventListener("siteauth:ready", boot, { once: true });
-      setTimeout(function () {
-        if (!mounted && SiteAuth.isReady()) boot();
-      }, 50);
-      return;
-    }
+    if (mounted) return;
     boot();
   }
 
   async function boot() {
-    if (mounted || !canMount()) return;
+    if (mounted) return;
     mounted = true;
     try {
       await AIQuiz.mountSubject(cfg);
@@ -176,9 +176,23 @@
     }
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", tryBoot);
-  } else {
+  function scheduleBoot() {
     tryBoot();
+    if (!mounted) {
+      setTimeout(tryBoot, 80);
+      setTimeout(tryBoot, 400);
+      setTimeout(tryBoot, 1200);
+    }
+  }
+
+  document.addEventListener("siteauth:ready", function () {
+    scheduleBoot();
+    if (mounted && AIQuiz.refreshSubject) AIQuiz.refreshSubject(cfg.appId);
+  });
+  document.addEventListener("ai-quiz:request-mount", scheduleBoot);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", scheduleBoot);
+  } else {
+    scheduleBoot();
   }
 })();

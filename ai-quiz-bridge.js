@@ -156,26 +156,35 @@
     return data.items || [];
   }
 
+  function canGenerate() {
+    if (!global.SiteAuth || !global.SiteAuth.isReady || !global.SiteAuth.isReady()) return true;
+    var user = global.SiteAuth.getUser();
+    return !!(user && (user.role === "admin" || user.role === "vip" || user.status === "approved"));
+  }
+
   function renderPanel(el, opts) {
     var presetKey = opts.preset || "generic";
     var preset = CFG.PRESETS[presetKey] || CFG.PRESETS.generic;
     var saved = loadSaved(opts.appId);
     var apiOk = !!CFG.getApiBase();
+    var approved = canGenerate();
 
     el.className = "ai-quiz-panel";
     el.innerHTML =
       '<div class="ai-quiz-panel__head">' +
       '<span class="ai-quiz-panel__title">AI 문제 생성</span>' +
       "</div>" +
-      (apiOk
-        ? ""
-        : '<p class="ai-quiz-panel__warn">API 서버 배포 후 ai-quiz-config.js에 주소를 넣어 주세요.</p>') +
+      (!approved
+        ? '<p class="ai-quiz-panel__warn">관리자 승인 후 AI 문제를 생성할 수 있습니다.</p>'
+        : apiOk
+          ? ""
+          : '<p class="ai-quiz-panel__warn">API 서버 주소가 설정되지 않았습니다.</p>') +
       '<label class="ai-quiz-field"><span>주제</span>' +
       '<input type="text" class="ai-quiz-topic" placeholder="' + esc(preset.topicPlaceholder) + '"></label>' +
       '<label class="ai-quiz-field"><span>문항 수</span>' +
       '<input type="number" class="ai-quiz-count" min="1" max="15" value="' + (preset.countDefault || 5) + '"></label>' +
       '<button type="button" class="ai-quiz-btn ai-quiz-btn--main ai-quiz-generate"' +
-      (apiOk ? "" : " disabled") +
+      (apiOk && approved ? "" : " disabled") +
       ">생성 후 「생성 AI 문제」 탭에 추가</button>" +
       '<p class="ai-quiz-panel__status" aria-live="polite"></p>' +
       (saved.length
@@ -213,7 +222,7 @@
         saveSaved(opts.appId, loadSaved(opts.appId).concat(items));
         await flushSave(opts.appId);
         if (typeof opts.onInject === "function") opts.onInject(items);
-        status.textContent = items.length + "문항이 추가되었습니다. 상단 「생성 AI 문제」 탭에서 풀 수 있습니다.";
+        status.textContent = items.length + "문항이 추가되었습니다. 「생성 AI 문제」 탭에서 풀 수 있습니다.";
         renderPanel(el, opts);
       } catch (err) {
         status.textContent = err.message || String(err);
@@ -227,7 +236,10 @@
     var mount = typeof opts.mount === "string" ? document.querySelector(opts.mount) : opts.mount;
     if (!mount) return null;
     var existing = mount.querySelector(".ai-quiz-panel");
-    if (existing) return existing;
+    if (existing) {
+      if (!existing.querySelector(".ai-quiz-topic")) renderPanel(existing, opts);
+      return existing;
+    }
     var el = document.createElement("div");
     mount.appendChild(el);
     renderPanel(el, opts);
@@ -244,6 +256,14 @@
     saveProg: saveProg,
     flushSave: flushSave,
     normalizeItems: normalizeItems,
+    refreshPanel: function (appId, preset) {
+      var mount = document.getElementById("aiQuizGen-" + appId);
+      if (!mount) return;
+      var panel = mount.querySelector(".ai-quiz-panel");
+      var opts = { appId: appId, preset: preset || "generic" };
+      if (panel) renderPanel(panel, opts);
+      else attachPanel(Object.assign({ mount: mount }, opts));
+    },
     generate: async function (presetKey, topic, count, appId) {
       return normalizeItems(await callProxy(presetKey, topic, count), appId || "generic");
     },

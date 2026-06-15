@@ -4,7 +4,8 @@
 (function (global) {
   if (!global.AIQuiz) return;
 
-  var TAB_VALUE = "ai-quiz";
+  var TAB_GEN = "ai-quiz-gen";
+  var TAB_PLAY = "ai-quiz";
   var mounts = {};
 
   function esc(s) {
@@ -304,7 +305,28 @@
     btn.innerHTML = "생성 AI 문제<small>" + (count ? count + "문항" : "비어 있음") + "</small>";
     btn.hidden = false;
     btn.style.display = "";
-    btn.classList.add("ai-quiz-tab--ready");
+    btn.classList.add("ai-quiz-tab", "ai-quiz-tab--ready");
+  }
+
+  function ensureTab(tabBar, tabAttr, tabBtnClass, val, html) {
+    if (!tabBar) return null;
+    var btn = tabBar.querySelector("[" + tabAttr + '="' + val + '"]');
+    if (!btn) {
+      btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = tabBtnClass + " ai-quiz-tab ai-quiz-tab--ready";
+      btn.setAttribute(tabAttr, val);
+      btn.setAttribute("role", "tab");
+      btn.setAttribute("aria-selected", "false");
+      btn.innerHTML = html;
+      tabBar.appendChild(btn);
+    } else {
+      btn.classList.add("ai-quiz-tab", "ai-quiz-tab--ready");
+      btn.hidden = false;
+      btn.style.display = "";
+      if (!btn.innerHTML.trim()) btn.innerHTML = html;
+    }
+    return btn;
   }
 
   function setTabOn(tabBar, tabAttr, tabBtnClass, activeBtn) {
@@ -316,17 +338,18 @@
     });
   }
 
-  function ensureFab(appId, genMount) {
+  function ensureFab(appId, genMount, openGenTab) {
     var fab = document.getElementById("aiQuizFab-" + appId);
     if (!fab) {
       fab = document.createElement("button");
       fab.id = "aiQuizFab-" + appId;
       fab.className = "ai-quiz-fab";
       fab.type = "button";
-      fab.setAttribute("aria-label", "AI 문제 생성 패널로 이동");
+      fab.setAttribute("aria-label", "AI 문제 생성 탭으로 이동");
       fab.innerHTML = "✨ AI 문제 생성";
       fab.addEventListener("click", function () {
-        if (genMount) {
+        if (typeof openGenTab === "function") openGenTab();
+        else if (genMount) {
           genMount.scrollIntoView({ behavior: "smooth", block: "start" });
           var topic = genMount.querySelector(".ai-quiz-topic");
           if (topic) setTimeout(function () { topic.focus(); }, 350);
@@ -341,9 +364,6 @@
   async function mountSubject(opts) {
     if (!opts || !opts.appId) return null;
     var appId = opts.appId;
-    if (global.AIQuiz.ensureData) {
-      await global.AIQuiz.ensureData(appId);
-    }
 
     var bottomMount =
       typeof opts.bottomMount === "string"
@@ -358,8 +378,17 @@
       .map(function (s) { return document.querySelector(s); })
       .filter(Boolean);
 
-    function placeAtBottom(el) {
-      bottomMount.appendChild(el);
+    var stage = document.getElementById("aiQuizStage-" + appId);
+    if (!stage) {
+      stage = document.createElement("div");
+      stage.id = "aiQuizStage-" + appId;
+      stage.className = "ai-quiz-stage";
+      if (tabBar) tabBar.insertAdjacentElement("afterend", stage);
+      else bottomMount.insertBefore(stage, bottomMount.firstChild);
+    }
+
+    function placeInStage(el) {
+      if (el.parentElement !== stage) stage.appendChild(el);
     }
 
     var genMount = document.getElementById("aiQuizGen-" + appId);
@@ -367,9 +396,9 @@
       genMount = document.createElement("div");
       genMount.id = "aiQuizGen-" + appId;
       genMount.className = "ai-quiz-gen-mount";
-      placeAtBottom(genMount);
-    } else if (genMount.parentElement !== bottomMount) {
-      placeAtBottom(genMount);
+      placeInStage(genMount);
+    } else {
+      placeInStage(genMount);
     }
 
     var wrap = document.getElementById("aiQuizWrap-" + appId);
@@ -382,40 +411,97 @@
       runMount.className = "ai-quiz-run";
       runMount.id = "aiQuizRun-" + appId;
       wrap.appendChild(runMount);
-      placeAtBottom(wrap);
-    } else if (wrap.parentElement !== bottomMount) {
-      placeAtBottom(wrap);
+      placeInStage(wrap);
+    } else {
+      placeInStage(wrap);
+    }
+
+    global.AIQuiz.attachPanel({
+      mount: genMount,
+      appId: appId,
+      preset: opts.preset || "generic",
+      onInject: function () {
+        if (mounts[appId]) {
+          mounts[appId].syncTab();
+          mounts[appId].runner.refresh();
+          mounts[appId].activatePlay();
+          if (mounts[appId].playTabBtn && mounts[appId].tabBar) {
+            setTabOn(mounts[appId].tabBar, mounts[appId].tabAttr, mounts[appId].tabBtnClass, mounts[appId].playTabBtn);
+          }
+        }
+      },
+      onClear: function () {
+        if (mounts[appId]) {
+          mounts[appId].runner.resetAll();
+          mounts[appId].syncTab();
+        }
+      }
+    });
+
+    function ensurePanel() {
+      if (!genMount || !global.AIQuiz.attachPanel) return;
+      if (!genMount.querySelector(".ai-quiz-panel") || !genMount.querySelector(".ai-quiz-topic")) {
+        global.AIQuiz.attachPanel({
+          mount: genMount,
+          appId: appId,
+          preset: opts.preset || "generic",
+          onInject: function () {
+            if (mounts[appId]) {
+              mounts[appId].syncTab();
+              mounts[appId].runner.refresh();
+              mounts[appId].activatePlay();
+            }
+          },
+          onClear: function () {
+            if (mounts[appId]) {
+              mounts[appId].runner.resetAll();
+              mounts[appId].syncTab();
+            }
+          }
+        });
+      }
     }
 
     var runner = createRunner(appId, document.getElementById("aiQuizRun-" + appId));
 
-    var tabBtn = null;
+    var genTabBtn = null;
+    var playTabBtn = null;
     if (tabBar) {
-      tabBtn = tabBar.querySelector("[" + tabAttr + '="' + TAB_VALUE + '"]');
-      if (!tabBtn) {
-        tabBtn = document.createElement("button");
-        tabBtn.type = "button";
-        tabBtn.className = tabBtnClass + " ai-quiz-tab";
-        tabBtn.setAttribute(tabAttr, TAB_VALUE);
-        tabBtn.setAttribute("role", "tab");
-        tabBtn.setAttribute("aria-selected", "false");
-        tabBar.appendChild(tabBtn);
-      }
-      tabBar.addEventListener(
-        "click",
-        function (ev) {
-          var btn = ev.target.closest("[" + tabAttr + "]");
-          if (!btn) return;
-          var val = btn.getAttribute(tabAttr);
-          if (val === TAB_VALUE) {
-            activate();
-            setTabOn(tabBar, tabAttr, tabBtnClass, tabBtn);
-          } else {
-            deactivate();
-          }
-        },
-        true
+      genTabBtn = ensureTab(
+        tabBar,
+        tabAttr,
+        tabBtnClass,
+        TAB_GEN,
+        "AI 문제 생성<small>주제 입력</small>"
       );
+      playTabBtn = ensureTab(
+        tabBar,
+        tabAttr,
+        tabBtnClass,
+        TAB_PLAY,
+        "생성 AI 문제<small>비어 있음</small>"
+      );
+      if (!tabBar.dataset.aiQuizBound) {
+        tabBar.dataset.aiQuizBound = "1";
+        tabBar.addEventListener(
+          "click",
+          function (ev) {
+            var btn = ev.target.closest("[" + tabAttr + "]");
+            if (!btn) return;
+            var val = btn.getAttribute(tabAttr);
+            if (val === TAB_GEN) {
+              activateGen();
+              setTabOn(tabBar, tabAttr, tabBtnClass, genTabBtn);
+            } else if (val === TAB_PLAY) {
+              activatePlay();
+              setTabOn(tabBar, tabAttr, tabBtnClass, playTabBtn);
+            } else {
+              deactivate();
+            }
+          },
+          true
+        );
+      }
     } else {
       var bar = document.getElementById("aiQuizStandalone-" + appId);
       if (!bar) {
@@ -423,7 +509,8 @@
         bar.id = "aiQuizStandalone-" + appId;
         bar.className = "ai-quiz-standalone";
         bar.innerHTML =
-          '<button type="button" class="ai-quiz-standalone__btn" data-ai-standalone-open>생성 AI 문제</button>' +
+          '<button type="button" class="ai-quiz-standalone__btn" data-ai-standalone-gen>AI 문제 생성</button>' +
+          '<button type="button" class="ai-quiz-standalone__btn" data-ai-standalone-play>생성 AI 문제</button>' +
           '<button type="button" class="ai-quiz-standalone__back" data-ai-standalone-close hidden>&larr; 돌아가기</button>';
         var anchor =
           bottomMount.querySelector("h1.app-title, h1.page-title, h1") ||
@@ -431,20 +518,39 @@
           bottomMount.querySelector(".site-nav");
         if (anchor) anchor.insertAdjacentElement("afterend", bar);
         else bottomMount.insertBefore(bar, bottomMount.firstChild);
-        bar.querySelector("[data-ai-standalone-open]").addEventListener("click", function () {
-          activate();
-          bar.querySelector("[data-ai-standalone-open]").hidden = true;
-          bar.querySelector("[data-ai-standalone-close]").hidden = false;
-        });
-        bar.querySelector("[data-ai-standalone-close]").addEventListener("click", function () {
-          deactivate();
-          bar.querySelector("[data-ai-standalone-open]").hidden = false;
-          bar.querySelector("[data-ai-standalone-close]").hidden = true;
-        });
       }
     }
 
-    function activate() {
+    function setStandaloneNav(active) {
+      var bar = document.getElementById("aiQuizStandalone-" + appId);
+      if (!bar) return;
+      var genBtn = bar.querySelector("[data-ai-standalone-gen]");
+      var playBtn = bar.querySelector("[data-ai-standalone-play]");
+      var backBtn = bar.querySelector("[data-ai-standalone-close]");
+      if (genBtn) genBtn.hidden = !!active;
+      if (playBtn) playBtn.hidden = !!active;
+      if (backBtn) backBtn.hidden = !active;
+    }
+
+    function wireStandalone() {
+      var bar = document.getElementById("aiQuizStandalone-" + appId);
+      if (!bar || bar.dataset.aiStandaloneBound) return;
+      bar.dataset.aiStandaloneBound = "1";
+      bar.querySelector("[data-ai-standalone-gen]").addEventListener("click", function () {
+        activateGen();
+        setStandaloneNav(true);
+      });
+      bar.querySelector("[data-ai-standalone-play]").addEventListener("click", function () {
+        activatePlay();
+        setStandaloneNav(true);
+      });
+      bar.querySelector("[data-ai-standalone-close]").addEventListener("click", function () {
+        deactivate();
+        setStandaloneNav(false);
+      });
+    }
+
+    function hideMainPanels() {
       hideHosts.forEach(function (el) {
         el.dataset.aiQuizPrevDisplay = el.style.display || "";
         el.dataset.aiQuizPrevHidden = el.hidden ? "1" : "0";
@@ -454,72 +560,186 @@
           el.style.display = "none";
         }
       });
-      if (genMount) genMount.style.display = "none";
-      wrap.hidden = false;
-      runner.refresh();
-      document.body.classList.add("ai-quiz-active");
-      var standalone = document.getElementById("aiQuizStandalone-" + appId);
-      if (standalone) {
-        var open = standalone.querySelector("[data-ai-standalone-open]");
-        var back = standalone.querySelector("[data-ai-standalone-close]");
-        if (open) open.hidden = true;
-        if (back) back.hidden = false;
-      }
     }
 
-    function deactivate() {
+    function restoreMainPanels() {
       hideHosts.forEach(function (el) {
         el.hidden = el.dataset.aiQuizPrevHidden === "1";
         el.style.display = el.dataset.aiQuizPrevDisplay || "";
       });
+    }
+
+    function activateGen() {
+      ensurePanel();
+      hideMainPanels();
+      stage.hidden = false;
+      stage.style.display = "";
+      if (genMount) genMount.style.display = "";
+      wrap.hidden = true;
+      document.body.classList.add("ai-quiz-active");
+      setStandaloneNav(true);
+      if (stage) stage.scrollIntoView({ behavior: "smooth", block: "start" });
+      var topic = genMount && genMount.querySelector(".ai-quiz-topic");
+      if (topic) setTimeout(function () { topic.focus(); }, 80);
+    }
+
+    function activatePlay() {
+      ensurePanel();
+      hideMainPanels();
+      stage.hidden = false;
+      stage.style.display = "";
+      if (genMount) genMount.style.display = "none";
+      wrap.hidden = false;
+      runner.refresh();
+      document.body.classList.add("ai-quiz-active");
+      setStandaloneNav(true);
+      if (stage) stage.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function deactivate() {
+      restoreMainPanels();
+      stage.hidden = true;
+      stage.style.display = "none";
       wrap.hidden = true;
       document.body.classList.remove("ai-quiz-active");
-      if (genMount) genMount.style.display = "";
-      var standalone = document.getElementById("aiQuizStandalone-" + appId);
-      if (standalone) {
-        var open = standalone.querySelector("[data-ai-standalone-open]");
-        var back = standalone.querySelector("[data-ai-standalone-close]");
-        if (open) open.hidden = false;
-        if (back) back.hidden = true;
-      }
+      if (genMount) genMount.style.display = "none";
+      setStandaloneNav(false);
+    }
+
+    function openGenTab() {
+      activateGen();
+      if (tabBar && genTabBtn) setTabOn(tabBar, tabAttr, tabBtnClass, genTabBtn);
     }
 
     function syncTab() {
       var n = runner.count();
-      updateTabLabel(tabBtn, n);
+      updateTabLabel(playTabBtn, n);
       var standalone = document.getElementById("aiQuizStandalone-" + appId);
       if (standalone) {
-        standalone.style.display = "";
-        var openBtn = standalone.querySelector("[data-ai-standalone-open]");
-        if (openBtn) openBtn.textContent = "생성 AI 문제 (" + n + "문항)";
+        standalone.style.display = "flex";
+        var playBtn = standalone.querySelector("[data-ai-standalone-play]");
+        if (playBtn) playBtn.textContent = "생성 AI 문제 (" + n + "문항)";
       }
     }
 
-    global.AIQuiz.attachPanel({
-      mount: genMount,
-      appId: appId,
-      preset: opts.preset || "generic",
-      onInject: function () {
-        syncTab();
-        runner.refresh();
-        activate();
-        if (tabBtn && tabBar) {
-          setTabOn(tabBar, tabAttr, tabBtnClass, tabBtn);
-        }
-      },
-      onClear: function () {
-        runner.resetAll();
-        syncTab();
-      }
-    });
-
-    ensureFab(appId, genMount);
+    if (genMount) genMount.style.display = "none";
+    wrap.hidden = true;
+    stage.hidden = true;
+    stage.style.display = "none";
+    wireStandalone();
 
     syncTab();
-    mounts[appId] = { runner: runner, syncTab: syncTab, activate: activate };
+    if (tabBar) {
+      var activeBtn = tabBar.querySelector("[" + tabAttr + '"].is-on');
+      if (activeBtn) {
+        var activeVal = activeBtn.getAttribute(tabAttr);
+        if (activeVal === TAB_GEN) activateGen();
+        else if (activeVal === TAB_PLAY) activatePlay();
+      }
+    }
+
+    mounts[appId] = {
+      runner: runner,
+      syncTab: syncTab,
+      activateGen: activateGen,
+      activatePlay: activatePlay,
+      ensurePanel: ensurePanel,
+      tabBar: tabBar,
+      tabAttr: tabAttr,
+      tabBtnClass: tabBtnClass,
+      playTabBtn: playTabBtn,
+      genTabBtn: genTabBtn,
+      preset: opts.preset || "generic"
+    };
+
+    if (global.AIQuiz.ensureData) {
+      global.AIQuiz.ensureData(appId).then(function () {
+        syncTab();
+        runner.refresh();
+        if (global.AIQuiz.refreshPanel) global.AIQuiz.refreshPanel(appId, opts.preset);
+      });
+    }
+
+    ensureFab(appId, genMount, openGenTab);
     return mounts[appId];
   }
 
+  function refreshSubject(appId) {
+    if (global.AIQuiz.refreshPanel) global.AIQuiz.refreshPanel(appId);
+    if (mounts[appId]) mounts[appId].syncTab();
+  }
+
   global.AIQuiz.mountSubject = mountSubject;
-  global.AIQuiz.TAB_VALUE = TAB_VALUE;
+  global.AIQuiz.refreshSubject = refreshSubject;
+  global.AIQuiz.TAB_GEN = TAB_GEN;
+  global.AIQuiz.TAB_PLAY = TAB_PLAY;
+
+  var TAB_ATTRS = [
+    "data-fk-view",
+    "data-fe-view",
+    "data-prog-view",
+    "data-fsci-tab",
+    "data-fs-tab",
+    "data-kh-view",
+    "data-hist-view",
+    "data-econ-view"
+  ];
+
+  function resumeActiveTab() {
+    Object.keys(mounts).forEach(function (appId) {
+      var m = mounts[appId];
+      if (!m || !m.tabBar || !m.tabAttr) return;
+      var active = m.tabBar.querySelector("[" + m.tabAttr + '"].is-on');
+      if (!active) return;
+      var val = active.getAttribute(m.tabAttr);
+      if (val === TAB_GEN) m.activateGen();
+      else if (val === TAB_PLAY) m.activatePlay();
+    });
+  }
+
+  if (!document.documentElement.dataset.aiQuizAuthHook) {
+    document.documentElement.dataset.aiQuizAuthHook = "1";
+    document.addEventListener("siteauth:ready", function () {
+      resumeActiveTab();
+      if (global.AIQuiz.refreshSubject) {
+        Object.keys(mounts).forEach(function (appId) {
+          global.AIQuiz.refreshSubject(appId);
+        });
+      }
+    });
+  }
+
+  if (!document.documentElement.dataset.aiQuizGlobalClick) {
+    document.documentElement.dataset.aiQuizGlobalClick = "1";
+    document.addEventListener(
+      "click",
+      function (ev) {
+        var btn = ev.target.closest(".ai-quiz-tab");
+        if (!btn) return;
+        var val = "";
+        TAB_ATTRS.forEach(function (attr) {
+          var v = btn.getAttribute(attr);
+          if (v) val = v;
+        });
+        if (val !== TAB_GEN && val !== TAB_PLAY) return;
+        function run() {
+          var keys = Object.keys(mounts);
+          if (!keys.length) return false;
+          var entry = mounts[keys[0]];
+          if (!entry) return false;
+          if (entry.ensurePanel) entry.ensurePanel();
+          if (val === TAB_GEN) entry.activateGen();
+          else entry.activatePlay();
+          return true;
+        }
+        if (!run()) {
+          document.dispatchEvent(new CustomEvent("ai-quiz:request-mount"));
+          setTimeout(function () {
+            if (!run()) setTimeout(run, 400);
+          }, 150);
+        }
+      },
+      true
+    );
+  }
 })(typeof window !== "undefined" ? window : globalThis);
