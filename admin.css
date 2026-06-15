@@ -1,3 +1,11 @@
+.admin-page .admin-shell {
+  visibility: hidden;
+}
+
+html.admin-ready .admin-page .admin-shell {
+  visibility: visible;
+}
+
 .admin-shell {
   max-width: 720px;
   margin: 0 auto;
@@ -117,4 +125,90 @@
   text-align: center;
   color: #94a3b8;
   font-size: 0.9rem;
+}
+
+.admin-name-panel {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid #dbeafe;
+}
+
+.admin-name-panel h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+}
+
+.admin-name-panel__lead {
+  margin: 0 0 0.85rem;
+  font-size: 0.84rem;
+  color: #64748b;
+}
+
+.admin-user__pending {
+  font-size: 0.78rem;
+  color: #0369a1;
+  margin-top: 0.2rem;
+}
+
+.admin-req-layout {
+  display: grid;
+  grid-template-columns: minmax(200px, 1fr) minmax(0, 1.4fr);
+  gap: 0.75rem;
+}
+
+@media (max-width: 720px) {
+  .admin-req-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin-req-detail {
+  padding: 0.75rem;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  min-height: 180px;
+}
+
+.admin-req-detail__title {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.admin-req-detail__meta {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-bottom: 0.65rem;
+  line-height: 1.5;
+}
+
+.admin-req-detail__body {
+  white-space: pre-wrap;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+
+.admin-req-reply-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 90px;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #cfe8f6;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 0.88rem;
+  margin-bottom: 0.5rem;
+}
+
+.admin-req-item {
+  cursor: pointer;
+}
+
+.admin-req-item.is-on {
+  border-color: #0284c7;
+  background: #e0f2fe;
 }

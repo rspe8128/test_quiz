@@ -146,13 +146,28 @@
   var cfg = SUBJECTS[page];
   if (!cfg) return;
 
+  function canMount() {
+    if (!window.SiteAuth) return true;
+    var user = SiteAuth.getUser();
+    return SiteAuth.isReady() && user && (user.role === "admin" || user.status === "approved");
+  }
+
   function boot() {
+    if (!canMount()) return;
     AIQuiz.mountSubject(cfg);
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", boot);
-  } else {
+  function tryBoot() {
+    if (window.SiteAuth && !SiteAuth.isReady()) {
+      document.addEventListener("siteauth:ready", boot, { once: true });
+      return;
+    }
     boot();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", tryBoot);
+  } else {
+    tryBoot();
   }
 })();

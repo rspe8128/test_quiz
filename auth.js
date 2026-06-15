@@ -69,8 +69,12 @@
     document.documentElement.classList.add("auth-locked");
   }
 
+  function isAdmin(user) {
+    return !!(user && String(user.role) === "admin");
+  }
+
   function canUseSite(user) {
-    return user && (user.role === "admin" || user.status === "approved");
+    return user && (isAdmin(user) || user.status === "approved");
   }
 
   function ensureOverlay() {
@@ -101,21 +105,102 @@
       bar.hidden = true;
       return;
     }
-    var adminLink =
-      user.role === "admin"
-        ? '<a href="admin.html">관리자 대시보드</a><span>·</span>'
-        : "";
+    var adminLink = isAdmin(user)
+      ? '<a href="admin.html">관리자 대시보드</a><span>·</span>'
+      : "";
+    var nameNote = user.pendingDisplayName
+      ? ' <span class="auth-bar__pending" title="이름 변경 승인 대기">(' +
+        esc(user.pendingDisplayName) +
+        " 대기)</span>"
+      : "";
     bar.innerHTML =
       "<span>" +
       esc(user.displayName || user.username) +
-      "님</span>" +
+      "님" +
+      nameNote +
+      "</span>" +
+      '<a href="requests.html">요청함</a><span>·</span>' +
+      '<button type="button" data-auth-settings>계정 설정</button><span>·</span>' +
       adminLink +
       '<button type="button" data-auth-logout>로그아웃</button>';
     bar.hidden = false;
     bar.querySelector("[data-auth-logout]").addEventListener("click", logout);
+    bar.querySelector("[data-auth-settings]").addEventListener("click", showSettings);
+  }
+
+  function showSettings() {
+    var user = state.user;
+    if (!user || !canUseSite(user)) return;
+    var gate = ensureOverlay();
+    gate.hidden = false;
+    var pendingNote = user.pendingDisplayName
+      ? '<p class="auth-card__lead">변경 신청: <strong>' +
+        esc(user.pendingDisplayName) +
+        "</strong> (관리자 승인 대기 중)<br>승인 전까지는 기존 이름으로 이용할 수 있습니다.</p>"
+      : "";
+  var adminNote = isAdmin(user)
+      ? '<p class="auth-card__lead">관리자 계정은 이름 변경 시 바로 반영됩니다.</p>'
+      : '<p class="auth-card__lead">이름 변경은 관리자 승인 후 반영됩니다. 승인 대기 중에도 사이트는 정상 이용 가능합니다.</p>';
+
+    gate.innerHTML =
+      '<div class="auth-card" role="dialog" aria-modal="true">' +
+      "<h2>계정 설정</h2>" +
+      '<p class="auth-card__lead">아이디: <strong>@' +
+      esc(user.username) +
+      "</strong></p>" +
+      pendingNote +
+      adminNote +
+      '<form id="authSettingsForm" class="auth-settings-panel">' +
+      '<label class="auth-field"><span>표시 이름</span><input name="displayName" required maxlength="40" value="' +
+      esc(user.pendingDisplayName || user.displayName || "") +
+      '" placeholder="표시 이름" /><small>가능하면 본명으로 해주세요</small></label>' +
+      '<button type="submit" class="auth-btn">이름 변경 신청</button>' +
+      '<button type="button" class="auth-btn auth-btn--ghost" data-auth-settings-close>닫기</button>' +
+      "</form>" +
+      '<p class="auth-msg" id="authSettingsMsg" hidden></p>' +
+      "</div>";
+
+    gate.querySelector("[data-auth-settings-close]").addEventListener("click", function () {
+      gate.hidden = true;
+    });
+
+    gate.querySelector("#authSettingsForm").addEventListener("submit", async function (ev) {
+      ev.preventDefault();
+      var msg = document.getElementById("authSettingsMsg");
+      var btn = gate.querySelector(".auth-btn[type=submit]");
+      if (btn) btn.disabled = true;
+      if (msg) msg.hidden = true;
+      var fd = new FormData(ev.target);
+      try {
+        var data = await api("/auth/profile/display-name", {
+          method: "POST",
+          body: JSON.stringify({ displayName: String(fd.get("displayName") || "").trim() })
+        });
+        state.user = data.user;
+        if (msg) {
+          msg.hidden = false;
+          msg.textContent = data.message || "저장되었습니다.";
+          msg.classList.add("is-ok");
+        }
+        renderBar(state.user);
+        if (isAdmin(state.user)) {
+          setTimeout(function () {
+            gate.hidden = true;
+          }, 800);
+        }
+      } catch (e) {
+        if (msg) {
+          msg.hidden = false;
+          msg.textContent = e.message;
+          msg.classList.remove("is-ok");
+        }
+      }
+      if (btn) btn.disabled = false;
+    });
   }
 
   function showLoginForm(mode) {
+    document.documentElement.classList.remove("site-ready");
     var gate = ensureOverlay();
     gate.hidden = false;
     lockSite();
@@ -136,7 +221,7 @@
       "</div>" +
       '<form id="authForm">' +
       (mode === "register"
-        ? '<label class="auth-field"><span>이름</span><input name="displayName" autocomplete="name" placeholder="표시 이름" /></label>'
+        ? '<label class="auth-field"><span>이름</span><input name="displayName" autocomplete="name" placeholder="표시 이름" required /><small>가능하면 본명으로 해주세요</small></label>'
         : "") +
       '<label class="auth-field"><span>아이디</span><input name="username" autocomplete="username" required placeholder="영문 소문자·숫자·_ 3~24자" /></label>' +
       '<label class="auth-field"><span>비밀번호</span><input type="password" name="password" autocomplete="current-password" required minlength="6" placeholder="6자 이상" /></label>' +
@@ -193,6 +278,7 @@
   function showApproved(user) {
     ensureOverlay().hidden = true;
     unlockSite();
+    document.documentElement.classList.add("site-ready");
     renderBar(user);
     state.user = user;
     state.ready = true;
@@ -236,6 +322,7 @@
     setToken("");
     state.user = null;
     state.ready = false;
+    document.documentElement.classList.remove("site-ready");
     ensureBar().hidden = true;
     showLoginForm("login");
   }
@@ -257,10 +344,11 @@
       state.user = user;
 
       if (isAdminPage) {
-        if (user.role !== "admin") {
-          location.href = "index.html";
+        if (!isAdmin(user)) {
+          location.replace("index.html");
           return;
         }
+        document.documentElement.classList.add("admin-ready", "site-ready");
         unlockSite();
         ensureOverlay().hidden = true;
         renderBar(user);
@@ -269,7 +357,7 @@
         return;
       }
 
-      if (user.role === "admin" || user.status === "approved") {
+      if (isAdmin(user) || user.status === "approved") {
         showApproved(user);
       } else if (user.status === "pending") {
         showPending(user);
@@ -318,7 +406,8 @@
     },
     authHeaders: authHeaders,
     api: api,
-    logout: logout
+    logout: logout,
+    refresh: bootstrap
   };
 
   if (document.readyState === "loading") {

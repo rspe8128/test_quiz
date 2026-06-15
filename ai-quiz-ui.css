@@ -1,5 +1,7 @@
 .ai-quiz-gen-mount {
   margin: 0.75rem 0 1rem;
+  position: relative;
+  z-index: 2;
 }
 
 .ai-quiz-gen-mount .ai-quiz-panel {
@@ -7,6 +9,34 @@
   border-style: solid;
   border-width: 2px;
   box-shadow: 0 2px 10px rgba(2, 132, 199, 0.1);
+}
+
+.ai-quiz-fab {
+  display: none;
+  position: fixed;
+  right: 1rem;
+  bottom: 5.5rem;
+  z-index: 99980;
+  padding: 0.7rem 1rem;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: #fff;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(2, 132, 199, 0.35);
+}
+
+html.site-ready.ai-quiz-mounted .ai-quiz-fab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.ai-quiz-fab[hidden] {
+  display: none !important;
 }
 
 .ai-quiz-panel {

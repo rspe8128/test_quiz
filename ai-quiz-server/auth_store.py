@@ -64,8 +64,16 @@ def init_db() -> None:
             """
         )
         conn.commit()
+        _migrate(conn)
 
     ensure_admin()
+
+
+def _migrate(conn: sqlite3.Connection) -> None:
+    cols = {row[1] for row in conn.execute("PRAGMA table_info(users)").fetchall()}
+    if "pending_display_name" not in cols:
+        conn.execute("ALTER TABLE users ADD COLUMN pending_display_name TEXT")
+        conn.commit()
 
 
 def ensure_admin() -> None:
@@ -99,10 +107,13 @@ def ensure_admin() -> None:
 def _user_dict(row: sqlite3.Row | None) -> dict | None:
     if not row:
         return None
+    keys = row.keys()
+    pending = row["pending_display_name"] if "pending_display_name" in keys else None
     return {
         "id": row["id"],
         "username": row["username"],
         "displayName": row["display_name"],
+        "pendingDisplayName": pending or None,
         "role": row["role"],
         "status": row["status"],
         "createdAt": row["created_at"],
@@ -212,3 +223,68 @@ def set_user_status(user_id: int, status: str) -> dict | None:
         conn.execute("UPDATE users SET status = ? WHERE id = ?", (status, user_id))
         conn.commit()
     return _user_dict(get_user_by_id(user_id))
+
+
+def request_display_name(user_id: int, display_name: str) -> dict | None:
+    display_name = display_name.strip()
+    if not display_name or len(display_name) > 40:
+        raise ValueError("표시 이름은 1~40자여야 합니다.")
+    row = get_user_by_id(user_id)
+    if not row:
+        return None
+    if row["role"] == "admin":
+        with _connect() as conn:
+            conn.execute(
+                "UPDATE users SET display_name = ?, pending_display_name = NULL WHERE id = ?",
+                (display_name, user_id),
+            )
+            conn.commit()
+        return _user_dict(get_user_by_id(user_id))
+    if row["status"] != "approved":
+        raise ValueError("가입 승인 후 이름을 변경할 수 있습니다.")
+    with _connect() as conn:
+        conn.execute(
+            "UPDATE users SET pending_display_name = ? WHERE id = ?",
+            (display_name, user_id),
+        )
+        conn.commit()
+    return _user_dict(get_user_by_id(user_id))
+
+
+def approve_display_name(user_id: int) -> dict | None:
+    row = get_user_by_id(user_id)
+    if not row or not row["pending_display_name"]:
+        return None
+    with _connect() as conn:
+        conn.execute(
+            """
+            UPDATE users
+            SET display_name = pending_display_name, pending_display_name = NULL
+            WHERE id = ?
+            """,
+            (user_id,),
+        )
+        conn.commit()
+    return _user_dict(get_user_by_id(user_id))
+
+
+def reject_display_name(user_id: int) -> dict | None:
+    row = get_user_by_id(user_id)
+    if not row or not row["pending_display_name"]:
+        return None
+    with _connect() as conn:
+        conn.execute("UPDATE users SET pending_display_name = NULL WHERE id = ?", (user_id,))
+        conn.commit()
+    return _user_dict(get_user_by_id(user_id))
+
+
+def list_name_changes() -> list[dict]:
+    with _connect() as conn:
+        rows = conn.execute(
+            """
+            SELECT * FROM users
+            WHERE pending_display_name IS NOT NULL AND pending_display_name != ''
+            ORDER BY created_at DESC
+            """
+        ).fetchall()
+    return [_user_dict(r) for r in rows]  # type: ignore[misc]

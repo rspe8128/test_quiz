@@ -322,6 +322,28 @@
     });
   }
 
+  function ensureFab(appId, genMount) {
+    var fab = document.getElementById("aiQuizFab-" + appId);
+    if (!fab) {
+      fab = document.createElement("button");
+      fab.id = "aiQuizFab-" + appId;
+      fab.className = "ai-quiz-fab";
+      fab.type = "button";
+      fab.setAttribute("aria-label", "AI 문제 생성 패널로 이동");
+      fab.innerHTML = "✨ AI 문제 생성";
+      fab.addEventListener("click", function () {
+        if (genMount) {
+          genMount.scrollIntoView({ behavior: "smooth", block: "start" });
+          var topic = genMount.querySelector(".ai-quiz-topic");
+          if (topic) setTimeout(function () { topic.focus(); }, 350);
+        }
+      });
+      document.body.appendChild(fab);
+    }
+    fab.hidden = false;
+    document.documentElement.classList.add("ai-quiz-mounted");
+  }
+
   function mountSubject(opts) {
     if (!opts || !opts.appId) return null;
     var appId = opts.appId;
@@ -500,6 +522,8 @@
         syncTab();
       }
     });
+
+    ensureFab(appId, genMount);
 
     syncTab();
     mounts[appId] = { runner: runner, syncTab: syncTab, activate: activate };

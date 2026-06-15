@@ -1,10 +1,25 @@
 (function () {
   var currentStatus = "pending";
+  var currentReqStatus = "pending";
+  var selectedReqId = null;
 
   function esc(s) {
     var d = document.createElement("div");
     d.textContent = s == null ? "" : String(s);
     return d.innerHTML;
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return "";
+    try {
+      return new Date(iso).toLocaleString("ko-KR");
+    } catch (e) {
+      return iso;
+    }
+  }
+
+  function isAdminUser(user) {
+    return user && String(user.role) === "admin";
   }
 
   function showMsg(text, ok) {
@@ -76,6 +91,210 @@
     });
   }
 
+  function renderNameChanges(users) {
+    var list = document.getElementById("adminNameList");
+    if (!list) return;
+    if (!users.length) {
+      list.innerHTML = '<p class="admin-empty">대기 중인 이름 변경이 없습니다.</p>';
+      return;
+    }
+    list.innerHTML = users
+      .map(function (u) {
+        return (
+          '<article class="admin-user">' +
+          "<div>" +
+          '<div class="admin-user__name">' +
+          esc(u.displayName || u.username) +
+          " → " +
+          esc(u.pendingDisplayName) +
+          "</div>" +
+          '<div class="admin-user__meta">@' +
+          esc(u.username) +
+          "</div>" +
+          "</div>" +
+          '<div class="admin-user__actions">' +
+          '<button type="button" class="approve" data-approve-name="' +
+          u.id +
+          '">승인</button>' +
+          '<button type="button" class="reject" data-reject-name="' +
+          u.id +
+          '">거절</button>' +
+          "</div>" +
+          "</article>"
+        );
+      })
+      .join("");
+
+    list.querySelectorAll("[data-approve-name]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        moderateName(parseInt(btn.getAttribute("data-approve-name"), 10), "approve-name");
+      });
+    });
+    list.querySelectorAll("[data-reject-name]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        moderateName(parseInt(btn.getAttribute("data-reject-name"), 10), "reject-name");
+      });
+    });
+  }
+
+  function renderReqList(requests) {
+    var list = document.getElementById("adminReqList");
+    if (!list) return;
+    if (!requests.length) {
+      list.innerHTML = '<p class="admin-empty">요청이 없습니다.</p>';
+      return;
+    }
+    list.innerHTML = requests
+      .map(function (r) {
+        return (
+          '<article class="admin-user admin-req-item' +
+          (selectedReqId === r.id ? " is-on" : "") +
+          '" data-req-id="' +
+          r.id +
+          '">' +
+          "<div>" +
+          '<div class="admin-user__name">' +
+          esc(r.title) +
+          "</div>" +
+          '<div class="admin-user__meta">' +
+          esc(r.fromName || r.fromUsername || "") +
+          " · " +
+          esc(r.categoryLabel) +
+          "<br>" +
+          fmtDate(r.createdAt) +
+          "</div>" +
+          '<div class="admin-user__pending">' +
+          esc(r.statusLabel) +
+          (r.fileCount ? " · 첨부 " + r.fileCount + "개" : "") +
+          "</div>" +
+          "</div></article>"
+        );
+      })
+      .join("");
+
+    list.querySelectorAll("[data-req-id]").forEach(function (el) {
+      el.addEventListener("click", function () {
+        openReqDetail(parseInt(el.getAttribute("data-req-id"), 10));
+      });
+    });
+  }
+
+  async function downloadFile(requestId, fileId, filename) {
+    var data = await SiteAuth.api("/requests/" + requestId + "/files/" + fileId);
+    var f = data.file;
+    var bin = atob(f.data);
+    var bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    var blob = new Blob([bytes], { type: f.mime || "application/octet-stream" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = filename || f.filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  async function openReqDetail(id) {
+    selectedReqId = id;
+    var data = await SiteAuth.api("/requests/" + id);
+    var r = data.request;
+    await loadRequests();
+
+    var filesHtml =
+      r.files && r.files.length
+        ? "<p><strong>첨부</strong> " +
+          r.files
+            .map(function (f) {
+              return (
+                '<button type="button" class="req-file-link" data-file="' +
+                f.id +
+                '">📎 ' +
+                esc(f.filename) +
+                "</button>"
+              );
+            })
+            .join(" ") +
+          "</p>"
+        : "";
+
+    var replyHtml = r.adminReply
+      ? '<div class="admin-req-detail__meta"><strong>이전 답변</strong><br>' +
+        esc(r.adminReply) +
+        "</div>"
+      : "";
+
+    var detail = document.getElementById("adminReqDetail");
+    detail.innerHTML =
+      '<h3 class="admin-req-detail__title">' +
+      esc(r.title) +
+      "</h3>" +
+      '<p class="admin-req-detail__meta">' +
+      "보낸 사람: " +
+      esc(r.fromName || r.fromUsername) +
+      " (@ " +
+      esc(r.fromUsername || "") +
+      ")<br>" +
+      esc(r.categoryLabel) +
+      " · " +
+      fmtDate(r.createdAt) +
+      "</p>" +
+      '<div class="admin-req-detail__body">' +
+      esc(r.body) +
+      "</div>" +
+      filesHtml +
+      replyHtml +
+      '<form class="admin-req-reply-form" id="adminReplyForm">' +
+      '<label class="req-field"><span>답변 보내기</span>' +
+      '<textarea name="reply" required placeholder="학생에게 보낼 답변을 작성하세요."></textarea></label>' +
+      '<div class="admin-user__actions">' +
+      '<button type="submit" class="approve">답변 전송</button>' +
+      '<button type="button" class="reject" data-close-req>처리 완료</button>' +
+      "</div></form>";
+
+    detail.querySelectorAll("[data-file]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        downloadFile(r.id, parseInt(btn.getAttribute("data-file"), 10), btn.textContent);
+      });
+    });
+
+    detail.querySelector("#adminReplyForm").addEventListener("submit", async function (ev) {
+      ev.preventDefault();
+      var reply = new FormData(ev.target).get("reply");
+      try {
+        await SiteAuth.api("/admin/requests/reply", {
+          method: "POST",
+          body: JSON.stringify({ requestId: r.id, reply: reply, status: "replied" })
+        });
+        showMsg("답변을 보냈습니다.", true);
+        openReqDetail(r.id);
+      } catch (e) {
+        showMsg(e.message);
+      }
+    });
+
+    detail.querySelector("[data-close-req]").addEventListener("click", async function () {
+      var reply = detail.querySelector('textarea[name="reply"]').value.trim();
+      if (!reply && !r.adminReply) {
+        showMsg("답변 없이 완료하려면 내용을 입력하거나 기존 답변이 있어야 합니다.");
+        return;
+      }
+      try {
+        await SiteAuth.api("/admin/requests/reply", {
+          method: "POST",
+          body: JSON.stringify({
+            requestId: r.id,
+            reply: reply || r.adminReply,
+            status: "closed"
+          })
+        });
+        showMsg("처리 완료했습니다.", true);
+        loadRequests();
+      } catch (e) {
+        showMsg(e.message);
+      }
+    });
+  }
+
   async function loadUsers() {
     var list = document.getElementById("adminList");
     if (list) list.innerHTML = '<p class="admin-empty">불러오는 중…</p>';
@@ -86,6 +305,31 @@
       showMsg("");
     } catch (e) {
       showMsg(e.message);
+      if (list) list.innerHTML = '<p class="admin-empty">목록을 불러오지 못했습니다.</p>';
+    }
+  }
+
+  async function loadNameChanges() {
+    var list = document.getElementById("adminNameList");
+    if (list) list.innerHTML = '<p class="admin-empty">불러오는 중…</p>';
+    try {
+      var data = await SiteAuth.api("/admin/name-changes");
+      renderNameChanges(data.users || []);
+    } catch (e) {
+      if (list) list.innerHTML = '<p class="admin-empty">목록을 불러오지 못했습니다.</p>';
+    }
+  }
+
+  async function loadRequests() {
+    var list = document.getElementById("adminReqList");
+    if (list) list.innerHTML = '<p class="admin-empty">불러오는 중…</p>';
+    try {
+      var path = currentReqStatus
+        ? "/admin/requests?status=" + encodeURIComponent(currentReqStatus)
+        : "/admin/requests";
+      var data = await SiteAuth.api(path);
+      renderReqList(data.requests || []);
+    } catch (e) {
       if (list) list.innerHTML = '<p class="admin-empty">목록을 불러오지 못했습니다.</p>';
     }
   }
@@ -104,9 +348,34 @@
     }
   }
 
-  document.querySelectorAll(".admin-tab").forEach(function (btn) {
+  async function moderateName(userId, action) {
+    showMsg("");
+    try {
+      await SiteAuth.api("/admin/" + action, {
+        method: "POST",
+        body: JSON.stringify({ userId: userId })
+      });
+      showMsg(action === "approve-name" ? "이름 변경을 승인했습니다." : "이름 변경을 거절했습니다.", true);
+      loadNameChanges();
+    } catch (e) {
+      showMsg(e.message);
+    }
+  }
+
+  function onReady(ev) {
+    var user = ev && ev.detail ? ev.detail.user : SiteAuth.getUser();
+    if (!isAdminUser(user)) {
+      location.replace("index.html");
+      return;
+    }
+    loadRequests();
+    loadNameChanges();
+    loadUsers();
+  }
+
+  document.querySelectorAll(".admin-panel__tabs:not(.admin-req-tabs) .admin-tab").forEach(function (btn) {
     btn.addEventListener("click", function () {
-      document.querySelectorAll(".admin-tab").forEach(function (b) {
+      document.querySelectorAll(".admin-panel__tabs:not(.admin-req-tabs) .admin-tab").forEach(function (b) {
         b.classList.toggle("is-on", b === btn);
       });
       currentStatus = btn.getAttribute("data-status") || "";
@@ -114,5 +383,18 @@
     });
   });
 
-  document.addEventListener("siteauth:ready", loadUsers);
+  document.querySelectorAll(".admin-req-tabs .admin-tab").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      document.querySelectorAll(".admin-req-tabs .admin-tab").forEach(function (b) {
+        b.classList.toggle("is-on", b === btn);
+      });
+      currentReqStatus = btn.getAttribute("data-req-status") || "";
+      selectedReqId = null;
+      document.getElementById("adminReqDetail").innerHTML =
+        '<p class="admin-empty">요청을 선택하세요.</p>';
+      loadRequests();
+    });
+  });
+
+  document.addEventListener("siteauth:ready", onReady);
 })();

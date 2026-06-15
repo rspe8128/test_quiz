@@ -1,0 +1,279 @@
+.requests-page .req-shell {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1rem 1rem 2.5rem;
+}
+
+html.site-ready .requests-page .req-shell {
+  visibility: visible;
+}
+
+.requests-page .req-shell[hidden] {
+  display: none !important;
+}
+
+.req-head h1 {
+  margin: 0.2rem 0 0.5rem;
+  font-size: 1.55rem;
+}
+
+.req-head__lead {
+  margin: 0;
+  color: #64748b;
+  line-height: 1.55;
+}
+
+.req-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) 1fr;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+@media (max-width: 720px) {
+  .req-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.req-side,
+.req-main {
+  background: #fff;
+  border: 1px solid #dbeafe;
+  border-radius: 14px;
+  padding: 0.85rem;
+}
+
+.req-compose-btn {
+  width: 100%;
+  margin-bottom: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: #fff;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.req-list {
+  display: grid;
+  gap: 0.45rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.req-item {
+  width: 100%;
+  text-align: left;
+  padding: 0.7rem 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+  font: inherit;
+  cursor: pointer;
+}
+
+.req-item.is-on {
+  border-color: #0284c7;
+  background: #e0f2fe;
+}
+
+.req-item__title {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.2rem;
+}
+
+.req-item__meta {
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+.req-item__badge {
+  display: inline-block;
+  margin-top: 0.25rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.req-item__badge--replied {
+  background: #d1fae5;
+  color: #047857;
+}
+
+.req-main h2 {
+  margin: 0 0 0.85rem;
+  font-size: 1.1rem;
+}
+
+.req-placeholder {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.req-field {
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.req-field > span {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.req-field input[type="text"],
+.req-field select,
+.req-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #cfe8f6;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 0.9rem;
+}
+
+.req-field textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+
+.req-field small {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.72rem;
+  color: #94a3b8;
+}
+
+.req-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.req-btn {
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.req-btn--main {
+  background: #0284c7;
+  color: #fff;
+}
+
+.req-btn--ghost {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.req-msg {
+  margin: 0.75rem 0 0;
+  font-size: 0.82rem;
+  color: #b45309;
+}
+
+.req-msg.is-ok {
+  color: #047857;
+}
+
+.req-empty {
+  margin: 0;
+  padding: 1rem 0;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+.req-detail__head {
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.req-detail__title {
+  margin: 0 0 0.35rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.req-detail__meta {
+  font-size: 0.78rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.req-detail__body {
+  white-space: pre-wrap;
+  line-height: 1.65;
+  font-size: 0.92rem;
+  color: #334155;
+  margin-bottom: 1rem;
+}
+
+.req-detail__files {
+  margin-bottom: 1rem;
+}
+
+.req-detail__files h3,
+.req-detail__reply h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.88rem;
+  color: #0369a1;
+}
+
+.req-file-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0 0.5rem 0.5rem 0;
+  padding: 0.4rem 0.65rem;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #0369a1;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.req-detail__reply {
+  padding: 0.85rem;
+  border-radius: 12px;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+}
+
+.req-detail__reply p {
+  margin: 0;
+  white-space: pre-wrap;
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+.req-detail__wait {
+  padding: 0.75rem;
+  border-radius: 10px;
+  background: #fffbeb;
+  color: #b45309;
+  font-size: 0.85rem;
+}

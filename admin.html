@@ -12,7 +12,7 @@
   <script src="auth-config.js"></script>
   <script src="auth.js"></script>
 </head>
-<body>
+<body class="admin-page">
   <div class="admin-shell">
     <nav class="site-nav">
       <a class="site-nav__link" href="index.html">&larr; 퀴즈 허브</a>
@@ -22,6 +22,33 @@
       <h1>회원 승인 대시보드</h1>
       <p class="admin-head__lead">가입 신청을 확인하고 승인하면 해당 사용자가 사이트를 이용할 수 있습니다.</p>
     </header>
+
+    <section class="admin-name-panel">
+      <h2>학생 요청함</h2>
+      <p class="admin-name-panel__lead">문제·자료 추가 요청 등을 확인하고 답변할 수 있습니다.</p>
+      <div class="admin-panel__tabs admin-req-tabs">
+        <button type="button" class="admin-tab is-on" data-req-status="pending">미확인</button>
+        <button type="button" class="admin-tab" data-req-status="read">확인함</button>
+        <button type="button" class="admin-tab" data-req-status="replied">답변함</button>
+        <button type="button" class="admin-tab" data-req-status="">전체</button>
+      </div>
+      <div class="admin-req-layout">
+        <div class="admin-list" id="adminReqList">
+          <p class="admin-empty">불러오는 중…</p>
+        </div>
+        <div class="admin-req-detail" id="adminReqDetail">
+          <p class="admin-empty">요청을 선택하세요.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="admin-name-panel">
+      <h2>이름 변경 승인</h2>
+      <p class="admin-name-panel__lead">표시 이름 변경 신청 목록입니다.</p>
+      <div class="admin-list" id="adminNameList">
+        <p class="admin-empty">불러오는 중…</p>
+      </div>
+    </section>
 
     <section class="admin-panel">
       <div class="admin-panel__tabs">

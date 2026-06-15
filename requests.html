@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>요청함 · 민사 1-1</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="site-theme.css" />
+  <link rel="stylesheet" href="auth.css" />
+  <link rel="stylesheet" href="requests.css" />
+  <script src="auth-config.js"></script>
+  <script src="auth.js"></script>
+</head>
+<body class="requests-page">
+  <div class="req-shell" id="reqShell" hidden>
+    <nav class="site-nav">
+      <a class="site-nav__link" href="index.html">&larr; 퀴즈 허브</a>
+    </nav>
+    <header class="req-head">
+      <p class="page-eyebrow">사이트 메일함</p>
+      <h1>관리자에게 요청하기</h1>
+      <p class="req-head__lead">문제 추가, 자료 추가 등을 요청하고 답변을 받을 수 있습니다.</p>
+    </header>
+
+    <div class="req-layout">
+      <aside class="req-side">
+        <button type="button" class="req-compose-btn" id="reqComposeBtn">+ 새 요청 작성</button>
+        <div class="req-list" id="reqList">
+          <p class="req-empty">불러오는 중…</p>
+        </div>
+      </aside>
+
+      <main class="req-main">
+        <div class="req-placeholder" id="reqPlaceholder">
+          <p>왼쪽에서 요청을 선택하거나 새 요청을 작성하세요.</p>
+        </div>
+
+        <form class="req-compose" id="reqCompose" hidden>
+          <h2>새 요청</h2>
+          <label class="req-field">
+            <span>요청 유형</span>
+            <select name="category" required>
+              <option value="problem">문제 추가 요청</option>
+              <option value="material">자료 추가 요청</option>
+              <option value="other">기타</option>
+            </select>
+          </label>
+          <label class="req-field">
+            <span>제목</span>
+            <input type="text" name="title" required maxlength="120" placeholder="예: 프로그래밍 배열 문제 추가 요청" />
+          </label>
+          <label class="req-field">
+            <span>내용</span>
+            <textarea name="body" required rows="8" maxlength="5000" placeholder="어떤 문제/자료가 필요한지 구체적으로 적어 주세요."></textarea>
+          </label>
+          <label class="req-field">
+            <span>첨부파일 (선택, 개수 제한 없음 · 각 50MB 이하)</span>
+            <input type="file" name="files" multiple accept="image/*,.pdf,.txt,.hwp,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip" />
+            <small>교재 사진, PDF, 한글/워드 파일 등</small>
+          </label>
+          <div class="req-actions">
+            <button type="submit" class="req-btn req-btn--main">보내기</button>
+            <button type="button" class="req-btn req-btn--ghost" id="reqComposeCancel">취소</button>
+          </div>
+          <p class="req-msg" id="reqComposeMsg" hidden></p>
+        </form>
+
+        <article class="req-detail" id="reqDetail" hidden></article>
+      </main>
+    </div>
+  </div>
+  <script src="requests.js"></script>
+</body>
+</html>

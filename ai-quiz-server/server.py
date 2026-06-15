@@ -24,6 +24,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
 import auth_store
+import requests_store
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 CONFIG_PATH = os.path.join(ROOT, "presets.json")
@@ -185,6 +186,65 @@ class Handler(BaseHTTPRequestHandler):
             self._json(200, {"users": users})
             return
 
+        if path == "/admin/name-changes":
+            if not self._require_admin():
+                return
+            self._json(200, {"users": auth_store.list_name_changes()})
+            return
+
+        if path == "/requests/mine":
+            user = self._require_user(approved_only=True)
+            if not user:
+                return
+            self._json(200, {"requests": requests_store.list_for_user(user["id"])})
+            return
+
+        if path == "/admin/requests":
+            if not self._require_admin():
+                return
+            status = (query.get("status") or [None])[0]
+            self._json(200, {"requests": requests_store.list_for_admin(status)})
+            return
+
+        if path.startswith("/requests/") and path.count("/") >= 3:
+            parts = path.split("/")
+            if len(parts) >= 5 and parts[3] == "files":
+                request_id = int(parts[2] or 0)
+                file_id = int(parts[4] or 0)
+                user = self._require_user(approved_only=False)
+                if not user:
+                    return
+                req = requests_store.get_request(request_id)
+                if not req:
+                    self._json(404, {"error": "요청을 찾을 수 없습니다."})
+                    return
+                if user["role"] != "admin" and req["userId"] != user["id"]:
+                    self._json(403, {"error": "권한이 없습니다."})
+                    return
+                f = requests_store.get_file(request_id, file_id)
+                if not f:
+                    self._json(404, {"error": "파일을 찾을 수 없습니다."})
+                    return
+                self._json(200, {"file": f})
+                return
+
+        if path.startswith("/requests/"):
+            request_id = int(path.split("/")[-1] or 0)
+            user = self._require_user(approved_only=False)
+            if not user:
+                return
+            req = requests_store.get_request(request_id)
+            if not req:
+                self._json(404, {"error": "요청을 찾을 수 없습니다."})
+                return
+            if user["role"] != "admin" and req["userId"] != user["id"]:
+                self._json(403, {"error": "권한이 없습니다."})
+                return
+            if user["role"] == "admin" and req["status"] == "pending":
+                req = requests_store.mark_read(request_id) or req
+            self._json(200, {"request": req})
+            return
+
         self._json(404, {"error": "not found"})
 
     def do_POST(self):
@@ -235,6 +295,34 @@ class Handler(BaseHTTPRequestHandler):
             self._json(200, {"ok": True})
             return
 
+        if path == "/auth/profile/display-name":
+            user = self._require_user(approved_only=True)
+            if not user:
+                return
+            display_name = str(data.get("displayName") or "").strip()
+            if not display_name:
+                self._json(400, {"error": "표시 이름을 입력해 주세요."})
+                return
+            try:
+                updated = auth_store.request_display_name(user["id"], display_name)
+            except ValueError as e:
+                self._json(400, {"error": str(e)})
+                return
+            if not updated:
+                self._json(404, {"error": "사용자를 찾을 수 없습니다."})
+                return
+            if updated["role"] == "admin":
+                self._json(200, {"user": updated, "message": "이름이 변경되었습니다."})
+                return
+            self._json(
+                200,
+                {
+                    "user": updated,
+                    "message": "이름 변경 신청이 접수되었습니다. 관리자 승인 후 반영됩니다.",
+                },
+            )
+            return
+
         if path == "/admin/approve":
             if not self._require_admin():
                 return
@@ -257,6 +345,63 @@ class Handler(BaseHTTPRequestHandler):
                 return
             user = auth_store.set_user_status(user_id, "rejected")
             self._json(200, {"user": user})
+            return
+
+        if path == "/admin/approve-name":
+            if not self._require_admin():
+                return
+            user_id = int(data.get("userId") or 0)
+            user = auth_store.approve_display_name(user_id)
+            if not user:
+                self._json(404, {"error": "대기 중인 이름 변경이 없습니다."})
+                return
+            self._json(200, {"user": user})
+            return
+
+        if path == "/admin/reject-name":
+            if not self._require_admin():
+                return
+            user_id = int(data.get("userId") or 0)
+            user = auth_store.reject_display_name(user_id)
+            if not user:
+                self._json(404, {"error": "대기 중인 이름 변경이 없습니다."})
+                return
+            self._json(200, {"user": user})
+            return
+
+        if path == "/requests":
+            user = self._require_user(approved_only=True)
+            if not user:
+                return
+            category = str(data.get("category") or "other")
+            title = str(data.get("title") or "")
+            body = str(data.get("body") or "")
+            files = data.get("files") or []
+            if not isinstance(files, list):
+                files = []
+            try:
+                req = requests_store.create_request(user["id"], category, title, body, files)
+            except ValueError as e:
+                self._json(400, {"error": str(e)})
+                return
+            self._json(201, {"request": req, "message": "요청이 전송되었습니다."})
+            return
+
+        if path == "/admin/requests/reply":
+            if not self._require_admin():
+                return
+            request_id = int(data.get("requestId") or 0)
+            reply = str(data.get("reply") or "")
+            status = str(data.get("status") or "replied")
+            try:
+                req = requests_store.reply_request(request_id, reply, status)
+            except ValueError as e:
+                self._json(400, {"error": str(e)})
+                return
+            if not req:
+                self._json(404, {"error": "요청을 찾을 수 없습니다."})
+                return
+            self._json(200, {"request": req, "message": "답변을 보냈습니다."})
             return
 
         if path == "/generate":
@@ -289,6 +434,7 @@ class Handler(BaseHTTPRequestHandler):
 
 def main():
     auth_store.init_db()
+    requests_store.init_requests_db()
     if not API_KEY:
         print(
             "경고: GEMINI_API_KEY(또는 GOOGLE_API_KEY)가 없습니다. /generate 요청은 실패합니다.",

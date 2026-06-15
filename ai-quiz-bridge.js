@@ -154,6 +154,8 @@
   function attachPanel(opts) {
     var mount = typeof opts.mount === "string" ? document.querySelector(opts.mount) : opts.mount;
     if (!mount) return null;
+    var existing = mount.querySelector(".ai-quiz-panel");
+    if (existing) return existing;
     var el = document.createElement("div");
     mount.appendChild(el);
     renderPanel(el, opts);
