@@ -1,8 +1,14 @@
 (function () {
+  var booted = false;
+
   function esc(s) {
     var d = document.createElement("div");
     d.textContent = s == null ? "" : String(s);
     return d.innerHTML;
+  }
+
+  function apiBase() {
+    return ((window.SiteAuthConfig && SiteAuthConfig.API_BASE) || "").replace(/\/+$/, "");
   }
 
   function avatarHtml(member) {
@@ -63,7 +69,7 @@
 
   function setupVipEditor(user) {
     var panel = document.getElementById("hofEdit");
-    if (!panel || user.role !== "vip") {
+    if (!panel || !user || user.role !== "vip") {
       if (panel) panel.hidden = true;
       return;
     }
@@ -76,11 +82,24 @@
   }
 
   async function loadHall() {
-    var data = await SiteAuth.api("/hall-of-fame");
+    var res = await fetch(apiBase() + "/hall-of-fame");
+    var data;
+    try {
+      data = await res.json();
+    } catch (e) {
+      data = {};
+    }
+    if (!res.ok) {
+      throw new Error((data && data.error) || "목록을 불러오지 못했습니다.");
+    }
     renderList(data.members || []);
   }
 
   async function saveProfile() {
+    if (!window.SiteAuth || !SiteAuth.api) {
+      alert("프로필을 저장하려면 VIP 계정으로 로그인해 주세요.");
+      return;
+    }
     var btn = document.getElementById("hofSaveBtn");
     var msg = document.getElementById("hofSaveMsg");
     if (btn) btn.disabled = true;
@@ -141,7 +160,12 @@
     if (saveBtn) saveBtn.addEventListener("click", saveProfile);
   }
 
-  async function init(user) {
+  async function boot(user) {
+    if (booted) {
+      setupVipEditor(user);
+      return;
+    }
+    booted = true;
     bindEditor();
     setupVipEditor(user);
     try {
@@ -153,10 +177,7 @@
   }
 
   document.addEventListener("siteauth:ready", function (ev) {
-    init(ev.detail && ev.detail.user ? ev.detail.user : SiteAuth.getUser());
+    var user = ev.detail ? ev.detail.user : null;
+    boot(user);
   });
-
-  if (SiteAuth.isReady && SiteAuth.isReady()) {
-    init(SiteAuth.getUser());
-  }
 })();

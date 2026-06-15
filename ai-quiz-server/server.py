@@ -198,9 +198,6 @@ class Handler(BaseHTTPRequestHandler):
             return
 
         if path == "/hall-of-fame":
-            user = self._require_user(approved_only=True)
-            if not user:
-                return
             self._json(200, {"members": auth_store.list_vip_hall()})
             return
 

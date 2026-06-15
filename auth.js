@@ -11,6 +11,7 @@
   var CACHE_TTL_MS = 10 * 60 * 1000;
   var CACHE_TTL_PENDING_MS = 45 * 1000;
   var isAdminPage = /admin\.html$/i.test(location.pathname);
+  var isPublicPage = /hall-of-fame\.html$/i.test(location.pathname);
 
   var state = {
     user: null,
@@ -320,6 +321,17 @@
     gate.querySelector("[data-auth-logout]").addEventListener("click", logout);
   }
 
+  function finishPublicPage(user) {
+    unlockSite();
+    document.documentElement.classList.add("site-ready");
+    ensureOverlay().hidden = true;
+    state.user = user || null;
+    state.ready = !!(user && canUseSite(user));
+    if (user && canUseSite(user)) renderBar(user);
+    else ensureBar().hidden = true;
+    document.dispatchEvent(new CustomEvent("siteauth:ready", { detail: { user: user || null } }));
+  }
+
   function applyUser(user) {
     state.user = user;
 
@@ -358,12 +370,16 @@
         prev.role !== user.role ||
         prev.displayName !== user.displayName ||
         prev.pendingDisplayName !== user.pendingDisplayName;
-      if (changed) applyUser(user);
+        if (changed) {
+          if (isPublicPage) finishPublicPage(user);
+          else applyUser(user);
+        }
     } catch (e) {
       if (e.status === 401) {
         clearUserCache();
         setToken("");
-        showLoginForm("login");
+        if (isPublicPage) finishPublicPage(null);
+        else showLoginForm("login");
       }
     }
   }
@@ -418,11 +434,39 @@
     state.ready = false;
     document.documentElement.classList.remove("site-ready");
     ensureBar().hidden = true;
-    showLoginForm("login");
+    if (isPublicPage) finishPublicPage(null);
+    else showLoginForm("login");
+  }
+
+  async function bootstrapPublic() {
+    var token = getToken();
+    if (!token) {
+      finishPublicPage(null);
+      return;
+    }
+    var cached = loadUserCache(token);
+    if (cached) {
+      finishPublicPage(cached);
+      refreshUserInBackground(token);
+      return;
+    }
+    try {
+      var data = await api("/auth/me");
+      saveUserCache(token, data.user);
+      finishPublicPage(data.user);
+    } catch (e) {
+      if (e.status === 401) setToken("");
+      finishPublicPage(null);
+    }
   }
 
   async function bootstrap() {
     warmupApi();
+
+    if (isPublicPage) {
+      await bootstrapPublic();
+      return;
+    }
 
     var token = getToken();
     if (!token) {
@@ -472,7 +516,7 @@
     }
   }
 
-  document.documentElement.classList.add("auth-locked");
+  if (!isPublicPage) document.documentElement.classList.add("auth-locked");
   warmupApi();
 
   window.SiteAuth = {
