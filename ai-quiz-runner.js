@@ -302,7 +302,9 @@
   function updateTabLabel(btn, count) {
     if (!btn) return;
     btn.innerHTML = "생성 AI 문제<small>" + (count ? count + "문항" : "비어 있음") + "</small>";
+    btn.hidden = false;
     btn.style.display = "";
+    btn.classList.add("ai-quiz-tab--ready");
   }
 
   function setTabOn(tabBar, tabAttr, tabBtnClass, activeBtn) {

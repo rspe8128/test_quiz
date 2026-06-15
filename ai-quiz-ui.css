@@ -246,8 +246,24 @@ html.site-ready.ai-quiz-mounted .ai-quiz-fab {
   color: var(--sky-600, #0284c7);
 }
 
-.ai-quiz-tab {
+.ai-quiz-tab:not(.ai-quiz-tab--ready) {
   display: none;
+}
+
+.prog-topnav__btn.ai-quiz-tab--ready,
+.fk-mode-nav__btn.ai-quiz-tab--ready,
+.fk-topnav__btn.ai-quiz-tab--ready,
+.kh-topnav__btn.ai-quiz-tab--ready,
+.hist-topnav__btn.ai-quiz-tab--ready,
+.econ-topnav__btn.ai-quiz-tab--ready,
+.ai-quiz-tab.ai-quiz-tab--ready {
+  display: block;
+}
+
+.prog-topnav__btn.ai-quiz-tab--ready,
+.fk-mode-nav__btn.ai-quiz-tab--ready,
+.fk-topnav__btn.ai-quiz-tab--ready {
+  flex: 1;
 }
 
 .ai-run-intro,

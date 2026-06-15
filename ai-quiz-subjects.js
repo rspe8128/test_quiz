@@ -146,6 +146,8 @@
   var cfg = SUBJECTS[page];
   if (!cfg) return;
 
+  var mounted = false;
+
   function canMount() {
     if (!window.SiteAuth) return true;
     var user = SiteAuth.getUser();
@@ -155,16 +157,21 @@
   function tryBoot() {
     if (window.SiteAuth && !SiteAuth.isReady()) {
       document.addEventListener("siteauth:ready", boot, { once: true });
+      setTimeout(function () {
+        if (!mounted && SiteAuth.isReady()) boot();
+      }, 50);
       return;
     }
     boot();
   }
 
   async function boot() {
-    if (!canMount()) return;
+    if (mounted || !canMount()) return;
+    mounted = true;
     try {
       await AIQuiz.mountSubject(cfg);
     } catch (e) {
+      mounted = false;
       console.error("AI 퀴즈 마운트 실패:", e);
     }
   }
