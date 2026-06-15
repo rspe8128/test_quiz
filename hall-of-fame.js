@@ -16,7 +16,7 @@
       return '<img src="' + esc(member.avatar) + '" alt="" />';
     }
     var letter = (member.username || "?").charAt(0).toUpperCase();
-    return '<span class="hof-avatar__letter">' + esc(letter) + "</span>";
+    return '<span class="hof-banner__letter">' + esc(letter) + "</span>";
   }
 
   function renderList(members) {
@@ -31,28 +31,28 @@
     list.innerHTML = members
       .map(function (m) {
         var msg = (m.message || "").trim();
-        var nameExtra =
+        var nameLine =
           m.displayName && m.displayName !== m.username
-            ? '<span class="hof-id__name">(' + esc(m.displayName) + ")</span>"
+            ? '<span class="hof-banner__name">' + esc(m.displayName) + "</span>"
             : "";
         return (
-          '<li class="hof-item">' +
-          '<div class="hof-avatar-wrap">' +
-          '<div class="hof-avatar">' +
+          '<li class="hof-banner">' +
+          '<div class="hof-banner__pole"></div>' +
+          '<div class="hof-banner__cloth">' +
+          '<div class="hof-banner__crest">' +
+          '<div class="hof-banner__avatar">' +
           avatarHtml(m) +
           "</div></div>" +
-          '<div class="hof-body">' +
-          '<div class="hof-id">@' +
+          '<p class="hof-banner__id">@' +
           esc(m.username) +
-          nameExtra +
-          "</div>" +
-          '<div class="hof-msg' +
-          (msg ? "" : " hof-msg--empty") +
+          nameLine +
+          "</p>" +
+          '<p class="hof-banner__msg' +
+          (msg ? "" : " hof-banner__msg--empty") +
           '">' +
-          esc(msg || "한마디가 아직 없습니다.") +
-          "</div>" +
-          "</div>" +
-          "</li>"
+          esc(msg || "한마디를 남겨 주세요") +
+          "</p>" +
+          "</div></li>"
         );
       })
       .join("");
@@ -177,6 +177,31 @@
     if (saveBtn) saveBtn.addEventListener("click", saveProfile);
   }
 
+  function bindScrollDrag() {
+    var el = document.getElementById("hofScroll");
+    if (!el) return;
+    var down = false;
+    var startX = 0;
+    var scrollL = 0;
+    el.addEventListener("mousedown", function (e) {
+      down = true;
+      startX = e.pageX - el.offsetLeft;
+      scrollL = el.scrollLeft;
+    });
+    el.addEventListener("mouseleave", function () {
+      down = false;
+    });
+    el.addEventListener("mouseup", function () {
+      down = false;
+    });
+    el.addEventListener("mousemove", function (e) {
+      if (!down) return;
+      e.preventDefault();
+      var x = e.pageX - el.offsetLeft;
+      el.scrollLeft = scrollL - (x - startX) * 1.2;
+    });
+  }
+
   async function boot(user) {
     if (booted) {
       setupVipEditor(user);
@@ -184,6 +209,7 @@
     }
     booted = true;
     bindEditor();
+    bindScrollDrag();
     setupVipEditor(user);
     try {
       await loadHall();
