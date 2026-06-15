@@ -1,0 +1,175 @@
+.auth-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(6px);
+}
+
+.auth-gate[hidden] {
+  display: none !important;
+}
+
+.auth-card {
+  width: min(420px, 100%);
+  padding: 1.5rem 1.4rem 1.35rem;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid #cfe8f6;
+  box-shadow: 0 18px 50px rgba(2, 132, 199, 0.18);
+  text-align: left;
+}
+
+.auth-card__badge {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0369a1;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.auth-card h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.25rem;
+  color: #0f172a;
+}
+
+.auth-card__lead {
+  margin: 0 0 1rem;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: #64748b;
+}
+
+.auth-tabs {
+  display: flex;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.auth-tabs button {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #dbeafe;
+  border-radius: 999px;
+  background: #f8fafc;
+  color: #475569;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auth-tabs button.is-on {
+  background: #0284c7;
+  border-color: #0284c7;
+  color: #fff;
+}
+
+.auth-field {
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.auth-field span {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.auth-field input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #cfe8f6;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 0.92rem;
+}
+
+.auth-btn {
+  width: 100%;
+  margin-top: 0.25rem;
+  padding: 0.65rem 1rem;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: #fff;
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.auth-btn:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.auth-btn--ghost {
+  margin-top: 0.65rem;
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.auth-msg {
+  margin: 0.75rem 0 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #b45309;
+}
+
+.auth-msg.is-ok {
+  color: #047857;
+}
+
+.auth-wait-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.auth-bar {
+  position: fixed;
+  top: 0.65rem;
+  right: 0.75rem;
+  z-index: 99990;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #dbeafe;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+  font-size: 0.78rem;
+  color: #334155;
+}
+
+.auth-bar[hidden] {
+  display: none !important;
+}
+
+.auth-bar a,
+.auth-bar button {
+  border: none;
+  background: none;
+  color: #0284c7;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+html.auth-locked body > :not(.auth-gate):not(.auth-bar) {
+  visibility: hidden;
+}

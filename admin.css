@@ -1,0 +1,120 @@
+.admin-shell {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1rem 1rem 2.5rem;
+}
+
+.admin-head h1 {
+  margin: 0.2rem 0 0.5rem;
+  font-size: 1.6rem;
+}
+
+.admin-head__lead {
+  margin: 0;
+  color: var(--text-muted, #64748b);
+  line-height: 1.55;
+}
+
+.admin-panel {
+  margin-top: 1.25rem;
+  padding: 1rem;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid #dbeafe;
+}
+
+.admin-panel__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.admin-tab {
+  padding: 0.45rem 0.85rem;
+  border: 1px solid #dbeafe;
+  border-radius: 999px;
+  background: #f8fafc;
+  color: #475569;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-tab.is-on {
+  background: #0284c7;
+  border-color: #0284c7;
+  color: #fff;
+}
+
+.admin-msg {
+  margin: 0 0 0.75rem;
+  font-size: 0.84rem;
+  color: #b45309;
+}
+
+.admin-msg.is-ok {
+  color: #047857;
+}
+
+.admin-list {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.admin-user {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.admin-user__name {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.admin-user__meta {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin-top: 0.15rem;
+}
+
+.admin-user__actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.admin-user__actions button {
+  padding: 0.45rem 0.75rem;
+  border: none;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-user__actions .approve {
+  background: #059669;
+  color: #fff;
+}
+
+.admin-user__actions .reject {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.admin-empty {
+  margin: 0;
+  padding: 1.5rem 0;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.9rem;
+}

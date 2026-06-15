@@ -66,9 +66,13 @@
     if (!base) {
       throw new Error("API 서버 주소가 아직 설정되지 않았습니다. (ai-quiz-config.js)");
     }
+    var headers = { "Content-Type": "application/json" };
+    if (global.SiteAuth && global.SiteAuth.authHeaders) {
+      headers = global.SiteAuth.authHeaders();
+    }
     var res = await fetch(base + "/generate", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: headers,
       body: JSON.stringify({ preset: presetKey, topic: topic, count: count })
     });
     var data;

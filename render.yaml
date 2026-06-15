@@ -9,5 +9,11 @@ services:
     envVars:
       - key: GEMINI_API_KEY
         sync: false
+      - key: AUTH_ADMIN_USERNAME
+        value: rspe
+      - key: AUTH_ADMIN_PASSWORD
+        sync: false
+      - key: AUTH_ADMIN_DISPLAY
+        value: 유노 남친
       - key: AI_QUIZ_HOST
         value: 0.0.0.0

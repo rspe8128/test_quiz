@@ -3,7 +3,18 @@
  * 예: https://test-quiz.onrender.com
  */
 (function (global) {
-  var BUILTIN_API_BASE = "https://test-quiz-8eb3.onrender.com";
+  var BUILTIN_API_BASE = (function () {
+    if (typeof SiteAuthConfig !== "undefined" && SiteAuthConfig.API_BASE) {
+      return SiteAuthConfig.API_BASE;
+    }
+    var host = typeof location !== "undefined" ? location.hostname : "";
+    var isLocal =
+      !host ||
+      host === "localhost" ||
+      host === "127.0.0.1" ||
+      (typeof location !== "undefined" && location.protocol === "file:");
+    return isLocal ? "http://localhost:8787" : "https://test-quiz-8eb3.onrender.com";
+  })();
 
   var PRESETS = {
     programming: {
