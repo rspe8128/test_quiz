@@ -113,8 +113,12 @@
     return !!(user && String(user.role) === "admin");
   }
 
+  function isVip(user) {
+    return !!(user && String(user.role) === "vip");
+  }
+
   function canUseSite(user) {
-    return user && (isAdmin(user) || user.status === "approved");
+    return user && (isAdmin(user) || isVip(user) || user.status === "approved");
   }
 
   function ensureOverlay() {
@@ -333,8 +337,8 @@
       return;
     }
 
-    if (isAdmin(user) || user.status === "approved") {
-      showApproved(user);
+      if (isAdmin(user) || isVip(user) || user.status === "approved") {
+        showApproved(user);
     } else if (user.status === "pending") {
       showPending(user);
     } else {

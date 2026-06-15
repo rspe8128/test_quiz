@@ -74,6 +74,27 @@ h1 {
   background: var(--sky-100);
   border-color: var(--sky-200);
 }
+.hof-hub-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem auto 0.5rem;
+  max-width: 280px;
+  padding: 0.85rem 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: #78350f;
+  background: linear-gradient(135deg, #fef08a 0%, #fde047 50%, #facc15 100%);
+  border: 1px solid #eab308;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(234, 179, 8, 0.25);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.hof-hub-link:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(234, 179, 8, 0.35);
+}
 .hub-back {
   display: inline-flex;
   align-items: center;

@@ -71,7 +71,11 @@ def _migrate(conn) -> None:
     cols = {row[1] for row in conn.execute("PRAGMA table_info(users)").fetchall()}
     if "pending_display_name" not in cols:
         conn.execute("ALTER TABLE users ADD COLUMN pending_display_name TEXT")
-        conn.commit()
+    if "vip_avatar" not in cols:
+        conn.execute("ALTER TABLE users ADD COLUMN vip_avatar TEXT")
+    if "vip_message" not in cols:
+        conn.execute("ALTER TABLE users ADD COLUMN vip_message TEXT")
+    conn.commit()
 
 
 def ensure_admin() -> None:
@@ -107,7 +111,7 @@ def _user_dict(row) -> dict | None:
         return None
     keys = row.keys()
     pending = row["pending_display_name"] if "pending_display_name" in keys else None
-    return {
+    out = {
         "id": row["id"],
         "username": row["username"],
         "displayName": row["display_name"],
@@ -116,6 +120,10 @@ def _user_dict(row) -> dict | None:
         "status": row["status"],
         "createdAt": row["created_at"],
     }
+    if "vip_avatar" in keys:
+        out["vipAvatar"] = row["vip_avatar"] or None
+        out["vipMessage"] = row["vip_message"] or None
+    return out
 
 
 def get_user_by_username(username: str):
@@ -286,3 +294,74 @@ def list_name_changes() -> list[dict]:
             """
         ).fetchall()
     return [_user_dict(r) for r in rows]  # type: ignore[misc]
+
+
+def list_vip_hall() -> list[dict]:
+    with _connect() as conn:
+        rows = conn.execute(
+            """
+            SELECT id, username, display_name, vip_avatar, vip_message, created_at
+            FROM users
+            WHERE role = 'vip' AND status = 'approved'
+            ORDER BY created_at ASC
+            """
+        ).fetchall()
+    return [
+        {
+            "id": r["id"],
+            "username": r["username"],
+            "displayName": r["display_name"],
+            "avatar": r["vip_avatar"] or None,
+            "message": r["vip_message"] or "",
+        }
+        for r in rows
+    ]
+
+
+def set_user_vip(user_id: int, vip: bool) -> dict | None:
+    row = get_user_by_id(user_id)
+    if not row or row["role"] == "admin":
+        return None
+    new_role = "vip" if vip else "user"
+    with _connect() as conn:
+        conn.execute(
+            "UPDATE users SET role = ?, status = 'approved' WHERE id = ?",
+            (new_role, user_id),
+        )
+        conn.commit()
+    return _user_dict(get_user_by_id(user_id))
+
+
+def update_vip_profile(
+    user_id: int,
+    *,
+    avatar: str | None = None,
+    message: str | None = None,
+) -> dict | None:
+    row = get_user_by_id(user_id)
+    if not row or row["role"] != "vip":
+        raise ValueError("VIP 계정만 프로필을 수정할 수 있습니다.")
+    if message is not None:
+        message = message.strip()
+        if len(message) > 80:
+            raise ValueError("한마디는 80자 이하여야 합니다.")
+    if avatar is not None and avatar:
+        if not avatar.startswith("data:image/"):
+            raise ValueError("프로필 사진은 이미지 파일이어야 합니다.")
+        if len(avatar) > 350_000:
+            raise ValueError("프로필 사진이 너무 큽니다. 200KB 이하로 올려 주세요.")
+    fields: list[str] = []
+    values: list[object] = []
+    if avatar is not None:
+        fields.append("vip_avatar = ?")
+        values.append(avatar or None)
+    if message is not None:
+        fields.append("vip_message = ?")
+        values.append(message or None)
+    if not fields:
+        return _user_dict(row)
+    values.append(user_id)
+    with _connect() as conn:
+        conn.execute(f"UPDATE users SET {', '.join(fields)} WHERE id = ?", values)
+        conn.commit()
+    return _user_dict(get_user_by_id(user_id))

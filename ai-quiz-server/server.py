@@ -197,6 +197,13 @@ class Handler(BaseHTTPRequestHandler):
             self._json(200, {"users": auth_store.list_name_changes()})
             return
 
+        if path == "/hall-of-fame":
+            user = self._require_user(approved_only=True)
+            if not user:
+                return
+            self._json(200, {"members": auth_store.list_vip_hall()})
+            return
+
         if path == "/ai-quiz/data":
             user = self._require_user(approved_only=True)
             if not user:
@@ -400,6 +407,44 @@ class Handler(BaseHTTPRequestHandler):
                 self._json(404, {"error": "대기 중인 이름 변경이 없습니다."})
                 return
             self._json(200, {"user": user})
+            return
+
+        if path == "/admin/set-vip":
+            if not self._require_admin():
+                return
+            user_id = int(data.get("userId") or 0)
+            vip = bool(data.get("vip"))
+            target = auth_store.get_user_by_id(user_id)
+            if not target or target["role"] == "admin":
+                self._json(404, {"error": "사용자를 찾을 수 없습니다."})
+                return
+            user = auth_store.set_user_vip(user_id, vip)
+            self._json(200, {"user": user})
+            return
+
+        if path == "/vip/profile":
+            user = self._require_user(approved_only=True)
+            if not user:
+                return
+            if user["role"] != "vip":
+                self._json(403, {"error": "VIP 계정만 프로필을 수정할 수 있습니다."})
+                return
+            avatar = data.get("avatar")
+            message = data.get("message")
+            if avatar is not None and not isinstance(avatar, str):
+                avatar = None
+            if message is not None and not isinstance(message, str):
+                message = None
+            try:
+                updated = auth_store.update_vip_profile(
+                    user["id"],
+                    avatar=avatar,
+                    message=message,
+                )
+            except ValueError as e:
+                self._json(400, {"error": str(e)})
+                return
+            self._json(200, {"user": updated, "message": "프로필이 저장되었습니다."})
             return
 
         if path == "/requests":

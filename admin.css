@@ -146,7 +146,18 @@ html.admin-ready .admin-page .admin-shell {
   color: #64748b;
 }
 
-.admin-user__pending {
+.admin-user__vip {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #92400e;
+  background: #fef08a;
+  border: 1px solid #eab308;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  margin-left: 0.25rem;
+  vertical-align: middle;
+}
   font-size: 0.78rem;
   color: #0369a1;
   margin-top: 0.2rem;

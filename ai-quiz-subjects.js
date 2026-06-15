@@ -151,7 +151,7 @@
   function canMount() {
     if (!window.SiteAuth) return true;
     var user = SiteAuth.getUser();
-    return SiteAuth.isReady() && user && (user.role === "admin" || user.status === "approved");
+    return SiteAuth.isReady() && user && (user.role === "admin" || user.role === "vip" || user.status === "approved");
   }
 
   function tryBoot() {
