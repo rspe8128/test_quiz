@@ -17,3 +17,11 @@ services:
         value: 유노 남친
       - key: AI_QUIZ_HOST
         value: 0.0.0.0
+      # 계정 영구 저장 (무료): turso.tech 에서 DB 생성 후 Render에 설정
+      - key: TURSO_DATABASE_URL
+        sync: false
+      - key: TURSO_AUTH_TOKEN
+        sync: false
+      # 유료 Starter 플랜 + 영구 디스크(/var/data) 연결 시 선택
+      - key: AUTH_DB_PATH
+        sync: false

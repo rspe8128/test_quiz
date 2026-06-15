@@ -4,12 +4,12 @@ from __future__ import annotations
 import base64
 import os
 import re
-import sqlite3
 from datetime import datetime, timezone
 
 import auth_store
+import db
 
-DB_PATH = auth_store.DB_PATH
+DB_PATH = db.DB_PATH
 MAX_FILE_BYTES = int(os.environ.get("REQUEST_MAX_FILE_MB", "50")) * 1024 * 1024
 ALLOWED_CATEGORIES = {"problem", "material", "other"}
 ALLOWED_STATUS = {"pending", "read", "replied", "closed"}
@@ -19,10 +19,8 @@ def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def _connect() -> sqlite3.Connection:
-    conn = sqlite3.connect(DB_PATH, check_same_thread=False)
-    conn.row_factory = sqlite3.Row
-    return conn
+def _connect():
+    return db.connect()
 
 
 def init_requests_db() -> None:
@@ -109,7 +107,7 @@ def _files_meta(request_id: int) -> list[dict]:
     ]
 
 
-def _request_dict(row: sqlite3.Row, *, include_body: bool = True) -> dict:
+def _request_dict(row, *, include_body: bool = True) -> dict:
     item = {
         "id": row["id"],
         "userId": row["user_id"],
@@ -172,7 +170,7 @@ def create_request(user_id: int, category: str, title: str, body: str, files: li
     return _request_dict(row)  # type: ignore[arg-type]
 
 
-def _get_row(request_id: int) -> sqlite3.Row | None:
+def _get_row(request_id: int):
     with _connect() as conn:
         return conn.execute("SELECT * FROM requests WHERE id = ?", (request_id,)).fetchone()
 

@@ -4,11 +4,11 @@ from __future__ import annotations
 import hashlib
 import os
 import secrets
-import sqlite3
 from datetime import datetime, timedelta, timezone
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.environ.get("AUTH_DB_PATH", os.path.join(ROOT, "auth.db"))
+import db
+
+DB_PATH = db.DB_PATH
 SESSION_DAYS = int(os.environ.get("AUTH_SESSION_DAYS", "30"))
 ADMIN_USERNAME = (os.environ.get("AUTH_ADMIN_USERNAME") or "rspe").strip().lower()
 ADMIN_PASSWORD = os.environ.get("AUTH_ADMIN_PASSWORD", "").strip()
@@ -19,10 +19,8 @@ def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def _connect() -> sqlite3.Connection:
-    conn = sqlite3.connect(DB_PATH, check_same_thread=False)
-    conn.row_factory = sqlite3.Row
-    return conn
+def _connect():
+    return db.connect()
 
 
 def _hash_password(password: str, salt: bytes | None = None) -> str:
@@ -69,7 +67,7 @@ def init_db() -> None:
     ensure_admin()
 
 
-def _migrate(conn: sqlite3.Connection) -> None:
+def _migrate(conn) -> None:
     cols = {row[1] for row in conn.execute("PRAGMA table_info(users)").fetchall()}
     if "pending_display_name" not in cols:
         conn.execute("ALTER TABLE users ADD COLUMN pending_display_name TEXT")
@@ -104,7 +102,7 @@ def ensure_admin() -> None:
         conn.commit()
 
 
-def _user_dict(row: sqlite3.Row | None) -> dict | None:
+def _user_dict(row) -> dict | None:
     if not row:
         return None
     keys = row.keys()
@@ -120,7 +118,7 @@ def _user_dict(row: sqlite3.Row | None) -> dict | None:
     }
 
 
-def get_user_by_username(username: str) -> sqlite3.Row | None:
+def get_user_by_username(username: str):
     with _connect() as conn:
         return conn.execute(
             "SELECT * FROM users WHERE username = ? COLLATE NOCASE",
@@ -128,7 +126,7 @@ def get_user_by_username(username: str) -> sqlite3.Row | None:
         ).fetchone()
 
 
-def get_user_by_id(user_id: int) -> sqlite3.Row | None:
+def get_user_by_id(user_id: int):
     with _connect() as conn:
         return conn.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
 

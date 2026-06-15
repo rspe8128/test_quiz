@@ -8,7 +8,9 @@ AI 퀴즈 + 회원 인증 서버 (Gemini API)
   AUTH_ADMIN_USERNAME — 관리자 아이디 (기본 rspe)
   AUTH_ADMIN_PASSWORD — 관리자 비밀번호 (필수, Render에만 설정)
   AUTH_ADMIN_DISPLAY  — 관리자 표시 이름 (기본 유노 남친)
-  AUTH_DB_PATH        — SQLite 경로 (기본 auth.db)
+  AUTH_DB_PATH        — SQLite 경로 (기본 auth.db, Render 디스크는 /var/data/site.db)
+  TURSO_DATABASE_URL  — Turso URL (무료 플랜 영구 저장, 선택)
+  TURSO_AUTH_TOKEN    — Turso 토큰 (선택)
   AI_QUIZ_HOST        — 0.0.0.0 (Render)
   AI_QUIZ_MODEL       — gemini-2.0-flash
 """
@@ -25,6 +27,7 @@ from urllib.parse import parse_qs, urlparse
 
 import auth_store
 import ai_quiz_store
+import db
 import requests_store
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -167,6 +170,7 @@ class Handler(BaseHTTPRequestHandler):
                     "model": MODEL,
                     "has_key": bool(API_KEY),
                     "auth": True,
+                    "db": db.db_info(),
                 },
             )
             return
@@ -492,6 +496,7 @@ def main():
     httpd = ThreadingHTTPServer((HOST, PORT), Handler)
     print(f"AI 퀴즈 서버 (Gemini + Auth) → http://{HOST}:{PORT}")
     print(f"모델: {MODEL}")
+    print(f"DB: {db.persistence_hint()}")
     print("헬스체크: GET /health")
     try:
         httpd.serve_forever()

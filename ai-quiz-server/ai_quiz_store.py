@@ -2,22 +2,20 @@
 from __future__ import annotations
 
 import json
-import sqlite3
 from datetime import datetime, timezone
 
 import auth_store
+import db
 
-DB_PATH = auth_store.DB_PATH
+DB_PATH = db.DB_PATH
 
 
 def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def _connect() -> sqlite3.Connection:
-    conn = sqlite3.connect(DB_PATH, check_same_thread=False)
-    conn.row_factory = sqlite3.Row
-    return conn
+def _connect():
+    return db.connect()
 
 
 def init_ai_quiz_db() -> None:
