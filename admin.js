@@ -3,6 +3,23 @@
   var currentReqStatus = "pending";
   var selectedReqId = null;
 
+  var APP_LABELS = {
+    prog: "프로그래밍",
+    korean: "국어 기말",
+    english: "영어",
+    science: "통합과학",
+    social: "통합사회",
+    "final-history": "한국사",
+    "word-quiz": "국어 단어",
+    history: "역사",
+    economics: "경제",
+    chinese: "중국어",
+    "java-practice": "Java",
+    "grammar-quiz": "문법 퀴즈",
+    grammar: "문법",
+    french: "프랑스어"
+  };
+
   function esc(s) {
     var d = document.createElement("div");
     d.textContent = s == null ? "" : String(s);
@@ -295,6 +312,103 @@
     });
   }
 
+  async function loadAiStats() {
+    var list = document.getElementById("adminAiStats");
+    if (!list) return;
+    list.innerHTML = '<p class="admin-empty">불러오는 중…</p>';
+    try {
+      var data = await SiteAuth.api("/admin/ai-stats");
+      renderAiStats(data.users || []);
+    } catch (e) {
+      list.innerHTML = '<p class="admin-empty">목록을 불러오지 못했습니다.</p>';
+    }
+  }
+
+  function renderAiStats(users) {
+    var list = document.getElementById("adminAiStats");
+    if (!list) return;
+    if (!users.length) {
+      list.innerHTML = '<p class="admin-empty">학습 데이터가 없습니다.</p>';
+      return;
+    }
+    list.innerHTML = users
+      .map(function (u) {
+        return (
+          '<article class="admin-user admin-req-item" data-ai-user="' +
+          u.id +
+          '">' +
+          "<div>" +
+          '<div class="admin-user__name">' +
+          esc(u.displayName || u.username) +
+          "</div>" +
+          '<div class="admin-user__meta">@' +
+          esc(u.username) +
+          " · " +
+          esc(statusLabel(u.status)) +
+          "</div>" +
+          '<div class="admin-user__pending">AI 문제 ' +
+          (u.totalAiItems || 0) +
+          "개 · 정답 " +
+          (u.totalMastered || 0) +
+          "개</div>" +
+          "</div>" +
+          '<span class="admin-user__meta">상세</span></article>'
+        );
+      })
+      .join("");
+
+    list.querySelectorAll("[data-ai-user]").forEach(function (el) {
+      el.addEventListener("click", function () {
+        openAiDetail(parseInt(el.getAttribute("data-ai-user"), 10));
+      });
+    });
+  }
+
+  async function openAiDetail(userId) {
+    var box = document.getElementById("adminAiDetail");
+    if (!box) return;
+    box.hidden = false;
+    box.innerHTML = '<p class="admin-empty">불러오는 중…</p>';
+    try {
+      var data = await SiteAuth.api("/admin/ai-stats/user?userId=" + userId);
+      var u = data.user;
+      var subs =
+        (u.aiSubjects || []).length === 0
+          ? "<p>생성한 AI 문제가 없습니다.</p>"
+          : u.aiSubjects
+              .map(function (s) {
+                return (
+                  "<p><strong>" +
+                  esc(APP_LABELS[s.appId] || s.appId) +
+                  "</strong> — 문제 " +
+                  s.itemCount +
+                  "개, 맞춤 " +
+                  s.masteredCount +
+                  "개, 오답 시도 " +
+                  s.wrongAttempts +
+                  "회, 최고 연속 " +
+                  s.bestStreak +
+                  " · " +
+                  fmtDate(s.updatedAt) +
+                  "</p>"
+                );
+              })
+              .join("");
+      box.innerHTML =
+        "<h3 class=\"admin-req-detail__title\">" +
+        esc(u.displayName || u.username) +
+        " (@ " +
+        esc(u.username) +
+        ")</h3>" +
+        '<p class="admin-req-detail__meta">상태: ' +
+        esc(statusLabel(u.status)) +
+        "</p>" +
+        subs;
+    } catch (e) {
+      box.innerHTML = '<p class="admin-empty">' + esc(e.message) + "</p>";
+    }
+  }
+
   async function loadUsers() {
     var list = document.getElementById("adminList");
     if (list) list.innerHTML = '<p class="admin-empty">불러오는 중…</p>';
@@ -369,6 +483,7 @@
       return;
     }
     loadRequests();
+    loadAiStats();
     loadNameChanges();
     loadUsers();
   }

@@ -24,6 +24,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
 import auth_store
+import ai_quiz_store
 import requests_store
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -190,6 +191,34 @@ class Handler(BaseHTTPRequestHandler):
             if not self._require_admin():
                 return
             self._json(200, {"users": auth_store.list_name_changes()})
+            return
+
+        if path == "/ai-quiz/data":
+            user = self._require_user(approved_only=True)
+            if not user:
+                return
+            app_id = (query.get("appId") or [""])[0]
+            if not app_id:
+                self._json(400, {"error": "appId required"})
+                return
+            self._json(200, ai_quiz_store.get_data(user["id"], app_id))
+            return
+
+        if path == "/admin/ai-stats":
+            if not self._require_admin():
+                return
+            self._json(200, {"users": ai_quiz_store.list_user_stats()})
+            return
+
+        if path == "/admin/ai-stats/user":
+            if not self._require_admin():
+                return
+            user_id = int((query.get("userId") or ["0"])[0])
+            detail = ai_quiz_store.get_user_detail(user_id)
+            if not detail:
+                self._json(404, {"error": "사용자를 찾을 수 없습니다."})
+                return
+            self._json(200, {"user": detail})
             return
 
         if path == "/requests/mine":
@@ -387,6 +416,20 @@ class Handler(BaseHTTPRequestHandler):
             self._json(201, {"request": req, "message": "요청이 전송되었습니다."})
             return
 
+        if path == "/ai-quiz/data":
+            user = self._require_user(approved_only=True)
+            if not user:
+                return
+            app_id = str(data.get("appId") or "").strip()
+            if not app_id:
+                self._json(400, {"error": "appId required"})
+                return
+            items = data.get("items")
+            prog = data.get("prog")
+            saved = ai_quiz_store.save_data(user["id"], app_id, items, prog)
+            self._json(200, saved)
+            return
+
         if path == "/admin/requests/reply":
             if not self._require_admin():
                 return
@@ -435,6 +478,7 @@ class Handler(BaseHTTPRequestHandler):
 def main():
     auth_store.init_db()
     requests_store.init_requests_db()
+    ai_quiz_store.init_ai_quiz_db()
     if not API_KEY:
         print(
             "경고: GEMINI_API_KEY(또는 GOOGLE_API_KEY)가 없습니다. /generate 요청은 실패합니다.",

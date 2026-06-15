@@ -1,11 +1,12 @@
 /**
- * AI 퀴즈 생성 — Render API 호출, 검증, 과목 앱 주입
+ * AI 퀴즈 생성 — Render API 호출, 계정별 서버 저장
  */
 (function (global) {
   if (!global.AIQuizConfig) return;
 
   var CFG = global.AIQuizConfig;
-  var LS_SAVED_PREFIX = "ai-quiz-saved-";
+  var cache = {};
+  var saveTimers = {};
 
   function esc(s) {
     var d = document.createElement("div");
@@ -15,6 +16,23 @@
 
   function nextId(appId) {
     return "ai-" + appId + "-" + Date.now() + "-" + Math.random().toString(36).slice(2, 7);
+  }
+
+  function defaultProg() {
+    return { mastered: {}, wrongCnt: {}, best: 0 };
+  }
+
+  function apiFetch(path, options) {
+    if (global.SiteAuth && global.SiteAuth.api) {
+      return global.SiteAuth.api(path, options);
+    }
+    var base = CFG.getApiBase();
+    return fetch(base + path, options).then(function (res) {
+      return res.json().then(function (data) {
+        if (!res.ok) throw new Error((data && data.error) || "요청 실패");
+        return data;
+      });
+    });
   }
 
   function normalizeItems(rawItems, appId) {
@@ -46,19 +64,70 @@
     return out.filter(function (q) { return q.q; });
   }
 
-  function loadSaved(appId) {
+  function ensureCache(appId) {
+    if (!cache[appId]) {
+      cache[appId] = { items: [], prog: defaultProg(), loaded: false };
+    }
+    return cache[appId];
+  }
+
+  async function ensureData(appId) {
+    var c = ensureCache(appId);
+    if (c.loaded) return c;
+    if (!global.SiteAuth || !global.SiteAuth.isReady || !global.SiteAuth.isReady()) {
+      c.loaded = true;
+      return c;
+    }
     try {
-      var raw = localStorage.getItem(LS_SAVED_PREFIX + appId);
-      return raw ? JSON.parse(raw) : [];
+      var data = await apiFetch("/ai-quiz/data?appId=" + encodeURIComponent(appId));
+      c.items = normalizeItems(data.items || [], appId);
+      c.prog = data.prog && typeof data.prog === "object" ? data.prog : defaultProg();
     } catch (e) {
-      return [];
+      /* 오프라인/미로그인 시 빈 상태 */
+    }
+    c.loaded = true;
+    return c;
+  }
+
+  function scheduleSave(appId) {
+    if (saveTimers[appId]) clearTimeout(saveTimers[appId]);
+    saveTimers[appId] = setTimeout(function () {
+      flushSave(appId);
+    }, 400);
+  }
+
+  async function flushSave(appId) {
+    var c = cache[appId];
+    if (!c || !global.SiteAuth || !global.SiteAuth.isReady || !global.SiteAuth.isReady()) return;
+    try {
+      await apiFetch("/ai-quiz/data", {
+        method: "POST",
+        body: JSON.stringify({ appId: appId, items: c.items, prog: c.prog })
+      });
+    } catch (e) {
+      console.warn("AI 퀴즈 저장 실패:", e);
     }
   }
 
+  function loadSaved(appId) {
+    return ensureCache(appId).items;
+  }
+
   function saveSaved(appId, items) {
-    try {
-      localStorage.setItem(LS_SAVED_PREFIX + appId, JSON.stringify(items));
-    } catch (e) {}
+    var c = ensureCache(appId);
+    c.items = items;
+    scheduleSave(appId);
+  }
+
+  function loadProg(appId) {
+    var c = ensureCache(appId);
+    return c.prog || defaultProg();
+  }
+
+  function saveProg(appId, prog) {
+    var c = ensureCache(appId);
+    c.prog = prog;
+    scheduleSave(appId);
   }
 
   async function callProxy(presetKey, topic, count) {
@@ -107,18 +176,20 @@
       '<input type="number" class="ai-quiz-count" min="1" max="15" value="' + (preset.countDefault || 5) + '"></label>' +
       '<button type="button" class="ai-quiz-btn ai-quiz-btn--main ai-quiz-generate"' +
       (apiOk ? "" : " disabled") +
-      ">생성 후 AI 탭에 추가</button>" +
+      ">생성 후 「생성 AI 문제」 탭에 추가</button>" +
       '<p class="ai-quiz-panel__status" aria-live="polite"></p>' +
       (saved.length
-        ? '<p class="ai-quiz-panel__saved">저장된 AI 문제 ' + saved.length + "개 · " +
+        ? '<p class="ai-quiz-panel__saved">저장된 AI 문제 ' + saved.length + "개 (계정에 저장됨) · " +
           '<button type="button" class="ai-quiz-link ai-quiz-clear">전체 삭제</button></p>'
-        : "");
+        : '<p class="ai-quiz-panel__saved">생성한 문제는 계정에 저장되어 새로고침 후에도 유지됩니다.</p>');
 
     var clearBtn = el.querySelector(".ai-quiz-clear");
     if (clearBtn) {
       clearBtn.addEventListener("click", function () {
         if (!confirm("저장된 AI 문제를 모두 삭제할까요?")) return;
         saveSaved(opts.appId, []);
+        saveProg(opts.appId, defaultProg());
+        flushSave(opts.appId);
         if (typeof opts.onClear === "function") opts.onClear();
         renderPanel(el, opts);
       });
@@ -140,8 +211,9 @@
         var items = normalizeItems(raw, opts.appId);
         if (!items.length) throw new Error("유효한 문제를 만들지 못했습니다. 다시 시도하세요.");
         saveSaved(opts.appId, loadSaved(opts.appId).concat(items));
+        await flushSave(opts.appId);
         if (typeof opts.onInject === "function") opts.onInject(items);
-        status.textContent = items.length + "문항이 추가되었습니다.";
+        status.textContent = items.length + "문항이 추가되었습니다. 상단 「생성 AI 문제」 탭에서 풀 수 있습니다.";
         renderPanel(el, opts);
       } catch (err) {
         status.textContent = err.message || String(err);
@@ -165,11 +237,15 @@
   global.AIQuiz = {
     PRESETS: CFG.PRESETS,
     getApiBase: CFG.getApiBase,
+    ensureData: ensureData,
     loadSaved: loadSaved,
     saveSaved: saveSaved,
+    loadProg: loadProg,
+    saveProg: saveProg,
+    flushSave: flushSave,
     normalizeItems: normalizeItems,
-    generate: async function (presetKey, topic, count) {
-      return normalizeItems(await callProxy(presetKey, topic, count), presetKey);
+    generate: async function (presetKey, topic, count, appId) {
+      return normalizeItems(await callProxy(presetKey, topic, count), appId || "generic");
     },
     attachPanel: attachPanel
   };

@@ -152,17 +152,21 @@
     return SiteAuth.isReady() && user && (user.role === "admin" || user.status === "approved");
   }
 
-  function boot() {
-    if (!canMount()) return;
-    AIQuiz.mountSubject(cfg);
-  }
-
   function tryBoot() {
     if (window.SiteAuth && !SiteAuth.isReady()) {
       document.addEventListener("siteauth:ready", boot, { once: true });
       return;
     }
     boot();
+  }
+
+  async function boot() {
+    if (!canMount()) return;
+    try {
+      await AIQuiz.mountSubject(cfg);
+    } catch (e) {
+      console.error("AI 퀴즈 마운트 실패:", e);
+    }
   }
 
   if (document.readyState === "loading") {

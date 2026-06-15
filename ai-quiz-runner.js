@@ -25,7 +25,6 @@
   }
 
   function createRunner(appId, mountEl) {
-    var LS_KEY = "ai-quiz-prog-" + appId;
     var S = {
       phase: "menu",
       queue: [],
@@ -38,18 +37,11 @@
     };
 
     function loadProg() {
-      try {
-        var t = localStorage.getItem(LS_KEY);
-        return t ? JSON.parse(t) : { mastered: {}, wrongCnt: {}, best: 0 };
-      } catch (e) {
-        return { mastered: {}, wrongCnt: {}, best: 0 };
-      }
+      return global.AIQuiz.loadProg ? global.AIQuiz.loadProg(appId) : { mastered: {}, wrongCnt: {}, best: 0 };
     }
 
     function saveProg() {
-      try {
-        localStorage.setItem(LS_KEY, JSON.stringify(S.prog));
-      } catch (e) {}
+      if (global.AIQuiz.saveProg) global.AIQuiz.saveProg(appId, S.prog);
     }
 
     S.prog = loadProg();
@@ -309,8 +301,8 @@
 
   function updateTabLabel(btn, count) {
     if (!btn) return;
-    btn.innerHTML = "AI 문제<small>" + (count ? count + "문항" : "생성 후 표시") + "</small>";
-    btn.style.display = count > 0 ? "" : "none";
+    btn.innerHTML = "생성 AI 문제<small>" + (count ? count + "문항" : "비어 있음") + "</small>";
+    btn.style.display = "";
   }
 
   function setTabOn(tabBar, tabAttr, tabBtnClass, activeBtn) {
@@ -344,9 +336,13 @@
     document.documentElement.classList.add("ai-quiz-mounted");
   }
 
-  function mountSubject(opts) {
+  async function mountSubject(opts) {
     if (!opts || !opts.appId) return null;
     var appId = opts.appId;
+    if (global.AIQuiz.ensureData) {
+      await global.AIQuiz.ensureData(appId);
+    }
+
     var bottomMount =
       typeof opts.bottomMount === "string"
         ? document.querySelector(opts.bottomMount)
@@ -360,17 +356,8 @@
       .map(function (s) { return document.querySelector(s); })
       .filter(Boolean);
 
-    function placeBelowTabs(el) {
-      if (tabBar) {
-        tabBar.insertAdjacentElement("afterend", el);
-      } else {
-        var anchor =
-          bottomMount.querySelector("h1.app-title, h1.page-title, h1") ||
-          bottomMount.querySelector(".page-card") ||
-          bottomMount.firstChild;
-        if (anchor) anchor.insertAdjacentElement("afterend", el);
-        else bottomMount.insertBefore(el, bottomMount.firstChild);
-      }
+    function placeAtBottom(el) {
+      bottomMount.appendChild(el);
     }
 
     var genMount = document.getElementById("aiQuizGen-" + appId);
@@ -378,7 +365,9 @@
       genMount = document.createElement("div");
       genMount.id = "aiQuizGen-" + appId;
       genMount.className = "ai-quiz-gen-mount";
-      placeBelowTabs(genMount);
+      placeAtBottom(genMount);
+    } else if (genMount.parentElement !== bottomMount) {
+      placeAtBottom(genMount);
     }
 
     var wrap = document.getElementById("aiQuizWrap-" + appId);
@@ -391,11 +380,9 @@
       runMount.className = "ai-quiz-run";
       runMount.id = "aiQuizRun-" + appId;
       wrap.appendChild(runMount);
-      if (genMount.nextSibling) {
-        bottomMount.insertBefore(wrap, genMount.nextSibling);
-      } else {
-        genMount.insertAdjacentElement("afterend", wrap);
-      }
+      placeAtBottom(wrap);
+    } else if (wrap.parentElement !== bottomMount) {
+      placeAtBottom(wrap);
     }
 
     var runner = createRunner(appId, document.getElementById("aiQuizRun-" + appId));
@@ -434,7 +421,7 @@
         bar.id = "aiQuizStandalone-" + appId;
         bar.className = "ai-quiz-standalone";
         bar.innerHTML =
-          '<button type="button" class="ai-quiz-standalone__btn" data-ai-standalone-open>AI 문제 풀기</button>' +
+          '<button type="button" class="ai-quiz-standalone__btn" data-ai-standalone-open>생성 AI 문제</button>' +
           '<button type="button" class="ai-quiz-standalone__back" data-ai-standalone-close hidden>&larr; 돌아가기</button>';
         var anchor =
           bottomMount.querySelector("h1.app-title, h1.page-title, h1") ||
@@ -465,6 +452,7 @@
           el.style.display = "none";
         }
       });
+      if (genMount) genMount.style.display = "none";
       wrap.hidden = false;
       runner.refresh();
       document.body.classList.add("ai-quiz-active");
@@ -484,6 +472,7 @@
       });
       wrap.hidden = true;
       document.body.classList.remove("ai-quiz-active");
+      if (genMount) genMount.style.display = "";
       var standalone = document.getElementById("aiQuizStandalone-" + appId);
       if (standalone) {
         var open = standalone.querySelector("[data-ai-standalone-open]");
@@ -498,11 +487,10 @@
       updateTabLabel(tabBtn, n);
       var standalone = document.getElementById("aiQuizStandalone-" + appId);
       if (standalone) {
-        standalone.style.display = n > 0 ? "" : "none";
+        standalone.style.display = "";
         var openBtn = standalone.querySelector("[data-ai-standalone-open]");
-        if (openBtn) openBtn.textContent = "AI 문제 풀기 (" + n + "문항)";
+        if (openBtn) openBtn.textContent = "생성 AI 문제 (" + n + "문항)";
       }
-      if (!n) deactivate();
     }
 
     global.AIQuiz.attachPanel({

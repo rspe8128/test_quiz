@@ -1,5 +1,7 @@
 .ai-quiz-gen-mount {
-  margin: 0.75rem 0 1rem;
+  margin: 1.5rem 0 0;
+  padding-top: 1rem;
+  border-top: 2px dashed #bae6fd;
   position: relative;
   z-index: 2;
 }
