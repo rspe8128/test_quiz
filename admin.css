@@ -66,6 +66,10 @@ html.admin-ready .admin-page .admin-shell {
   color: #047857;
 }
 
+.admin-msg--vip {
+  margin: 0 0 0.75rem;
+}
+
 .admin-list {
   display: grid;
   gap: 0.65rem;

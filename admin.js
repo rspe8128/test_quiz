@@ -47,27 +47,44 @@
     el.classList.toggle("is-ok", !!ok);
   }
 
-  function statusLabel(status) {
-    if (status === "pending") return "승인 대기";
-    if (status === "approved") return "승인됨";
-    if (status === "rejected") return "거절됨";
-    return status;
+  function showVipMsg(text, ok) {
+    var el = document.getElementById("adminVipMsg");
+    if (!el) return;
+    el.hidden = !text;
+    el.textContent = text || "";
+    el.classList.toggle("is-ok", !!ok);
   }
 
-  function roleBadge(u) {
-    if (u.role === "admin") return "관리자";
-    if (u.role === "vip") return "VIP";
-    return statusLabel(u.status);
+  function vipActionHtml(u) {
+    if (u.role === "admin") return "";
+    if (u.role === "vip") {
+      return (
+        '<div class="admin-user__actions">' +
+        '<button type="button" class="reject" data-vip-id="' +
+        u.id +
+        '" data-vip-action="demote">VIP 해제</button></div>'
+      );
+    }
+    if (u.status === "approved") {
+      return (
+        '<div class="admin-user__actions">' +
+        '<button type="button" class="approve" data-vip-id="' +
+        u.id +
+        '" data-vip-action="promote">VIP 승격</button></div>'
+      );
+    }
+    return "";
   }
 
   function renderVipUsers(users) {
     var list = document.getElementById("adminVipList");
     if (!list) return;
     var eligible = (users || []).filter(function (u) {
-      return u.role !== "admin" && u.status === "approved";
+      return u.role !== "admin" && (u.role === "vip" || u.status === "approved");
     });
     if (!eligible.length) {
-      list.innerHTML = '<p class="admin-empty">승인된 회원이 없습니다.</p>';
+      list.innerHTML =
+        '<p class="admin-empty">승인된 회원이 없습니다.<br>먼저 아래 「승인 대기」에서 회원을 승인해 주세요.</p>';
       return;
     }
     list.innerHTML = eligible
@@ -84,26 +101,38 @@
           esc(u.username) +
           "</div>" +
           "</div>" +
-          '<div class="admin-user__actions">' +
-          '<button type="button" class="' +
-          (isVip ? "reject" : "approve") +
-          '" data-vip="' +
-          u.id +
-          '" data-vip-on="' +
-          (isVip ? "0" : "1") +
-          '">' +
-          (isVip ? "VIP 해제" : "VIP 승격") +
-          "</button>" +
-          "</div>" +
+          vipActionHtml(u) +
           "</article>"
         );
       })
       .join("");
-    list.querySelectorAll("[data-vip]").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        setVip(parseInt(btn.getAttribute("data-vip"), 10), btn.getAttribute("data-vip-on") === "1");
-      });
+  }
+
+  function bindVipClicks() {
+    if (document.documentElement.dataset.vipClickBound) return;
+    document.documentElement.dataset.vipClickBound = "1";
+    document.addEventListener("click", function (e) {
+      var btn = e.target.closest("button[data-vip-id]");
+      if (!btn) return;
+      e.preventDefault();
+      e.stopPropagation();
+      var id = parseInt(btn.getAttribute("data-vip-id"), 10);
+      if (!id) return;
+      var promote = btn.getAttribute("data-vip-action") === "promote";
+      setVip(id, promote, btn);
     });
+  }
+  function statusLabel(status) {
+    if (status === "pending") return "승인 대기";
+    if (status === "approved") return "승인됨";
+    if (status === "rejected") return "거절됨";
+    return status;
+  }
+
+  function roleBadge(u) {
+    if (u.role === "admin") return "관리자";
+    if (u.role === "vip") return "VIP";
+    return statusLabel(u.status);
   }
 
   function renderUsers(users) {
@@ -118,8 +147,6 @@
         var actions =
           u.role === "admin"
             ? '<span class="admin-user__meta">관리자</span>'
-            : u.role === "vip"
-              ? '<span class="admin-user__meta admin-user__vip">VIP · 명예의 전당</span>'
             : u.status === "pending"
               ? '<div class="admin-user__actions">' +
                 '<button type="button" class="approve" data-approve="' +
@@ -129,9 +156,12 @@
                 u.id +
                 '">거절</button>' +
                 "</div>"
-              : '<span class="admin-user__meta">' +
-                esc(statusLabel(u.status)) +
-                "</span>";
+              : u.role === "vip" || u.status === "approved"
+                ? vipActionHtml(u) ||
+                  '<span class="admin-user__meta">' + esc(roleBadge(u)) + "</span>"
+                : '<span class="admin-user__meta">' +
+                  esc(statusLabel(u.status)) +
+                  "</span>";
         return (
           '<article class="admin-user">' +
           "<div>" +
@@ -467,26 +497,29 @@
     var list = document.getElementById("adminVipList");
     if (list) list.innerHTML = '<p class="admin-empty">불러오는 중…</p>';
     try {
-      var data = await SiteAuth.api("/admin/users?status=approved");
+      var data = await SiteAuth.api("/admin/users");
       renderVipUsers(data.users || []);
     } catch (e) {
       if (list) list.innerHTML = '<p class="admin-empty">목록을 불러오지 못했습니다.</p>';
+      showVipMsg(e.message);
     }
   }
 
-  async function setVip(userId, vip) {
-    showMsg("");
+  async function setVip(userId, vip, btn) {
+    showVipMsg("");
+    if (btn) btn.disabled = true;
     try {
       await SiteAuth.api("/admin/set-vip", {
         method: "POST",
-        body: JSON.stringify({ userId: userId, vip: vip })
+        body: JSON.stringify({ userId: userId, vip: !!vip })
       });
-      showMsg(vip ? "VIP로 승격했습니다." : "VIP를 해제했습니다.", true);
-      loadVipUsers();
-      loadUsers();
+      showVipMsg(vip ? "VIP로 승격했습니다." : "VIP를 해제했습니다.", true);
+      await loadVipUsers();
+      await loadUsers();
     } catch (e) {
-      showMsg(e.message);
+      showVipMsg(e.message);
     }
+    if (btn) btn.disabled = false;
   }
 
   async function loadUsers() {
@@ -562,6 +595,7 @@
       location.replace("index.html");
       return;
     }
+    bindVipClicks();
     loadRequests();
     loadAiStats();
     loadVipUsers();

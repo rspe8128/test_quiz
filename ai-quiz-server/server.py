@@ -410,7 +410,14 @@ class Handler(BaseHTTPRequestHandler):
             if not self._require_admin():
                 return
             user_id = int(data.get("userId") or 0)
-            vip = bool(data.get("vip"))
+            if "vip" not in data:
+                self._json(400, {"error": "vip 값이 필요합니다."})
+                return
+            raw_vip = data.get("vip")
+            if isinstance(raw_vip, bool):
+                vip = raw_vip
+            else:
+                vip = str(raw_vip).lower() in ("1", "true", "yes")
             target = auth_store.get_user_by_id(user_id)
             if not target or target["role"] == "admin":
                 self._json(404, {"error": "사용자를 찾을 수 없습니다."})
