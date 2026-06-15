@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-AI 퀴즈 생성 프록시 서버 (이식 가능)
+AI 퀴즈 생성 프록시 서버 (Gemini API)
 
 사용법:
-  set OPENAI_API_KEY=sk-...
+  set GEMINI_API_KEY=AQ....
   python server.py
 
 기본 주소: http://localhost:8787
-사이트 설정에 위 주소를 입력하면 어디서 호스팅해도 동일하게 동작합니다.
 
 환경 변수:
-  OPENAI_API_KEY  — 필수 (OpenAI 또는 OpenRouter 등 호환 API)
+  GEMINI_API_KEY / GOOGLE_API_KEY — 필수 (GOOGLE_API_KEY 우선)
   AI_QUIZ_PORT    — 기본 8787
   AI_QUIZ_HOST    — 기본 127.0.0.1 (다른 PC에서 접속 시 0.0.0.0)
-  AI_QUIZ_MODEL   — 기본 gpt-4o-mini
-  AI_QUIZ_API_BASE — 기본 https://api.openai.com/v1
+  AI_QUIZ_MODEL   — 기본 gemini-2.0-flash
 """
 from __future__ import annotations
 
@@ -32,9 +30,9 @@ CONFIG_PATH = os.path.join(ROOT, "presets.json")
 
 HOST = os.environ.get("AI_QUIZ_HOST") or ("0.0.0.0" if os.environ.get("PORT") else "127.0.0.1")
 PORT = int(os.environ.get("PORT", os.environ.get("AI_QUIZ_PORT", "8787")))
-API_KEY = os.environ.get("OPENAI_API_KEY", "").strip()
-API_BASE = os.environ.get("AI_QUIZ_API_BASE", "https://api.openai.com/v1").rstrip("/")
-MODEL = os.environ.get("AI_QUIZ_MODEL", "gpt-4o-mini")
+API_KEY = (os.environ.get("GOOGLE_API_KEY") or os.environ.get("GEMINI_API_KEY") or "").strip()
+MODEL = os.environ.get("AI_QUIZ_MODEL", "gemini-2.0-flash")
+API_BASE = "https://generativelanguage.googleapis.com/v1beta"
 
 
 def load_presets() -> dict:
@@ -51,22 +49,20 @@ def fill_template(tpl: str, **kwargs) -> str:
 
 def call_llm(system: str, user: str) -> list:
     if not API_KEY:
-        raise RuntimeError("OPENAI_API_KEY 환경 변수가 설정되지 않았습니다.")
+        raise RuntimeError("GEMINI_API_KEY 또는 GOOGLE_API_KEY 환경 변수가 설정되지 않았습니다.")
 
     payload = {
-        "model": MODEL,
-        "response_format": {"type": "json_object"},
-        "messages": [
-            {"role": "system", "content": system},
-            {"role": "user", "content": user},
-        ],
+        "systemInstruction": {"parts": [{"text": system}]},
+        "contents": [{"role": "user", "parts": [{"text": user}]}],
+        "generationConfig": {"responseMimeType": "application/json"},
     }
+    url = f"{API_BASE}/models/{MODEL}:generateContent"
     req = urllib.request.Request(
-        f"{API_BASE}/chat/completions",
+        url,
         data=json.dumps(payload).encode("utf-8"),
         headers={
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {API_KEY}",
+            "x-goog-api-key": API_KEY,
         },
         method="POST",
     )
@@ -75,17 +71,24 @@ def call_llm(system: str, user: str) -> list:
             body = json.loads(resp.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
         detail = e.read().decode("utf-8", errors="replace")
-        raise RuntimeError(f"API 오류 ({e.code}): {detail[:400]}") from e
+        raise RuntimeError(f"Gemini API 오류 ({e.code}): {detail[:400]}") from e
 
-    text = body.get("choices", [{}])[0].get("message", {}).get("content", "")
+    candidates = body.get("candidates") or []
+    if not candidates:
+        block = (body.get("promptFeedback") or {}).get("blockReason")
+        raise RuntimeError(f"AI 응답이 비어 있습니다.{f' (차단: {block})' if block else ''}")
+
+    parts = (candidates[0].get("content") or {}).get("parts") or []
+    text = "".join(p.get("text", "") for p in parts).strip()
     if not text:
-        raise RuntimeError("AI 응답이 비어 있습니다.")
+        raise RuntimeError("AI 응답 텍스트가 비어 있습니다.")
+
     parsed = json.loads(text)
     return parsed.get("items") or parsed.get("questions") or []
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "AIQuizProxy/1.0"
+    server_version = "AIQuizProxy/2.0"
 
     def log_message(self, fmt, *args):
         sys.stderr.write("[%s] %s\n" % (self.log_date_time_string(), fmt % args))
@@ -115,6 +118,7 @@ class Handler(BaseHTTPRequestHandler):
                 200,
                 {
                     "ok": True,
+                    "provider": "gemini",
                     "model": MODEL,
                     "has_key": bool(API_KEY),
                 },
@@ -157,9 +161,13 @@ class Handler(BaseHTTPRequestHandler):
 
 def main():
     if not API_KEY:
-        print("경고: OPENAI_API_KEY가 없습니다. /generate 요청은 실패합니다.", file=sys.stderr)
+        print(
+            "경고: GEMINI_API_KEY(또는 GOOGLE_API_KEY)가 없습니다. /generate 요청은 실패합니다.",
+            file=sys.stderr,
+        )
     httpd = ThreadingHTTPServer((HOST, PORT), Handler)
-    print(f"AI 퀴즈 서버 → http://{HOST}:{PORT}")
+    print(f"AI 퀴즈 서버 (Gemini) → http://{HOST}:{PORT}")
+    print(f"모델: {MODEL}")
     print("헬스체크: GET /health")
     try:
         httpd.serve_forever()

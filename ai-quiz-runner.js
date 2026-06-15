@@ -338,6 +338,27 @@
       .map(function (s) { return document.querySelector(s); })
       .filter(Boolean);
 
+    function placeBelowTabs(el) {
+      if (tabBar) {
+        tabBar.insertAdjacentElement("afterend", el);
+      } else {
+        var anchor =
+          bottomMount.querySelector("h1.app-title, h1.page-title, h1") ||
+          bottomMount.querySelector(".page-card") ||
+          bottomMount.firstChild;
+        if (anchor) anchor.insertAdjacentElement("afterend", el);
+        else bottomMount.insertBefore(el, bottomMount.firstChild);
+      }
+    }
+
+    var genMount = document.getElementById("aiQuizGen-" + appId);
+    if (!genMount) {
+      genMount = document.createElement("div");
+      genMount.id = "aiQuizGen-" + appId;
+      genMount.className = "ai-quiz-gen-mount";
+      placeBelowTabs(genMount);
+    }
+
     var wrap = document.getElementById("aiQuizWrap-" + appId);
     if (!wrap) {
       wrap = document.createElement("div");
@@ -348,16 +369,10 @@
       runMount.className = "ai-quiz-run";
       runMount.id = "aiQuizRun-" + appId;
       wrap.appendChild(runMount);
-      if (opts.wrapInsert === "first" && bottomMount.firstChild) {
-        bottomMount.insertBefore(wrap, bottomMount.firstChild);
-      } else if (tabBar && tabBar.parentElement) {
-        tabBar.parentElement.insertAdjacentElement("afterend", wrap);
+      if (genMount.nextSibling) {
+        bottomMount.insertBefore(wrap, genMount.nextSibling);
       } else {
-        var wrapAnchor =
-          bottomMount.querySelector("h1.app-title, h1.page-title, h1") ||
-          bottomMount.querySelector(".page-card");
-        if (wrapAnchor) wrapAnchor.insertAdjacentElement("afterend", wrap);
-        else bottomMount.insertBefore(wrap, bottomMount.firstChild);
+        genMount.insertAdjacentElement("afterend", wrap);
       }
     }
 
@@ -416,13 +431,6 @@
           bar.querySelector("[data-ai-standalone-close]").hidden = true;
         });
       }
-    }
-
-    var genMount = document.getElementById("aiQuizGen-" + appId);
-    if (!genMount) {
-      genMount = document.createElement("div");
-      genMount.id = "aiQuizGen-" + appId;
-      bottomMount.appendChild(genMount);
     }
 
     function activate() {

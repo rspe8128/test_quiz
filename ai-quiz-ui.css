@@ -1,3 +1,14 @@
+.ai-quiz-gen-mount {
+  margin: 0.75rem 0 1rem;
+}
+
+.ai-quiz-gen-mount .ai-quiz-panel {
+  margin-top: 0;
+  border-style: solid;
+  border-width: 2px;
+  box-shadow: 0 2px 10px rgba(2, 132, 199, 0.1);
+}
+
 .ai-quiz-panel {
   margin-top: 1.25rem;
   padding: 1rem 1.1rem;

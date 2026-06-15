@@ -7,7 +7,7 @@ services:
     startCommand: python server.py
     healthCheckPath: /health
     envVars:
-      - key: OPENAI_API_KEY
+      - key: GEMINI_API_KEY
         sync: false
       - key: AI_QUIZ_HOST
         value: 0.0.0.0
