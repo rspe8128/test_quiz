@@ -15,10 +15,22 @@
   global.SiteAuthConfig = {
     API_BASE: API_BASE,
     TOKEN_KEY: "site-auth-token-v1",
+    USER_CACHE_KEY: "site-auth-user-cache-v1",
     isLocal: isLocal
   };
 
   if (typeof global.AIQuizConfig === "undefined") {
     global.AIQuizConfig = { getApiBase: function () { return API_BASE; }, BUILTIN_API_BASE: API_BASE };
+  }
+
+  if (!isLocal && typeof document !== "undefined" && document.head) {
+    var pre = document.createElement("link");
+    pre.rel = "preconnect";
+    pre.href = API_BASE;
+    document.head.appendChild(pre);
+    var dns = document.createElement("link");
+    dns.rel = "dns-prefetch";
+    dns.href = API_BASE;
+    document.head.appendChild(dns);
   }
 })(typeof window !== "undefined" ? window : globalThis);

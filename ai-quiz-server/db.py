@@ -8,6 +8,9 @@ import threading
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 _lock = threading.Lock()
+_sync_lock = threading.Lock()
+_sync_timer: threading.Timer | None = None
+_shared_conn = None
 
 TURSO_URL = (
     os.environ.get("TURSO_DATABASE_URL")
@@ -19,6 +22,7 @@ TURSO_TOKEN = (
     or os.environ.get("LIBSQL_AUTH_TOKEN")
     or ""
 ).strip()
+SYNC_DEBOUNCE_SEC = float(os.environ.get("TURSO_SYNC_DEBOUNCE_SEC", "2"))
 
 
 def resolve_db_path() -> str:
@@ -45,7 +49,6 @@ def use_turso() -> bool:
 
 
 def migrate_legacy_db() -> None:
-    """로컬 auth.db → 영구 디스크 경로로 한 번만 복사."""
     legacy = os.path.join(ROOT, "auth.db")
     target = os.path.abspath(DB_PATH)
     if os.path.abspath(legacy) == target:
@@ -56,8 +59,6 @@ def migrate_legacy_db() -> None:
 
 
 class Row:
-    """sqlite3.Row 호환 — libsql 튜플 결과를 dict-like로."""
-
     def __init__(self, description, values):
         if description and isinstance(description[0], (tuple, list)):
             keys = [col[0] for col in description]
@@ -105,26 +106,40 @@ class _LibsqlConnection:
         return wrapped
 
     def executescript(self, script):
-        return self._conn.executescript(script)
+        result = self._conn.executescript(script)
+        _schedule_turso_sync()
+        return result
 
     def commit(self):
         self._conn.commit()
-        if hasattr(self._conn, "sync"):
-            try:
-                self._conn.sync()
-            except Exception:
-                pass
+        _schedule_turso_sync()
+
+
+class _DbSession:
+    """공유 연결 — with 블록마다 닫지 않고 commit만 수행."""
 
     def __enter__(self):
-        return self
+        _lock.acquire()
+        conn = _get_shared_connection()
+        if use_turso():
+            self._wrapper = _LibsqlConnection(conn)
+            return self._wrapper
+        self._wrapper = None
+        return conn
 
     def __exit__(self, exc_type, exc, tb):
-        if exc_type is None:
-            self.commit()
+        try:
+            if exc_type is None:
+                if self._wrapper is not None:
+                    self._wrapper.commit()
+                else:
+                    _get_shared_connection().commit()
+        finally:
+            _lock.release()
         return False
 
 
-def _connect_sqlite() -> sqlite3.Connection:
+def _create_sqlite_connection() -> sqlite3.Connection:
     ensure_db_dir()
     migrate_legacy_db()
     conn = sqlite3.connect(DB_PATH, check_same_thread=False)
@@ -132,32 +147,82 @@ def _connect_sqlite() -> sqlite3.Connection:
     conn.execute("PRAGMA journal_mode=WAL")
     conn.execute("PRAGMA busy_timeout=5000")
     conn.execute("PRAGMA foreign_keys=ON")
+    conn.execute("PRAGMA synchronous=NORMAL")
     return conn
 
 
-def _connect_libsql() -> _LibsqlConnection:
+def _create_libsql_connection():
     import libsql
 
     ensure_db_dir()
     migrate_legacy_db()
-    raw = libsql.connect(
+    return libsql.connect(
         DB_PATH,
         sync_url=TURSO_URL,
         auth_token=TURSO_TOKEN,
-        sync_interval=30,
+        sync_interval=60,
     )
-    try:
-        raw.sync()
-    except Exception:
-        pass
-    return _LibsqlConnection(raw)
+
+
+def _get_shared_connection():
+    global _shared_conn
+    if _shared_conn is None:
+        _shared_conn = _create_libsql_connection() if use_turso() else _create_sqlite_connection()
+    return _shared_conn
+
+
+def _do_turso_sync() -> None:
+    global _sync_timer
+    with _lock:
+        conn = _shared_conn
+        if conn is not None and hasattr(conn, "sync"):
+            try:
+                conn.sync()
+            except Exception:
+                pass
+    with _sync_lock:
+        _sync_timer = None
+
+
+def _schedule_turso_sync() -> None:
+    global _sync_timer
+    if not use_turso():
+        return
+    with _sync_lock:
+        if _sync_timer is not None:
+            _sync_timer.cancel()
+        _sync_timer = threading.Timer(SYNC_DEBOUNCE_SEC, _do_turso_sync)
+        _sync_timer.daemon = True
+        _sync_timer.start()
 
 
 def connect():
-    with _lock:
-        if use_turso():
-            return _connect_libsql()
-        return _connect_sqlite()
+    return _DbSession()
+
+
+def warmup() -> None:
+    """서버 시작 시 DB 연결·Turso 초기 동기화 1회."""
+    with _DbSession() as conn:
+        conn.execute("SELECT 1")
+    if use_turso():
+        with _lock:
+            raw = _shared_conn
+            if raw is not None and hasattr(raw, "sync"):
+                try:
+                    raw.sync()
+                except Exception:
+                    pass
+
+
+def flush() -> None:
+    """종료 전 Turso 동기화."""
+    global _sync_timer
+    with _sync_lock:
+        if _sync_timer is not None:
+            _sync_timer.cancel()
+            _sync_timer = None
+    if use_turso():
+        _do_turso_sync()
 
 
 def db_info() -> dict:
@@ -170,13 +235,12 @@ def db_info() -> dict:
 
 def persistence_hint() -> str:
     if use_turso():
-        return "Turso 클라우드 DB에 동기화 중 (계정 영구 저장)"
+        return "Turso 클라우드 DB (백그라운드 동기화)"
     if os.path.isdir("/var/data") and os.access("/var/data", os.W_OK):
         return "Render 영구 디스크에 저장 중"
     if os.environ.get("PORT"):
         return (
             "경고: 계정 DB가 임시 디스크에 있습니다. "
-            "재배포·재시작 시 가입 계정이 사라집니다. "
-            "Render 영구 디스크(/var/data) 또는 Turso(TURSO_DATABASE_URL)를 설정하세요."
+            "재배포·재시작 시 가입 계정이 사라집니다."
         )
     return "로컬 SQLite (auth.db)"

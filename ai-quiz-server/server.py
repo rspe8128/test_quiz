@@ -480,6 +480,7 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def main():
+    db.warmup()
     auth_store.init_db()
     requests_store.init_requests_db()
     ai_quiz_store.init_ai_quiz_db()
@@ -502,6 +503,7 @@ def main():
         httpd.serve_forever()
     except KeyboardInterrupt:
         print("\n종료")
+        db.flush()
         httpd.server_close()
 
 

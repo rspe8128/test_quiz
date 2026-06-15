@@ -7,6 +7,9 @@
   var CFG = window.SiteAuthConfig;
   var API = (CFG.API_BASE || "").replace(/\/+$/, "");
   var TOKEN_KEY = CFG.TOKEN_KEY || "site-auth-token-v1";
+  var USER_CACHE_KEY = CFG.USER_CACHE_KEY || "site-auth-user-cache-v1";
+  var CACHE_TTL_MS = 10 * 60 * 1000;
+  var CACHE_TTL_PENDING_MS = 45 * 1000;
   var isAdminPage = /admin\.html$/i.test(location.pathname);
 
   var state = {
@@ -26,9 +29,46 @@
   function setToken(token) {
     try {
       if (token) localStorage.setItem(TOKEN_KEY, token);
-      else localStorage.removeItem(TOKEN_KEY);
+      else {
+        localStorage.removeItem(TOKEN_KEY);
+        clearUserCache();
+      }
     } catch (e) {}
     state.token = token || null;
+  }
+
+  function clearUserCache() {
+    try {
+      sessionStorage.removeItem(USER_CACHE_KEY);
+    } catch (e) {}
+  }
+
+  function loadUserCache(token) {
+    try {
+      var raw = sessionStorage.getItem(USER_CACHE_KEY);
+      if (!raw) return null;
+      var cached = JSON.parse(raw);
+      if (!cached || cached.token !== token || !cached.user) return null;
+      var ttl = cached.user.status === "pending" ? CACHE_TTL_PENDING_MS : CACHE_TTL_MS;
+      if (Date.now() - cached.ts > ttl) return null;
+      return cached.user;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function saveUserCache(token, user) {
+    try {
+      sessionStorage.setItem(
+        USER_CACHE_KEY,
+        JSON.stringify({ token: token, user: user, ts: Date.now() })
+      );
+    } catch (e) {}
+  }
+
+  function warmupApi() {
+    if (CFG.isLocal) return;
+    fetch(API + "/health", { mode: "cors", credentials: "omit" }).catch(function () {});
   }
 
   function esc(s) {
@@ -177,6 +217,7 @@
           body: JSON.stringify({ displayName: String(fd.get("displayName") || "").trim() })
         });
         state.user = data.user;
+        saveUserCache(getToken(), data.user);
         if (msg) {
           msg.hidden = false;
           msg.textContent = data.message || "저장되었습니다.";
@@ -275,6 +316,54 @@
     gate.querySelector("[data-auth-logout]").addEventListener("click", logout);
   }
 
+  function applyUser(user) {
+    state.user = user;
+
+    if (isAdminPage) {
+      if (!isAdmin(user)) {
+        location.replace("index.html");
+        return;
+      }
+      document.documentElement.classList.add("admin-ready", "site-ready");
+      unlockSite();
+      ensureOverlay().hidden = true;
+      renderBar(user);
+      state.ready = true;
+      document.dispatchEvent(new CustomEvent("siteauth:ready", { detail: { user: user } }));
+      return;
+    }
+
+    if (isAdmin(user) || user.status === "approved") {
+      showApproved(user);
+    } else if (user.status === "pending") {
+      showPending(user);
+    } else {
+      showRejected(user);
+    }
+  }
+
+  async function refreshUserInBackground(token) {
+    try {
+      var data = await api("/auth/me");
+      var user = data.user;
+      saveUserCache(token, user);
+      var prev = state.user;
+      var changed =
+        !prev ||
+        prev.status !== user.status ||
+        prev.role !== user.role ||
+        prev.displayName !== user.displayName ||
+        prev.pendingDisplayName !== user.pendingDisplayName;
+      if (changed) applyUser(user);
+    } catch (e) {
+      if (e.status === 401) {
+        clearUserCache();
+        setToken("");
+        showLoginForm("login");
+      }
+    }
+  }
+
   function showApproved(user) {
     ensureOverlay().hidden = true;
     unlockSite();
@@ -319,6 +408,7 @@
     try {
       await api("/auth/logout", { method: "POST" });
     } catch (e) {}
+    clearUserCache();
     setToken("");
     state.user = null;
     state.ready = false;
@@ -328,42 +418,26 @@
   }
 
   async function bootstrap() {
+    warmupApi();
+
     var token = getToken();
     if (!token) {
-      if (isAdminPage) {
-        showLoginForm("login");
-        return;
-      }
       showLoginForm("login");
+      return;
+    }
+
+    var cached = loadUserCache(token);
+    if (cached) {
+      applyUser(cached);
+      refreshUserInBackground(token);
       return;
     }
 
     try {
       var data = await api("/auth/me");
       var user = data.user;
-      state.user = user;
-
-      if (isAdminPage) {
-        if (!isAdmin(user)) {
-          location.replace("index.html");
-          return;
-        }
-        document.documentElement.classList.add("admin-ready", "site-ready");
-        unlockSite();
-        ensureOverlay().hidden = true;
-        renderBar(user);
-        state.ready = true;
-        document.dispatchEvent(new CustomEvent("siteauth:ready", { detail: { user: user } }));
-        return;
-      }
-
-      if (isAdmin(user) || user.status === "approved") {
-        showApproved(user);
-      } else if (user.status === "pending") {
-        showPending(user);
-      } else {
-        showRejected(user);
-      }
+      saveUserCache(token, user);
+      applyUser(user);
     } catch (e) {
       setToken("");
       if (e.status === 401) {
@@ -395,6 +469,7 @@
   }
 
   document.documentElement.classList.add("auth-locked");
+  warmupApi();
 
   window.SiteAuth = {
     getToken: getToken,
