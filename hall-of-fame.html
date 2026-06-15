@@ -12,30 +12,48 @@
   <script src="auth-config.js"></script>
   <script src="auth.js"></script>
 </head>
-<body>
+<body class="hof-page">
+  <div class="hof-bg" aria-hidden="true">
+    <span class="hof-sparkle hof-sparkle--1">✦</span>
+    <span class="hof-sparkle hof-sparkle--2">✧</span>
+    <span class="hof-sparkle hof-sparkle--3">★</span>
+    <span class="hof-sparkle hof-sparkle--4">✦</span>
+    <span class="hof-sparkle hof-sparkle--5">✧</span>
+  </div>
+
   <div class="hof-wrap">
-    <nav class="site-nav" style="margin-bottom:1rem;">
-      <a class="site-nav__link" href="index.html">&larr; 퀴즈 허브</a>
+    <nav class="site-nav hof-nav">
+      <a class="site-nav__link hof-nav__link" href="index.html">&larr; 퀴즈 허브</a>
     </nav>
 
     <div class="hof-card">
-      <h1 class="hof-header">명예의 전당</h1>
-      <ul class="hof-list" id="hofList">
-        <li class="hof-empty">불러오는 중…</li>
-      </ul>
+      <header class="hof-header">
+        <div class="hof-header__shine" aria-hidden="true"></div>
+        <span class="hof-header__crown" aria-hidden="true">👑</span>
+        <h1 class="hof-header__title">명예의 전당</h1>
+        <p class="hof-header__sub">서버를 후원해 주신 VIP 분들께 드리는 감사의 공간</p>
+      </header>
+
+      <div class="hof-list-wrap">
+        <ul class="hof-list" id="hofList">
+          <li class="hof-empty">불러오는 중…</li>
+        </ul>
+      </div>
 
       <section class="hof-edit" id="hofEdit" hidden>
-        <h2>내 VIP 프로필</h2>
+        <div class="hof-edit__badge">VIP 전용</div>
+        <h2>내 프로필 꾸미기</h2>
+        <p class="hof-edit__lead">프로필 사진과 한마디를 등록하면 명예의 전당에 표시됩니다.</p>
         <div class="hof-edit__row">
           <button type="button" class="hof-edit__avatar-btn" id="hofAvatarBtn" aria-label="프로필 사진 변경">
-            <span>사진<br>선택</span>
+            <span class="hof-edit__avatar-ring"></span>
+            <span class="hof-edit__avatar-inner">사진<br>선택</span>
           </button>
-          <div>
-            <p class="hof-field" style="margin-bottom:0.5rem;">
+          <div class="hof-edit__idbox">
+            <label class="hof-field hof-field--compact">
               <span>아이디</span>
               <input type="text" id="hofUsername" readonly />
-            </p>
-            <p style="font-size:0.78rem;color:#a16207;">VIP만 프로필 사진과 한마디를 등록할 수 있습니다.</p>
+            </label>
           </div>
         </div>
         <input type="file" id="hofAvatarFile" accept="image/jpeg,image/png,image/webp,image/gif" />
@@ -44,12 +62,12 @@
           <textarea id="hofMessage" maxlength="80" rows="2" placeholder="후원해 주셔서 감사합니다!"></textarea>
           <small>최대 80자</small>
         </label>
-        <button type="button" class="hof-save" id="hofSaveBtn">저장</button>
+        <button type="button" class="hof-save" id="hofSaveBtn">✨ 프로필 저장</button>
         <p class="hof-msg-box" id="hofSaveMsg" hidden></p>
       </section>
     </div>
   </div>
-  <div class="footer">제작자: 정해우</div>
+  <div class="footer hof-footer">제작자: 정해우</div>
   <script src="hall-of-fame.js"></script>
 </body>
 </html>

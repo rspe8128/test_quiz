@@ -24,23 +24,27 @@
     if (!list) return;
     if (!members.length) {
       list.innerHTML =
-        '<li class="hof-empty">아직 등록된 VIP가 없습니다.<br>서버 후원자분들이 이곳에 올라갑니다.</li>';
+        '<li class="hof-empty"><span class="hof-empty__icon">🏛️</span>' +
+        "아직 등록된 VIP가 없습니다.<br>서버 후원자분들이 이곳에 올라갑니다.</li>";
       return;
     }
     list.innerHTML = members
       .map(function (m) {
         var msg = (m.message || "").trim();
+        var nameExtra =
+          m.displayName && m.displayName !== m.username
+            ? '<span class="hof-id__name">(' + esc(m.displayName) + ")</span>"
+            : "";
         return (
           '<li class="hof-item">' +
+          '<div class="hof-avatar-wrap">' +
           '<div class="hof-avatar">' +
           avatarHtml(m) +
-          "</div>" +
+          "</div></div>" +
           '<div class="hof-body">' +
           '<div class="hof-id">@' +
           esc(m.username) +
-          (m.displayName && m.displayName !== m.username
-            ? ' <span style="font-weight:500;color:#64748b;">(' + esc(m.displayName) + ")</span>"
-            : "") +
+          nameExtra +
           "</div>" +
           '<div class="hof-msg' +
           (msg ? "" : " hof-msg--empty") +
@@ -60,10 +64,23 @@
   function setAvatarPreview(dataUrl) {
     var btn = document.getElementById("hofAvatarBtn");
     if (!btn) return;
+    var inner = btn.querySelector(".hof-edit__avatar-inner");
     if (dataUrl) {
-      btn.innerHTML = '<img src="' + dataUrl + '" alt="" />';
+      var existing = btn.querySelector("img.hof-edit-preview");
+      if (!existing) {
+        existing = document.createElement("img");
+        existing.className = "hof-edit-preview";
+        btn.appendChild(existing);
+      }
+      existing.src = dataUrl;
+      if (inner) inner.style.display = "none";
     } else {
-      btn.innerHTML = "<span>사진<br>선택</span>";
+      var img = btn.querySelector("img.hof-edit-preview");
+      if (img) img.remove();
+      if (inner) {
+        inner.style.display = "";
+        inner.innerHTML = "사진<br>선택";
+      }
     }
   }
 
