@@ -158,6 +158,8 @@ html.admin-ready .admin-page .admin-shell {
   margin-left: 0.25rem;
   vertical-align: middle;
 }
+
+.admin-user__pending {
   font-size: 0.78rem;
   color: #0369a1;
   margin-top: 0.2rem;
