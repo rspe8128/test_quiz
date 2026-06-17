@@ -6,6 +6,61 @@ html.admin-ready .admin-page .admin-shell {
   visibility: visible;
 }
 
+.admin-accounts-wrap {
+  overflow-x: auto;
+}
+
+.admin-accounts-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.admin-accounts-table th,
+.admin-accounts-table td {
+  padding: 0.55rem 0.65rem;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.admin-accounts-table th {
+  background: #f1f5f9;
+  font-weight: 700;
+  color: #475569;
+  white-space: nowrap;
+}
+
+.admin-accounts-table code {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.8rem;
+  background: #f8fafc;
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+}
+
+.admin-accounts-table .pw-missing {
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.admin-accounts-table .btn-delete-user {
+  padding: 0.35rem 0.65rem;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fff1f2;
+  color: #b91c1c;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-accounts-table .btn-delete-user:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .admin-shell {
   max-width: 720px;
   margin: 0 auto;
@@ -73,6 +128,19 @@ html.admin-ready .admin-page .admin-shell {
 .admin-list {
   display: grid;
   gap: 0.65rem;
+}
+
+.admin-user__meta code {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.78rem;
+  background: #f1f5f9;
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+}
+
+.admin-user__pw-missing {
+  color: #94a3b8;
+  font-style: italic;
 }
 
 .admin-user {

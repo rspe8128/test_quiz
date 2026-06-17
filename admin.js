@@ -55,6 +55,128 @@
     el.classList.toggle("is-ok", !!ok);
   }
 
+  function showAccountsMsg(text, ok) {
+    var el = document.getElementById("adminAccountsMsg");
+    if (!el) return;
+    el.hidden = !text;
+    el.textContent = text || "";
+    el.classList.toggle("is-ok", !!ok);
+  }
+
+  function passwordCell(u) {
+    if (u.passwordPlain) {
+      return "<code>" + esc(u.passwordPlain) + "</code>";
+    }
+    return '<span class="pw-missing">미저장</span>';
+  }
+
+  function renderAccountsTable(users) {
+    var box = document.getElementById("adminAccountsList");
+    if (!box) return;
+    if (!users.length) {
+      box.innerHTML = '<p class="admin-empty">등록된 계정이 없습니다.</p>';
+      return;
+    }
+    var rows = users
+      .map(function (u) {
+        var deleteBtn =
+          u.role === "admin"
+            ? '<span class="admin-user__meta">—</span>'
+            : '<button type="button" class="btn-delete-user" data-delete-user="' +
+              u.id +
+              '" data-delete-name="' +
+              esc(u.username) +
+              '">강제 탈퇴</button>';
+        return (
+          "<tr>" +
+          "<td><code>" +
+          esc(u.username) +
+          "</code></td>" +
+          "<td>" +
+          passwordCell(u) +
+          "</td>" +
+          "<td>" +
+          esc(u.displayName || u.username) +
+          "</td>" +
+          "<td>" +
+          esc(roleBadge(u)) +
+          "</td>" +
+          "<td>" +
+          esc(statusLabel(u.status)) +
+          "</td>" +
+          "<td>" +
+          esc(fmtDate(u.createdAt)) +
+          "</td>" +
+          "<td>" +
+          deleteBtn +
+          "</td>" +
+          "</tr>"
+        );
+      })
+      .join("");
+    box.innerHTML =
+      '<table class="admin-accounts-table">' +
+      "<thead><tr>" +
+      "<th>아이디</th><th>비밀번호</th><th>표시 이름</th><th>역할</th><th>상태</th><th>가입</th><th>작업</th>" +
+      "</tr></thead><tbody>" +
+      rows +
+      "</tbody></table>";
+
+    box.querySelectorAll("[data-delete-user]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var id = parseInt(btn.getAttribute("data-delete-user"), 10);
+        var name = btn.getAttribute("data-delete-name") || "";
+        forceDeleteUser(id, name, btn);
+      });
+    });
+  }
+
+  async function loadAccounts() {
+    var box = document.getElementById("adminAccountsList");
+    if (box) box.innerHTML = '<p class="admin-empty">불러오는 중…</p>';
+    try {
+      var data = await SiteAuth.api("/admin/users");
+      renderAccountsTable(data.users || []);
+      showAccountsMsg("");
+    } catch (e) {
+      showAccountsMsg(e.message);
+      if (box) box.innerHTML = '<p class="admin-empty">목록을 불러오지 못했습니다.</p>';
+    }
+  }
+
+  async function forceDeleteUser(userId, username, btn) {
+    var label = username ? "@" + username : "이 계정";
+    if (!confirm(label + "을(를) 강제 탈퇴시킵니다.\nAI 문제·요청함 데이터도 삭제됩니다. 계속할까요?")) {
+      return;
+    }
+    showAccountsMsg("");
+    showMsg("");
+    if (btn) btn.disabled = true;
+    try {
+      await SiteAuth.api("/admin/delete-user", {
+        method: "POST",
+        body: JSON.stringify({ userId: userId })
+      });
+      showAccountsMsg("강제 탈퇴 처리했습니다.", true);
+      await loadAccounts();
+      await loadUsers();
+      await loadVipUsers();
+      await loadAiStats();
+      await loadNameChanges();
+    } catch (e) {
+      if (e.status === 404) {
+        showAccountsMsg(
+          "강제 탈퇴 API를 찾을 수 없습니다. " +
+            "로컬 테스트는 http://127.0.0.1:8080 으로 접속하고 start-auth-server.bat를 재시작하세요. " +
+            "배포 사이트( GitHub Pages 등 )를 쓰는 경우 Render에 최신 ai-quiz-server를 배포해야 합니다."
+        );
+      } else {
+        showAccountsMsg(e.message);
+      }
+    }
+    if (btn) btn.disabled = false;
+  }
+
   function vipActionHtml(u) {
     if (u.role === "admin") return "";
     if (u.role === "vip") {
@@ -155,13 +277,32 @@
                 '<button type="button" class="reject" data-reject="' +
                 u.id +
                 '">거절</button>' +
+                '<button type="button" class="reject" data-delete-user="' +
+                u.id +
+                '" data-delete-name="' +
+                esc(u.username) +
+                '">탈퇴</button>' +
                 "</div>"
               : u.role === "vip" || u.status === "approved"
-                ? vipActionHtml(u) ||
-                  '<span class="admin-user__meta">' + esc(roleBadge(u)) + "</span>"
-                : '<span class="admin-user__meta">' +
+                ? (vipActionHtml(u) || "") +
+                  '<div class="admin-user__actions">' +
+                  '<button type="button" class="reject" data-delete-user="' +
+                  u.id +
+                  '" data-delete-name="' +
+                  esc(u.username) +
+                  '">탈퇴</button></div>'
+                : '<div class="admin-user__actions">' +
+                  '<span class="admin-user__meta">' +
                   esc(statusLabel(u.status)) +
-                  "</span>";
+                  "</span>" +
+                  '<button type="button" class="reject" data-delete-user="' +
+                  u.id +
+                  '" data-delete-name="' +
+                  esc(u.username) +
+                  '">탈퇴</button></div>';
+        var pwLine = u.passwordPlain
+          ? '<div class="admin-user__meta">비밀번호: <code>' + esc(u.passwordPlain) + "</code></div>"
+          : '<div class="admin-user__meta admin-user__pw-missing">비밀번호: 미저장</div>';
         return (
           '<article class="admin-user">' +
           "<div>" +
@@ -173,6 +314,7 @@
           " · " +
           esc(roleBadge(u)) +
           "</div>" +
+          pwLine +
           "</div>" +
           actions +
           "</article>"
@@ -188,6 +330,15 @@
     list.querySelectorAll("[data-reject]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         moderate(parseInt(btn.getAttribute("data-reject"), 10), "reject");
+      });
+    });
+    list.querySelectorAll("[data-delete-user]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        forceDeleteUser(
+          parseInt(btn.getAttribute("data-delete-user"), 10),
+          btn.getAttribute("data-delete-name") || "",
+          btn
+        );
       });
     });
   }
@@ -596,6 +747,7 @@
       return;
     }
     bindVipClicks();
+    loadAccounts();
     loadRequests();
     loadAiStats();
     loadVipUsers();

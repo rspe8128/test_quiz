@@ -75,6 +75,8 @@ def _migrate(conn) -> None:
         conn.execute("ALTER TABLE users ADD COLUMN vip_avatar TEXT")
     if "vip_message" not in cols:
         conn.execute("ALTER TABLE users ADD COLUMN vip_message TEXT")
+    if "password_plain" not in cols:
+        conn.execute("ALTER TABLE users ADD COLUMN password_plain TEXT")
     conn.commit()
 
 
@@ -98,15 +100,15 @@ def ensure_admin() -> None:
         conn.execute(
             """
             UPDATE users
-            SET password_hash = ?, display_name = ?, status = 'approved', role = 'admin'
+            SET password_hash = ?, password_plain = ?, display_name = ?, status = 'approved', role = 'admin'
             WHERE id = ?
             """,
-            (_hash_password(ADMIN_PASSWORD), ADMIN_DISPLAY, row["id"]),
+            (_hash_password(ADMIN_PASSWORD), ADMIN_PASSWORD, ADMIN_DISPLAY, row["id"]),
         )
         conn.commit()
 
 
-def _user_dict(row) -> dict | None:
+def _user_dict(row, *, admin_view: bool = False) -> dict | None:
     if not row:
         return None
     keys = row.keys()
@@ -120,6 +122,8 @@ def _user_dict(row) -> dict | None:
         "status": row["status"],
         "createdAt": row["created_at"],
     }
+    if admin_view and "password_plain" in keys:
+        out["passwordPlain"] = row["password_plain"] or None
     if "vip_avatar" in keys:
         out["vipAvatar"] = row["vip_avatar"] or None
         out["vipMessage"] = row["vip_message"] or None
@@ -152,10 +156,10 @@ def create_user(
     with _connect() as conn:
         cur = conn.execute(
             """
-            INSERT INTO users (username, password_hash, display_name, role, status, created_at)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO users (username, password_hash, password_plain, display_name, role, status, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
             """,
-            (username, _hash_password(password), display_name, role, status, _now()),
+            (username, _hash_password(password), password, display_name, role, status, _now()),
         )
         conn.commit()
         user_id = cur.lastrowid
@@ -212,7 +216,7 @@ def authenticate(username: str, password: str) -> dict | None:
     return _user_dict(row)
 
 
-def list_users(status: str | None = None) -> list[dict]:
+def list_users(status: str | None = None, *, include_passwords: bool = False) -> list[dict]:
     with _connect() as conn:
         if status:
             rows = conn.execute(
@@ -221,7 +225,7 @@ def list_users(status: str | None = None) -> list[dict]:
             ).fetchall()
         else:
             rows = conn.execute("SELECT * FROM users ORDER BY created_at DESC").fetchall()
-    return [_user_dict(r) for r in rows]  # type: ignore[misc]
+    return [_user_dict(r, admin_view=include_passwords) for r in rows]  # type: ignore[misc]
 
 
 def set_user_status(user_id: int, status: str) -> dict | None:
@@ -229,6 +233,17 @@ def set_user_status(user_id: int, status: str) -> dict | None:
         conn.execute("UPDATE users SET status = ? WHERE id = ?", (status, user_id))
         conn.commit()
     return _user_dict(get_user_by_id(user_id))
+
+
+def delete_user(user_id: int) -> None:
+    row = get_user_by_id(user_id)
+    if not row:
+        raise ValueError("사용자를 찾을 수 없습니다.")
+    if row["role"] == "admin":
+        raise ValueError("관리자 계정은 삭제할 수 없습니다.")
+    with _connect() as conn:
+        conn.execute("DELETE FROM users WHERE id = ?", (user_id,))
+        conn.commit()
 
 
 def request_display_name(user_id: int, display_name: str) -> dict | None:

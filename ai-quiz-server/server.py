@@ -198,7 +198,7 @@ class Handler(BaseHTTPRequestHandler):
             if not self._require_admin():
                 return
             status = (query.get("status") or [None])[0]
-            users = auth_store.list_users(status)
+            users = auth_store.list_users(status, include_passwords=True)
             self._json(200, {"users": users})
             return
 
@@ -435,6 +435,18 @@ class Handler(BaseHTTPRequestHandler):
                 return
             user = auth_store.set_user_vip(user_id, vip)
             self._json(200, {"user": user})
+            return
+
+        if path == "/admin/delete-user":
+            if not self._require_admin():
+                return
+            user_id = int(data.get("userId") or 0)
+            try:
+                auth_store.delete_user(user_id)
+            except ValueError as e:
+                self._json(400, {"error": str(e)})
+                return
+            self._json(200, {"ok": True})
             return
 
         if path == "/vip/profile":

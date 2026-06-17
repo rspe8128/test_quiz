@@ -3,14 +3,23 @@
  */
 (function (global) {
   var host = typeof location !== "undefined" ? location.hostname : "";
+  var port = typeof location !== "undefined" ? location.port : "";
   var isLocal =
     !host ||
     host === "localhost" ||
     host === "127.0.0.1" ||
-    location.protocol === "file:";
-  var API_BASE = isLocal
-    ? "http://localhost:8787"
-    : "https://test-quiz-8eb3.onrender.com";
+    location.protocol === "file:" ||
+    port === "8080";
+  var forceLocal =
+    typeof location !== "undefined" &&
+    /(?:^|[?&])api=local(?:&|$)/.test(location.search || "");
+  var stored =
+    typeof localStorage !== "undefined" && localStorage.getItem("site-api-base");
+  var API_BASE =
+    stored ||
+    (forceLocal || isLocal
+      ? "http://127.0.0.1:8787"
+      : "https://test-quiz-8eb3.onrender.com");
 
   global.SiteAuthConfig = {
     API_BASE: API_BASE,
